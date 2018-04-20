@@ -41,9 +41,9 @@ class UserDao {
         return $row['count'] > 0;
     }
 
-    public function loginSession($email) {
-        $statement = $this->pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $statement->execute(array($email));
+    public function loginSession($email, $password) {
+        $statement = $this->pdo->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
+        $statement->execute(array($email, $password));
         $user = $statement->fetch();
         $logged_user['id'] = $user['id'];
         $logged_user['first_name'] = $user['first_name'];

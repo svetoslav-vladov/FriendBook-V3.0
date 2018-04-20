@@ -18,7 +18,7 @@ if (isset($_POST['login'])) {
         header("location: ../view/login.php?error=" . htmlentities($error));
     }
     elseif($pdo->userPassCheck($email, $password)) {
-        $pdo->loginSession($email);
+        $pdo->loginSession($email, $password);
         header('location: ../view/main.php');
     }
     else {

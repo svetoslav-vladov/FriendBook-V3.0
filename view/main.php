@@ -7,3 +7,7 @@ $logged_user_id = $_SESSION['logged']['id'];
 require_once "../include/header.php";
 //mainHeader is after login, top navigation
 require_once  "../include/mainHeader.php";
+
+echo '<pre>';
+var_dump($_SESSION);
+echo '</pre>';

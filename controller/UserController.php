@@ -1,8 +1,7 @@
 <?php
-use \model\Dao\UserDao;
-use \model\User;
+    use \model\Dao\UserDao;
+    use \model\User;
     require_once "../include/default_paths.php";
-
     function __autoload($class)
     {
         $class = "..\\" . $class;
@@ -35,7 +34,11 @@ use \model\User;
         $error = false;
         $success = false;
 
-        if($password !== $confirm_pass) {
+        if ($pdo->regUserExist($email)) {
+            $error = 'Email already exists! Please try another.';
+            header("location: ../view/register.php?error=" . htmlentities($error));
+        }
+        elseif($password !== $confirm_pass) {
             $error = 'Password miss match!';
             header("location: ../view/register.php?error=" . htmlentities($error));
         }

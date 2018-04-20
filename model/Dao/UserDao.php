@@ -26,4 +26,11 @@ class UserDao {
         $stmt->execute(array($user->getFirstName(), $user->getLastName(), $user->getEmail(), $user->getPassword(), $user->getGender(), $user->getBirthday(), $user->getProfilePic(), $user->getCoverPic()
         ));
     }
+
+    function regUserExist($email) {
+        $statement = $this->pdo->prepare("SELECT COUNT(*) AS count FROM users WHERE email = ?");
+        $statement->execute(array($email));
+        $row = $statement->fetch();
+        return $row['count'] > 0;
+    }
 }

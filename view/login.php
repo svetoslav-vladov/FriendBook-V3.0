@@ -5,8 +5,8 @@
     if(isset($_SESSION["logged"])){
         header('location: ./main.php');
     }
-
 ?>
+
 <div id="wrap">
     <div class="logo-front">
         <a href="<?php echo $_SERVER["REQUEST_URI"]; ?>">
@@ -33,7 +33,7 @@
         </div>
     </form>
     <div class="footer-front">
-        <p>www.FriendBook.bg &copy; 2018 <br> All Rights Reserved <br> Version 2.0</p>
+        <p>www.FriendBook.bg &copy; 2018 <br> All Rights Reserved <br> Version 3.0</p>
     </div>
 </div>
 <?php

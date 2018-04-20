@@ -12,7 +12,7 @@
         </a>
     </div>
 
-    <form id="register" action="../controller/UserController.php" method="post">
+    <form id="register" action="../controller/register_controller.php" method="post">
         <div>
             <input type="text" placeholder="first name:" name="first_name">
         </div>

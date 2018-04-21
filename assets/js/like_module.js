@@ -1,14 +1,18 @@
 var loading_gif = $('<img class="loading-gif" src="../assets/images/ajax-loading-c4.gif">');
 function likePost(post_id) {
+    $('#counter' + post_id).empty();
     var request = new XMLHttpRequest();
     request.open('post', '../controller/like_post_controller.php');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
+            getCountLikes(post_id);
             $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 loading_gif.remove();
                 isLiked(post_id);
+                $('#dislike-container'+post_id).empty();
+                isDisliked(post_id);
             },250);
         }
     };
@@ -24,6 +28,8 @@ function unlikePost(post_id) {
             setTimeout(function(){
                 loading_gif.remove();
                 isLiked(post_id);
+                $('#dislike-container'+post_id).empty();
+                isDisliked(post_id);
             },250);
         }
     };
@@ -37,12 +43,12 @@ function isLiked(post_id) {
         if (this.readyState === 4 && this.status === 200) {
             likeButton.click(function () {
                 likePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#like_counter'+post_id).remove();
                 $(this).remove();
             });
             unlikeButton.click(function () {
                 unlikePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#like_counter'+post_id).remove();
                 $(this).remove();
             });
             getCountLikes(post_id);
@@ -61,7 +67,7 @@ function getCountLikes(post_id) {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var likeCounter = $(`<span class="likes_counter" id="counter${post_id}">${this.responseText}</span>`);
+            var likeCounter = $(`<span class="likes_counter" id="like_counter${post_id}">${this.responseText}</span>`);
             $('#like'+post_id).append(likeCounter);
             $('#unlike'+post_id).append(likeCounter);
         }
@@ -78,10 +84,12 @@ function dislikePost(post_id) {
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
+            $('#dislike-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 loading_gif.remove();
                 isDisliked(post_id);
+                $('#like-container'+post_id).empty();
+                isLiked(post_id);
             },250);
         }
     };
@@ -93,10 +101,12 @@ function undislikePost(post_id) {
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
+            $('#dislike-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 loading_gif.remove();
                 isDisliked(post_id);
+                $('#like-container'+post_id).empty();
+                isLiked(post_id);
             },250);
         }
     };
@@ -112,20 +122,21 @@ function isDisliked(post_id) {
         if (this.readyState === 4 && this.status === 200) {
             dislikeButton.click(function () {
                 dislikePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#dislike_counter'+post_id).remove();
                 $(this).remove();
             });
             undislikeButton.click(function () {
                 undislikePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#dislike_counter'+post_id).remove();
                 $(this).remove();
             });
             getCountDislikes(post_id);
+            console.log(this.responseText);
             if (this.responseText == 1) {
-                $('#like-container'+post_id).append(undislikeButton);
+                $('#dislike-container'+post_id).append(undislikeButton);
             }
             else {
-                $('#like-container'+post_id).append(dislikeButton);
+                $('#dislike-container'+post_id).append(dislikeButton);
             }
         }
     };
@@ -137,7 +148,7 @@ function getCountDislikes(post_id) {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var dislikeCounter = $(`<span class="likes_counter" id="counter${post_id}">${this.responseText}</span>`);
+            var dislikeCounter = $(`<span class="likes_counter" id="dislike_counter${post_id}">${this.responseText}</span>`);
             $('#dislike'+post_id).append(dislikeCounter);
             $('#undislike'+post_id).append(dislikeCounter);
         }

@@ -68,7 +68,7 @@ class PostDao {
     function isLiked($post_id, $user_id) {
         $statement = $this->pdo->prepare("SELECT COUNT(*) AS isLike 
                                 FROM like_post
-                                WHERE post_id = ? AND user_id = ?");
+                                WHERE post_id = ? AND user_id = ? AND status = 1");
         $statement->execute(array($post_id, $user_id));
 //    $result = $statement->fetch(); // return first row of table
         echo $statement->fetch()['isLike'];
@@ -96,7 +96,7 @@ class PostDao {
     function isDisliked($post_id, $user_id) {
         $statement = $this->pdo->prepare("SELECT COUNT(*) AS isDislike 
                                 FROM like_post
-                                WHERE post_id = ? AND user_id = ?");
+                                WHERE post_id = ? AND user_id = ? AND status = 0");
         $statement->execute(array($post_id, $user_id));
         echo $statement->fetch()['isDislike'];
     }

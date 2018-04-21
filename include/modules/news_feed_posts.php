@@ -22,6 +22,12 @@
                     <script>
                         $(document).ready(function () {
                             isLiked(<?php echo $post['post_id']?>);
+                        });
+                    </script>
+                </div>
+                <div class="like-container" id="dislike-container<?php echo $post['post_id']?>">
+                    <script>
+                        $(document).ready(function () {
                             isDisliked(<?php echo $post['post_id'] ?>);
                         });
                     </script>

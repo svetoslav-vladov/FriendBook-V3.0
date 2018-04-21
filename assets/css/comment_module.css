@@ -230,44 +230,40 @@ span.likes_counter, .comment-counter {
     margin-left: 10px;
 }
 
-.like-button, .undislike-button {
-    background: #c7c7c7;
+.like-button, .dislike-button {
     color: white;
-    font-weight: bold;
-    font-family: arial;
-    border: 1px solid #959595;
+    /*background: #c7c7c7;*/
+    /*font-weight: bold;*/
+    /*font-family: arial;*/
+    /*border: 1px solid #959595;*/
+    background: none;
+    border: none;
     cursor:  pointer;
     transition: background 0.3s ease-in-out;
 }
-.like-button:hover {
-    background: #4CAF50;
-    border:  1px solid #388c3b;
-}
-
-.unlike-button {
-    background: #219421;
+.like-button:hover, .dislike-button:hover {
+    /*background: #4CAF50;*/
+    /*border:  1px solid #388c3b;*/
     color: black;
-    font-weight: bold;
-    font-family: arial;
-    border: 1px solid #255a27;
+}
+
+.unlike-button, .undislike-button {
+    /*background: #219421;*/
+    color: black;
+    /*font-weight: bold;*/
+    /*font-family: arial;*/
+    /*border: 1px solid #255a27;*/
+    border: none;
+    background: none;
     cursor:  pointer;
     transition: background 0.3s ease-in-out;
 }
 
-.unlike-button:hover {
-    background: #930000;
-    border: 1px solid #4a0202;
-}
-.dislike-button {
-    color: white;
-    background: #930000;
-    border: 1px solid #4a0202;
-    transition: background 0.3s ease-in-out;
-}
-.dislike-button:hover {
-    background: #219421;
-    border:  1px solid #388c3b;
-    cursor: pointer;
+.unlike-button:hover, .undislike-button:hover {
+    /*background: #930000;*/
+    color: black;
+    opacity: 0.8;
+    /*border: 1px solid #4a0202;*/
 }
 .undislike-button {
     color: black;
@@ -280,7 +276,8 @@ span.likes_counter, .comment-counter {
     padding:  15px;
     width: 45%;
     margin: 0px 5px;
-    box-shadow: 2px 2px 5px #0000003b;
+    /*box-shadow: 2px 2px 5px #0000003b;*/
+    outline:none;
 }
 
 .comments-buttons button {

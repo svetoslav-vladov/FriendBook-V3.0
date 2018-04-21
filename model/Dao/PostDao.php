@@ -77,8 +77,35 @@ class PostDao {
     function getCountLikes($post_id) {
         $statement = $this->pdo->prepare("SELECT COUNT(*) AS like_count 
                                 FROM like_post
-                                WHERE post_id = ?");
+                                WHERE post_id = ? AND status = 1");
         $statement->execute(array($post_id));
         echo $statement->fetch()['like_count'];
+    }
+
+    function dislikePost($post_id, $user_id, $status) {
+        $statement = $this->pdo->prepare("INSERT INTO like_post (post_id, user_id, status) 
+                                VALUES (?,?,?)");
+        return $statement->execute(array($post_id, $user_id, $status));
+    }
+
+    function unDislikePost($post_id, $user_id) {
+        $statement = $this->pdo->prepare("DELETE FROM like_post WHERE post_id = ? AND user_id = ?");
+        return $statement->execute(array($post_id, $user_id));
+    }
+
+    function isDisliked($post_id, $user_id) {
+        $statement = $this->pdo->prepare("SELECT COUNT(*) AS isDislike 
+                                FROM like_post
+                                WHERE post_id = ? AND user_id = ?");
+        $statement->execute(array($post_id, $user_id));
+        echo $statement->fetch()['isDislike'];
+    }
+
+    function getCountDislikes($post_id) {
+        $statement = $this->pdo->prepare("SELECT COUNT(*) AS dislike_count 
+                                FROM like_post
+                                WHERE post_id = ? AND status = 0");
+        $statement->execute(array($post_id));
+        echo $statement->fetch()['dislike_count'];
     }
 }

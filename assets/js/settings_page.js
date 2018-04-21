@@ -5,7 +5,7 @@ var security_btn = document.querySelector('#security');
 
 //loading image
 var loading_image = document.createElement('img');
-loading_image.src = '../assets/images/loading.gif';
+loading_image.src = '../assets/images/ajax-loading-c4.gif';
 
 // getting submit btn's
 var general_submit = document.querySelector('#general_submit');

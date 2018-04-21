@@ -22,6 +22,7 @@
                     <script>
                         $(document).ready(function () {
                             isLiked(<?php echo $post['post_id']?>);
+                            isDisliked(<?php echo $post['post_id'] ?>);
                         });
                     </script>
                 </div>

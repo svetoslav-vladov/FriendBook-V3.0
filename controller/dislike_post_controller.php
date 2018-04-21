@@ -1,4 +1,5 @@
 <?php
+
 use \model\Dao\PostDao;
 require_once '../include/session.php';
 function __autoload($class) {
@@ -6,17 +7,17 @@ function __autoload($class) {
     require_once str_replace("\\", "/", $class) . ".php";
 }
 $pdo = new PostDao();
-$status = 1;
-//AJAX REQUEST for like a post
+$status = 0;
+//AJAX REQUEST for dislike a post
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $user_id = $_SESSION['logged']['id'];
     $post_id = htmlentities($_POST['post_id']);
-    $pdo->unDislikePost($post_id,$user_id);
-    $pdo->likePost($post_id, $user_id, $status);
+    $pdo->unlikePost($post_id, $user_id);
+    $pdo->dislikePost($post_id, $user_id, $status);
 }
 //function for like post
 if (isset($_GET['post_id'])) {
     $user_id = $_SESSION['logged']['id'];
     $post_id = htmlentities($_GET['post_id']);
-    $pdo->isLiked($post_id, $user_id);
+    $pdo->isDisliked($post_id, $user_id);
 }

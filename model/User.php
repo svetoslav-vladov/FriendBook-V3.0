@@ -40,65 +40,49 @@ class User implements \JsonSerializable {
     /**
      * @return mixed
      */
-    public function getFirstName()
-    {
+    public function getFirstName() {
         return $this->first_name;
     }
-
     /**
      * @return mixed
      */
-    public function getLastName()
-    {
+    public function getLastName() {
         return $this->last_name;
     }
-
     /**
      * @return mixed
      */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
-
     /**
      * @return mixed
      */
-    public function getPassword()
-    {
+    public function getPassword() {
         return $this->password;
     }
-
     /**
      * @return mixed
      */
-    public function getGender()
-    {
+    public function getGender() {
         return $this->gender;
     }
-
     /**
      * @return mixed
      */
-    public function getBirthday()
-    {
+    public function getBirthday() {
         return $this->birthday;
     }
-
     /**
      * @return mixed
      */
-    public function getProfilePic()
-    {
+    public function getProfilePic() {
         return $this->profile_pic;
     }
-
     /**
      * @return mixed
      */
-    public function getCoverPic()
-    {
+    public function getCoverPic() {
         return $this->cover_pic;
     }
-
 }

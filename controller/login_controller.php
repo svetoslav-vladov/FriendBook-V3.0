@@ -8,8 +8,8 @@ function __autoload($class) {
 }
 
 if (isset($_POST['login'])) {
-    $email = htmlentities($_POST['email']);
-    $password = htmlentities(sha1($_POST['password']));
+    $email = trim(htmlentities($_POST['email']));
+    $password = trim(htmlentities(sha1($_POST['password'])));
     $error = false;
     $pdo = new UserDao();
 

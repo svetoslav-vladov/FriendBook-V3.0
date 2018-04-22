@@ -1,17 +1,15 @@
 var loading_gif = $('<img class="loading-gif" src="../assets/images/ajax-loading-c4.gif">');
 function likePost(post_id) {
-    $('#counter' + post_id).empty();
     var request = new XMLHttpRequest();
     request.open('post', '../controller/like_post_controller.php');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#dislike-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
-            getCountLikes(post_id);
             $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 loading_gif.remove();
                 isLiked(post_id);
-                $('#dislike-container'+post_id).empty();
                 isDisliked(post_id);
             },250);
         }
@@ -23,12 +21,12 @@ function unlikePost(post_id) {
     request.open('post', '../controller/unlike_post_controller.php');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#dislike-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
             $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 loading_gif.remove();
                 isLiked(post_id);
-                $('#dislike-container'+post_id).empty();
                 isDisliked(post_id);
             },250);
         }
@@ -83,12 +81,12 @@ function dislikePost(post_id) {
     request.open('post', '../controller/dislike_post_controller.php');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
             $('#dislike-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 loading_gif.remove();
                 isDisliked(post_id);
-                $('#like-container'+post_id).empty();
                 isLiked(post_id);
             },250);
         }
@@ -100,12 +98,12 @@ function undislikePost(post_id) {
     request.open('post', '../controller/undislike_post_controller.php');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
             $('#dislike-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 loading_gif.remove();
                 isDisliked(post_id);
-                $('#like-container'+post_id).empty();
                 isLiked(post_id);
             },250);
         }

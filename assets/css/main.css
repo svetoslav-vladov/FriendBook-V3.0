@@ -656,17 +656,15 @@ div#profileUserNav ul li:last-child {
     border-bottom: 1px solid #62a762;
 }
 
-.like-container {
-    position: relative;
-}
+
 .like_counter {
     position: relative;
 }
 .loading-gif {
     width: 25px;
     position: absolute;
-    left: 100px;
-    top: 12px;
+    left: 72px;
+    top: 256px;
 }
 .post_loading{
     height: 50px;
@@ -767,20 +765,6 @@ div.date {
     font-size:  1.1em;
     color: #555;
 }
-
-.post_navigation {
-    display: grid;
-    grid-template-columns:  1fr 1fr;
-    grid-gap:  25px;
-    margin: 15px 0px 0;
-    background: #e0e0e0;
-    padding: 15px;
-    border-top: 1px solid #c1c1c1;
-    border-bottom: 1px solid #c1c1c1;
-}
-
-
-
 
 .comments {
     padding: 10px;

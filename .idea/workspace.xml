@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7aeb2900-a7bf-4e12-82cd-c8d0de60f0ac" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/comment_module.css" afterPath="$PROJECT_DIR$/assets/css/comment_module.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/main.css" afterPath="$PROJECT_DIR$/assets/css/main.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/like_module.js" afterPath="$PROJECT_DIR$/assets/js/like_module.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,8 +17,8 @@
       <file leaf-file-name="like_module.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/assets/js/like_module.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2058">
-              <caret line="7" column="59" lean-forward="false" selection-start-line="7" selection-start-column="59" selection-end-line="7" selection-end-column="59" />
+            <state relative-caret-position="374">
+              <caret line="49" column="65" lean-forward="false" selection-start-line="49" selection-start-column="65" selection-end-line="49" selection-end-column="65" />
               <folding />
             </state>
           </provider>
@@ -303,12 +301,12 @@
       <workItem from="1524135643828" duration="1380000" />
       <workItem from="1524229447597" duration="17959000" />
       <workItem from="1524300886309" duration="26591000" />
-      <workItem from="1524389357301" duration="2537000" />
+      <workItem from="1524389357301" duration="6038000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50944000" />
+    <option name="totallyTimeSpent" value="54445000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -717,8 +715,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/js/like_module.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2058">
-          <caret line="7" column="59" lean-forward="false" selection-start-line="7" selection-start-column="59" selection-end-line="7" selection-end-column="59" />
+        <state relative-caret-position="374">
+          <caret line="49" column="65" lean-forward="false" selection-start-line="49" selection-start-column="65" selection-end-line="49" selection-end-column="65" />
           <folding />
         </state>
       </provider>

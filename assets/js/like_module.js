@@ -6,12 +6,11 @@ function likePost(post_id) {
     request.onreadystatechange = function() {
         $('#dislike-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isLiked(post_id);
                 isDisliked(post_id);
-            },250);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
@@ -22,13 +21,13 @@ function unlikePost(post_id) {
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         $('#dislike-container'+post_id).empty();
+        $('#like-container'+post_id).append(loading_gif);
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isLiked(post_id);
                 isDisliked(post_id);
-            },250);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
@@ -41,12 +40,16 @@ function isLiked(post_id) {
         if (this.readyState === 4 && this.status === 200) {
             likeButton.click(function () {
                 likePost(post_id);
+                $('#like-container'+post_id).append(loading_gif);
                 $('#like_counter'+post_id).remove();
+                $('#dislike-container'+post_id).empty();
                 $(this).remove();
             });
             unlikeButton.click(function () {
                 unlikePost(post_id);
+                $('#like-container'+post_id).append(loading_gif);
                 $('#like_counter'+post_id).remove();
+                $('#dislike-container'+post_id).empty();
                 $(this).remove();
             });
             getCountLikes(post_id);
@@ -74,8 +77,6 @@ function getCountLikes(post_id) {
     req.send();
 }
 
-
-
 function dislikePost(post_id) {
     var request = new XMLHttpRequest();
     request.open('post', '../controller/dislike_post_controller.php');
@@ -83,12 +84,11 @@ function dislikePost(post_id) {
     request.onreadystatechange = function() {
         $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
-            $('#dislike-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isDisliked(post_id);
                 isLiked(post_id);
-            },250);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
@@ -100,12 +100,11 @@ function undislikePost(post_id) {
     request.onreadystatechange = function() {
         $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
-            $('#dislike-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isDisliked(post_id);
                 isLiked(post_id);
-            },250);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
@@ -120,12 +119,16 @@ function isDisliked(post_id) {
         if (this.readyState === 4 && this.status === 200) {
             dislikeButton.click(function () {
                 dislikePost(post_id);
+                $('#dislike-container'+post_id).append(loading_gif);
                 $('#dislike_counter'+post_id).remove();
+                $('#like-container'+post_id).empty();
                 $(this).remove();
             });
             undislikeButton.click(function () {
                 undislikePost(post_id);
+                $('#dislike-container'+post_id).append(loading_gif);
                 $('#dislike_counter'+post_id).remove();
+                $('#like-container'+post_id).empty();
                 $(this).remove();
             });
             getCountDislikes(post_id);

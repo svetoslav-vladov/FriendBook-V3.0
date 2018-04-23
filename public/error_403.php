@@ -1,0 +1,1 @@
+<img src="<?php echo URL_ROOT; ?>/assets/images/error-403.png" class="error_poster" alt="error 403">

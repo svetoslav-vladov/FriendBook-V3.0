@@ -1,0 +1,14 @@
+@media screen and (max-width: 768px){
+    .padding-top-register {
+
+    }
+    .padding-top-login {
+
+    }
+    body{
+        overflow-y: scroll;
+    }
+    form.form-horizontal.form-register {
+        padding-top: 200px;
+    }
+}

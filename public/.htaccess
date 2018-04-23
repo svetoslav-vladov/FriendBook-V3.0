@@ -1,0 +1,30 @@
+<IfModule mod_rewrite.c>
+
+Options +FollowSymLinks
+Options -Multiviews
+Options -Indexes
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteBase /projects/ITTS9/FriendBook-v3.0/
+
+# error.php rewrite
+RewriteRule ^error/(\d+)*$ ./index.php?err=$1
+
+#RewriteRule ^(\w+)*$ ./index5.php?page=$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)$ index.php?page=$1 [L]
+
+# rewrite for target & action
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/([^/]+)$ index.php?target=$1&action=$2 [L]
+
+ErrorDocument 404 /projects/ITTS9/FriendBook-v3.0/error/404
+ErrorDocument 403 /projects/ITTS9/FriendBook-v3.0/error/403
+ErrorDocument 401 /projects/ITTS9/FriendBook-v3.0/error/401
+
+</IfModule>

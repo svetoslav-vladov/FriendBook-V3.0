@@ -1,0 +1,140 @@
+html,
+body {
+    height: 100%;
+}
+
+div#guest_wrap {
+    text-align: center;
+}
+
+body {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+}
+
+.padding-top-register{
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-sign {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+form.form-sign img {
+    width: 100%;
+}
+.form-sign .checkbox {
+    font-weight: 400;
+}
+.form-sign .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+.form-sign .form-control:focus {
+    z-index: 2;
+}
+.form-sign input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-sign input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+a.text-success:focus, a.text-success:hover {
+    text-decoration: underline;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.25rem + 5px);
+}
+.form-horizontal{
+    text-align: left;
+}
+.form-control-feedback {
+    width:  max-content;
+}
+.row {
+
+    margin-right: 0;
+    margin-left: 0;
+}
+.padding-top-register{
+    text-align: center;
+}
+.error_poster{
+    width:100%;
+}
+.err_msg {
+    position:  absolute;
+    top: 60px;
+    background: #dc3545f2;
+    width:  100%;
+    text-align:  center;
+    padding:  5px 0;
+    font-size:  1.2em;
+    font-weight:  bold;
+    text-transform: CAPITALIZE;
+    z-index:  10000;
+    border-top: 1px solid #90232e;
+    border-bottom: 1px solid #90232e;
+    color: white;
+}
+.ok_msg {
+    position:  absolute;
+    top: 60px;
+    background: #47bf62f2;
+    width:  100%;
+    text-align:  center;
+    padding:  5px 0;
+    font-size:  1.2em;
+    font-weight:  bold;
+    text-transform: CAPITALIZE;
+    z-index:  10000;
+    border-top: 1px solid #2b7d3e;
+    border-bottom: 1px solid #2b7d3e;
+    color: white;
+}
+nav{
+    z-index: 10000;
+}
+nav li{
+    font-size: 1.2rem;
+}
+.user_profile_pic {
+    border-radius:  50%;
+    height: 35px;
+    position:  absolute;
+    left: -36px;
+    top: 2px;
+}
+.profile_btn_top{
+
+    position:  relative;
+}
+
+.dropdown-menu {
+    left: unset;
+    right: 0 ;
+}

@@ -1,6 +1,8 @@
 html,
 body {
     height: 100%;
+    padding-bottom: 40px;
+    padding-top: 60px;
 }
 
 div#guest_wrap {
@@ -96,7 +98,7 @@ select.form-control:not([size]):not([multiple]) {
     font-size:  1.2em;
     font-weight:  bold;
     text-transform: CAPITALIZE;
-    z-index:  10000;
+    z-index:  1000;
     border-top: 1px solid #90232e;
     border-bottom: 1px solid #90232e;
     color: white;
@@ -111,7 +113,7 @@ select.form-control:not([size]):not([multiple]) {
     font-size:  1.2em;
     font-weight:  bold;
     text-transform: CAPITALIZE;
-    z-index:  10000;
+    z-index: 1000;
     border-top: 1px solid #2b7d3e;
     border-bottom: 1px solid #2b7d3e;
     color: white;
@@ -130,7 +132,6 @@ nav li{
     top: 2px;
 }
 .profile_btn_top{
-
     position:  relative;
 }
 
@@ -138,3 +139,25 @@ nav li{
     left: unset;
     right: 0 ;
 }
+div#wrap {
+    height: 90%;
+    width: 90%;
+}
+
+.fixed-top {
+    z-index: 1030;
+}
+
+/* layout sidebars fixed*/
+
+.sidebar-nav-fixed {
+    width:14%;
+}
+
+@media (min-width: 768px) {
+    #sidemenu.affix {
+        position: fixed;
+    }
+}
+
+

@@ -8,24 +8,22 @@
 
 namespace model\Dao;
 
+use model\Post;
 
 class PostDao {
-    const DB_NAME = 'friendbook_v3';
-    const DB_IP = 'localhost';
-    const DB_PORT = '3306';
-    const DB_USER = 'friendbook';
-    const DB_PASS = 'test123';
+    private function __construct() {
+        $this->pdo = DBconnect::getInstance()->dbConnect();
+    }
+
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new PostDao();
+        }
+        return self::$instance;
+    }
 
     private $pdo;
-
-    public function __construct() {
-        try {
-            $this->pdo = new \PDO("mysql:host=" . self::DB_IP . ":" . self::DB_PORT . ";dbname=" . self::DB_NAME, self::DB_USER, self::DB_PASS);
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        } catch (\PDOException $e) {
-            echo "Problem with db query  - " . $e->getMessage();
-        }
-    }
+    private static $instance;
 
     public function addPost($user_id, $description){
         $statement = $this->pdo->prepare("INSERT INTO posts (user_id, description) 

@@ -1,10 +1,7 @@
 <?php
 namespace model;
 
-class Post implements \JsonSerializable {
-    public function jsonSerialize() {
-        return get_object_vars($this);
-    }
+class Post {
     private $post_id;
     private $owner_id;
     private $description;
@@ -16,8 +13,7 @@ class Post implements \JsonSerializable {
      * @param $description
      * @param array $post_photos
      */
-    public function __construct($post_id, $owner_id, $description) {
-        $this->post_id = $post_id;
+    public function __construct($owner_id, $description) {
         $this->owner_id = $owner_id;
         $this->description = $description;
     }

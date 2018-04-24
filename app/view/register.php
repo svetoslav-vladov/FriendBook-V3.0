@@ -1,4 +1,5 @@
 <div id="guest_wrap">
+    <div class="container">
     <div class="row">
         <form class="form-horizontal form-register" method="POST" action="<?php echo URL_ROOT; ?>/user/register">
             <div class="row text-center">
@@ -175,6 +176,6 @@
             </p>
         </form>
 
+        </div>
     </div>
-
 </div>

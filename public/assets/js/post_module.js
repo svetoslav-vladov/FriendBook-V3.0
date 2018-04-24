@@ -30,7 +30,7 @@ if(document.querySelector('#post-form')){
 
                 fake_input.removeChild(img);
                 fake_input.style.display = 'none';
-                post_module_form.style.height = '300px';
+                post_module_form.style.height = '310px';
             }, 400);
 
 

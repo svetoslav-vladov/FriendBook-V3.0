@@ -9,5 +9,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
     <script src="<?php echo URL_ROOT; ?>/assets/js/custom.js"></script>
+    <script src="<?php echo URL_ROOT; ?>/assets/js/close_messages.js"></script>
+    <script src="<?php echo URL_ROOT; ?>/assets/js/post_module.js"></script>
     </body>
 </html>

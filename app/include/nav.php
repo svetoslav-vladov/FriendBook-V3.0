@@ -13,9 +13,9 @@
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item active profile_btn_top">
                     <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/profile">
-                        <img class="img-fluid user_profile_pic" src="<?php echo URL_ROOT . $_SESSION['logged']['profile_pic'] ?>"
-                                                       alt="<?php echo $_SESSION['logged']['full_name'];?> profile picture">
-                        <?php echo $_SESSION['logged']['first_name'];?></a>
+                        <img class="img-fluid user_profile_pic" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic(); ?>"
+                                                       alt="<?php echo $_SESSION['logged']->getFullName();?> profile picture">
+                        <?php echo $_SESSION['logged']->getFirstName(); ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/main">Home</a>

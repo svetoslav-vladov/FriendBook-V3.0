@@ -2,7 +2,6 @@
 
 namespace model\Dao;
 
-
 class DBconnect {
 
     private static $instance;

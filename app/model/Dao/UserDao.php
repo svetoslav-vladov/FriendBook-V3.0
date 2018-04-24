@@ -14,11 +14,9 @@ class UserDao {
 
     const CHECK_FOR_EMAIL = "SELECT COUNT(*) as row FROM users WHERE email = ?";
 
-    const LOGIN_CHECK = "SELECT email,password FROM users WHERE email = ? AND password = ?";
+    const LOGIN_CHECK = "SELECT * FROM users WHERE email = ? AND password = ?";
 
     const GET_INFO_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
-
-    const GET_INFO_BY_ID = "SELECT * FROM users WHERE id = ?";
 
     // getting static connection from DBconnect file
     private function __construct() {
@@ -32,7 +30,7 @@ class UserDao {
         return self::$instance;
     }
 
-    public function insert_user_db(User $user) {
+    public function insertUserDb(User $user) {
         $statement = $this->pdo->prepare(self::INSERT_USER);
         return $statement->execute(array(
             $user->getFirstName(),
@@ -53,25 +51,14 @@ class UserDao {
             $user->getEmail(),
             $user->getPassword()
         ));
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return $statement->fetch(\PDO::FETCH_OBJ);
+
     }
 
-    // No class restriction below!!!
-    public function checkIfExists($email) {
+    public function checkIfExists(User $user) {
         $statement = $this->pdo->prepare(self::CHECK_FOR_EMAIL);
-        $statement->execute(array($email));
+        $statement->execute(array($user->getEmail()));
         return $statement->fetch(\PDO::FETCH_ASSOC)['row'] > 0;
     }
 
-    public function getUserByEmail($email) {
-        $statement = $this->pdo->prepare(self::GET_INFO_BY_EMAIL);
-        $statement->execute(array($email));
-        return $statement->fetch(\PDO::FETCH_ASSOC);
-    }
-
-    public function getUserById($id) {
-        $statement = $this->pdo->prepare(self::GET_INFO_BY_ID);
-        $statement->execute(array($id));
-        return $statement->fetch(\PDO::FETCH_ASSOC);
-    }
 }

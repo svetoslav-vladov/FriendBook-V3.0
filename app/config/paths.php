@@ -3,7 +3,7 @@
     //app root
     define('APP_ROOT', dirname(dirname(__FILE__)));
     //url root
-    define('URL_ROOT', 'http://' . $_SERVER['SERVER_NAME'] . '/projects/itts9/FriendBook-v3.0');
+    define('URL_ROOT', 'http://' . $_SERVER['SERVER_NAME'] . '/projects/FriendBook-v3.0');
     // site name
     define('SITE_NAME', 'SharePosts');
 

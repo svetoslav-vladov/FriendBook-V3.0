@@ -8,7 +8,7 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteBase /projects/ITTS9/FriendBook-v3.0/
+RewriteBase /projects/FriendBook-v3.0/
 
 # error.php rewrite
 RewriteRule ^error/(\d+)*$ ./index.php?err=$1
@@ -23,8 +23,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^/]+)/([^/]+)$ index.php?target=$1&action=$2 [L]
 
-ErrorDocument 404 /projects/ITTS9/FriendBook-v3.0/error/404
-ErrorDocument 403 /projects/ITTS9/FriendBook-v3.0/error/403
-ErrorDocument 401 /projects/ITTS9/FriendBook-v3.0/error/401
+ErrorDocument 404 /projects/FriendBook-v3.0/error/404
+ErrorDocument 403 /projects/FriendBook-v3.0/error/403
+ErrorDocument 401 /projects/FriendBook-v3.0/error/401
 
 </IfModule>

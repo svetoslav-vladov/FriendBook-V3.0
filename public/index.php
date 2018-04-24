@@ -9,7 +9,6 @@ spl_autoload_register(function ($class) {
     require_once APP_ROOT . DIRECTORY_SEPARATOR . $class;
 });
 
-
 ini_set('mbstring.internal_encoding', 'UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -37,8 +36,8 @@ elseif(!file_exists(APP_ROOT .$controllerClassName . ".php")){
 elseif (class_exists($controllerClassName)) {
     $contoller = new $controllerClassName();
 
-    if(!(($controllerName == "index" || $controllerName == "user")  &&
-        ($methodName == "index" || $methodName == "login" || $methodName == "register" ))){
+    if(!(($controllerName === "index" || $controllerName === "user")  &&
+        ($methodName === "index" || $methodName === "login" || $methodName === "register" ))){
         if(!isset($_SESSION["logged"])){
             $controller = new controller\IndexController();
             $controller->error(401);
@@ -49,19 +48,20 @@ elseif (class_exists($controllerClassName)) {
         }
     }
     elseif (method_exists($contoller, $methodName)) {
+        if(isset($_SESSION['logged']) && ($controllerName === "index")  &&
+            ($methodName === "login" || $methodName === "register" )){
+            header('location:'.URL_ROOT.'/index/main');
+        }
         $contoller->$methodName();
     }
     else {
-
         $controller = new controller\IndexController();
         $controller->login();
-
     }
 }
 else {
     $fileNotFound = true;
 }
-
 
 if ($fileNotFound) {
     header("location:". URL_ROOT);

@@ -2,38 +2,25 @@
 
 namespace controller;
 
-use model\Dao\UserDao;
-use model\Dao\PostDao;
-
-use model\User;
-use model\Post;
-use model\Comment;
-
 class IndexController extends \controller\BaseController{
 
     public function login() {
-
-        $this->loadData('login');
-
+        $this->renderView('login');
     }
+
     public function profile() {
-
-        $this->loadData('profile');
-
+        $this->renderView('profile');
     }
+
     public function register() {
-
-        $this->loadData('register');
-
+        $this->renderView('register');
     }
+
     public function main() {
-
-        $this->loadData('main');
-
+        $this->renderView('main');
     }
+
     public function error($err) {
-
-        $this->loadData('error', $err);
-
+        $this->renderView('error', $err);
     }
 }

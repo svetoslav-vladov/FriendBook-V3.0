@@ -1,13 +1,10 @@
-<?php
-require_once "../include/session.php";
-?>
 <div id="opacity_black_background">
 <form id="post-form" class="shadow-box" action="../controller/add_post_controller.php" method="post">
     <label for="post_module">Make post</label>
     <div id="add_post_wrap">
         <div id="small_image">
-            <a href="../view/profile.php">
-                <img src="<?php if(isset($_SESSION["logged"])){ echo $_SESSION["logged"]["profile_pic"];}?>" alt="profile_pic">
+            <a href="<?php echo URL_ROOT?>/index/profile">
+                <img src="<?php if(isset($_SESSION["logged"])){ echo URL_ROOT . $_SESSION["logged"]["profile_pic"];}?>" alt="profile_pic">
             </a>
         </div>
         <div id="post_input_fake">

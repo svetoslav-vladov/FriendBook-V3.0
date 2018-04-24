@@ -27,6 +27,44 @@
         private $reg_date;
 
         /**
+         * User constructor.
+         * @param $id
+         * @param $first_name
+         * @param $last_name
+         * @param $full_name
+         * @param $email
+         * @param $password
+         * @param $gender
+         * @param $birthday
+         * @param $profile_pic
+         * @param $cover_pic
+         * @param $friends
+         * @param $followers
+         * @param $albums
+         * @param $photos
+         * @param $reg_date
+         */
+//        public function __construct($id = null, $first_name = null, $last_name = null, $full_name = null, $email, $password = null,
+//                                    $gender= null, $birthday = null, $profile_pic = null, $cover_pic = null, $friends = null,
+//                                    $followers = null, $albums = null, $photos = null, $reg_date = null) {
+//            $this->id = $id;
+//            $this->first_name = $first_name;
+//            $this->last_name = $last_name;
+//            $this->full_name = $full_name;
+//            $this->email = $email;
+//            $this->password = $password;
+//            $this->gender = $gender;
+//            $this->birthday = $birthday;
+//            $this->profile_pic = $profile_pic;
+//            $this->cover_pic = $cover_pic;
+//            $this->friends = $friends;
+//            $this->followers = $followers;
+//            $this->albums = $albums;
+//            $this->photos = $photos;
+//            $this->reg_date = $reg_date;
+//        }
+
+        /**
          * @return mixed
          */
         public function getId()

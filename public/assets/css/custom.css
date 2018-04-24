@@ -129,10 +129,6 @@ nav li{
     right: 0 ;
 }
 
-div#wrap {
-    height: 90%;
-    width: 90%;
-}
 
 .fixed-top {
     z-index: 1030;
@@ -153,4 +149,48 @@ div#wrap {
 .err_msg:hover, .ok_msg:hover, #ajax_error:hover, #ajax_success:hover {
     cursor: pointer;
     color: black;
+}
+
+.post_form textarea {
+    resize: none;
+    margin-bottom: 10px;
+}
+.post_form input {
+    margin: 0 !important;
+}
+
+.post_modal {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 14px 0px grey;
+}
+
+#small_image {
+    display: inline-block;
+    width: 62px;
+    margin: 10px;
+}
+
+#small_image a img {
+    width:100%;
+    border-radius: 50%;
+}
+
+#post_input_fake {
+    display: inline-block;
+}
+.modal-header {
+    display: block;
+}
+.modal-header a{
+    display: inline-block;
+    width: 70px;
+}
+
+.modal-header a img {
+    width: 100%;
+}
+
+.modal-header h5 {
+    display: inline-block;
 }

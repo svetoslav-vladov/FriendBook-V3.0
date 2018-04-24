@@ -1,21 +1,30 @@
-<div id="opacity_black_background">
-<form id="post-form" class="shadow-box" action="<?php echo URL_ROOT?>/post/addPost" method="post">
-    <label for="post_module">Make post</label>
-    <div id="add_post_wrap">
-        <div id="small_image">
-            <a href="<?php echo URL_ROOT?>/index/profile">
-                <img src="<?php if(isset($_SESSION["logged"])){ echo URL_ROOT . $_SESSION["logged"]->getProfilePic();}?>" alt="profile_pic">
-            </a>
-        </div>
-        <div id="post_input_fake">
-            <p id="post-panel">What's on your mind, <?php if(isset($_SESSION["logged"])){ echo $_SESSION["logged"]->getFirstName() . " " . $_SESSION["logged"]->getLastName() ;} ?>?</p>
-        </div>
-        <div id="post_add_popup">
-            <textarea id="post_module" class="shadow-box" cols="62" rows="10" name="desc"></textarea>
-            <input class="mini-btn shadow-box" type="submit" value="post" name="add_post">
-            <button class="mini-btn shadow-box" id="cancel_post">CANCEL</button>
+<div id="small_image">
+    <a href="<?php echo URL_ROOT;?>/index/profile">
+        <img class="img-rounded" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic();?>" alt="profile_pic">
+    </a>
+</div>
+<!-- div to Open the Modal -->
+<div id="post_input_fake" data-toggle="modal" data-target="#exampleModalCenter">
+    <p id="post-panel" class="mb-0">What's on your mind, <?php echo $_SESSION['logged']->getFirstName() . ' ' . $_SESSION['logged']->getLastName();?>?</p>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="<?php echo URL_ROOT;?>/index/profile">
+                    <img class="img-rounded" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic();?>" alt="profile_pic">
+                </a>
+                <h5  id="exampleModalLongTitle" class="mb-0">What's on your mind, eray myumyun?</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="post_form" action="<?php echo URL_ROOT?>/post/addPost">
+                    <textarea class="form-control" rows="5" id="comment" name="desc"></textarea>
+                    <input type="submit" class="btn btn-primary mb-2" name="add_post" value="POST">
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="CANCEL">
+                </form>
+            </div>
         </div>
     </div>
 </div>
-    <div class="clear"></div>
-</form>

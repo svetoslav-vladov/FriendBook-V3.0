@@ -1,22 +1,24 @@
 var loading_gif = $('<img class="loading-gif" src="../assets/images/ajax-loading-c4.gif">');
+var url_root = "http://localhost/projects/FriendBook-v3.0";
 function likePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', '../controller/like_post_controller.php');
+    request.open('post', url_root + '/post/likePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isLiked(post_id);
-            },250);
+                isDisliked(post_id);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
 }
 function unlikePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', '../controller/unlike_post_controller.php');
+    request.open('post', url_root + '/post/unlikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -37,12 +39,16 @@ function isLiked(post_id) {
         if (this.readyState === 4 && this.status === 200) {
             likeButton.click(function () {
                 likePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#like-container'+post_id).append(loading_gif);
+                $('#like_counter'+post_id).remove();
+                $('#dislike-container'+post_id).empty();
                 $(this).remove();
             });
             unlikeButton.click(function () {
                 unlikePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#like-container'+post_id).append(loading_gif);
+                $('#like_counter'+post_id).remove();
+                $('#dislike-container'+post_id).empty();
                 $(this).remove();
             });
             getCountLikes(post_id);
@@ -54,7 +60,7 @@ function isLiked(post_id) {
             }
         }
     };
-    req.open("GET", "../controller/like_post_controller.php?post_id="+post_id);
+    req.open("GET", url_root + "/post/likePost&post_id="+post_id);
     req.send();
 }
 function getCountLikes(post_id) {
@@ -66,15 +72,13 @@ function getCountLikes(post_id) {
             $('#unlike'+post_id).append(likeCounter);
         }
     };
-    req.open("GET", "../controller/likeCounter_controller.php?post_id="+post_id);
+    req.open("GET", url_root + "/post/likeCounter&post_id="+post_id);
     req.send();
 }
 
-
-
 function dislikePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', '../controller/dislike_post_controller.php');
+    request.open('post', url_root + '/post/disikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -89,7 +93,7 @@ function dislikePost(post_id) {
 }
 function undislikePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', '../controller/undislike_post_controller.php');
+    request.open('post', url_root + '/post/undislikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -122,14 +126,14 @@ function isDisliked(post_id) {
             });
             getCountDislikes(post_id);
             if (this.responseText == 1) {
-                $('#like-container'+post_id).append(undislikeButton);
+                $('#dislike-container'+post_id).append(undislikeButton);
             }
             else {
-                $('#like-container'+post_id).append(dislikeButton);
+                $('#dislike-container'+post_id).append(dislikeButton);
             }
         }
     };
-    req.open("GET", "../controller/dislike_post_controller.php?post_id="+post_id);
+    req.open("GET", url_root + "/post/dislikePost&post_id="+post_id);
     req.send();
 }
 
@@ -142,6 +146,6 @@ function getCountDislikes(post_id) {
             $('#undislike'+post_id).append(dislikeCounter);
         }
     };
-    req.open("GET", "../controller/dislikeCounter_controller.php?post_id="+post_id);
+    req.open("GET", url_root + "/post/dislikeCounter&post_id="+post_id);
     req.send();
 }

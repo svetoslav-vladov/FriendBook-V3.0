@@ -17,27 +17,9 @@
                 </div>
                 <hr>
                 <h2>News Feed:</h2>
-                <div>
+                <div class="news_feed_posts">
                     <?php require_once '../app/include/modules/news_feed_posts.php'; ?>
                 </div>
-                <div class="card p-3 mt-3 mb-3">
-                    <p>
-                        <?php var_dump($_SESSION); ?>
-                    </p>
-                </div>
-                <div class="card p-3 mt-3 mb-3">
-                    <h2>Post</h2>
-                    <p>
-                        <?php var_dump($_SESSION); ?>
-                    </p>
-                </div>
-                <div class="card p-3 mt-3 mb-3">
-                    <h2>Post</h2>
-                    <p>
-                        <?php var_dump($_SESSION); ?>
-                    </p>
-                </div>
-
             </div>
             <!--/span-->
             <div class="col-md-3 col-lg-3">

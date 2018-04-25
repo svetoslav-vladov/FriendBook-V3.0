@@ -105,6 +105,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 nav{
     z-index: 10000;
+    border-bottom: 5px solid #1f7d34;
 }
 nav li{
     font-size: 1.2rem;
@@ -222,4 +223,33 @@ span.nav-icon {
 
 div#about, div#photos, div#friends {
     display: none;
+}
+
+ul.navbar-nav li {
+    cursor:  pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+ul.navbar-nav li:hover {
+    background: #ffffff1f;
+    border-radius: 5px;
+}
+
+ul.navbar-nav li a{
+    color:#d7eedd !important;
+}
+
+.dropdown-menu {
+    background: green;
+}
+
+.dropdown-menu a:hover {
+    color: black !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #28a745;
+}
+img.logo {
+    height: 32px;
 }

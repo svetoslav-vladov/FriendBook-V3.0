@@ -12,7 +12,7 @@
             </div>
             <!--/span-->
             <div class="col-md-6" id="#main">
-                <div class="post_modal">
+                <div class="post_modal mb-5">
                     <?php require_once '../app/include/modules/post-mod.php';?>
                 </div>
                 <hr>

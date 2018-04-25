@@ -13,6 +13,26 @@
             <div class="description">
                 <p><?php echo $post["description"]; ?></p>
             </div>
+            <div class="post_navigation">
+                <div class="like-container" id="like-container<?php echo $post['post_id']?>">
+                    <script>
+                        $(document).ready(function () {
+                            isLiked(<?php echo $post['post_id']?>);
+                        });
+                    </script>
+                </div>
+                <div class="like-container" id="dislike-container<?php echo $post['post_id']?>">
+                    <script>
+                        $(document).ready(function () {
+                            isDisliked(<?php echo $post['post_id'] ?>);
+                        });
+                    </script>
+                </div>
+                <div class="comments-buttons" id=comments-buttons<?php echo $post['post_id']; ?>">
+                    <button onclick="displayComments(<?php echo $post['post_id']?>)" type="button" class="display_comments" name="button" id="comment_btn<?php echo $post['post_id']?>">COMMENTS</button>
+                    <button onclick="hideComments(<?php echo $post['post_id']?>)" type="button" name="button" class="comment_btn_close" id="comment_btn_close<?php echo $post['post_id']?>">CLOSE COMMENTS</button>
+                </div>
+            </div>
         </div>
         <?php }?>
 </div>

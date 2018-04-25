@@ -129,11 +129,6 @@ nav li{
     right: 0 ;
 }
 
-div#wrap {
-    height: 90%;
-    width: 90%;
-}
-
 .fixed-top {
     z-index: 1030;
 }

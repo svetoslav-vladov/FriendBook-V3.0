@@ -18,7 +18,7 @@
 
         private $relation_status;
         private $profile_pic;
-        private $cover_pic;
+        private $profile_cover;
         private $description;
         private $display_name;
         private $country_id;
@@ -75,7 +75,7 @@
             $this->birthday = $birthday;
             $this->relation_status = $relation_status;
             $this->profile_pic = $profile_pic;
-            $this->cover_pic = $cover_pic;
+            $this->profile_cover = $cover_pic;
             $this->description = $description;
             $this->display_name = $display_name;
             $this->country_id = $country_id;
@@ -179,9 +179,9 @@
         /**
          * @return null
          */
-        public function getCoverPic()
+        public function getProfileCover()
         {
-            return $this->cover_pic;
+            return $this->profile_cover;
         }
 
         /**
@@ -353,11 +353,11 @@
         }
 
         /**
-         * @param null $cover_pic
+         * @param null $profile_cover
          */
-        public function setCoverPic($cover_pic)
+        public function setProfileCover($profile_cover)
         {
-            $this->cover_pic = $cover_pic;
+            $this->profile_cover = $profile_cover;
         }
 
         /**

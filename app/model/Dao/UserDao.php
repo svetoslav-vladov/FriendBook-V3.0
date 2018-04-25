@@ -40,7 +40,7 @@ class UserDao {
             $user->getGender(),
             $user->getBirthday(),
             $user->getProfilePic(),
-            $user->getCoverPic(),
+            $user->getProfileCover(),
         ));
     }
 

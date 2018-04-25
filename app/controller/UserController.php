@@ -140,7 +140,7 @@ class UserController extends BaseController {
                     $user->setPassword(sha1($pass));
                     $user->setGender($gender);
                     $user->setBirthday($birthday);
-                    $user->setCoverPic($cover_pic);
+                    $user->setProfileCover($cover_pic);
                     $user->setProfilePic($profile_pic);
 
                     $insert = $dao->insertUserDb($user);

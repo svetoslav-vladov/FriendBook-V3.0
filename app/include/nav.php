@@ -20,14 +20,26 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/main">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-users"></i></a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="friendRequests"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users"></i></a>
+                    <div class="dropdown-menu" aria-labelledby="friendRequests">
+                        No friend requests :(
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-envelope"></i></a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="messages"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-envelope"></i></a>
+                    <div class="dropdown-menu" aria-labelledby="messages">
+                        No messages ;(
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-bell"></i></a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="http://example.com" id="notifications"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i></a>
+                    <div class="dropdown-menu" aria-labelledby="notifications">
+                        No notifications :)
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01"

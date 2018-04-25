@@ -18,6 +18,8 @@ class UserDao {
 
     const GET_INFO_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
 
+    const GET_INFO_BY_ID = "SELECT * FROM users WHERE id = ?";
+
     // getting static connection from DBconnect file
     private function __construct() {
         $this->pdo = DBconnect::getInstance()->dbConnect();
@@ -59,6 +61,12 @@ class UserDao {
         $statement = $this->pdo->prepare(self::CHECK_FOR_EMAIL);
         $statement->execute(array($user->getEmail()));
         return $statement->fetch(\PDO::FETCH_ASSOC)['row'] > 0;
+    }
+
+    public function getUserInfoById(User $user) {
+        $statement = $this->pdo->prepare(self::GET_INFO_BY_ID);
+        $statement->execute(array($user->getId()));
+        return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
 }

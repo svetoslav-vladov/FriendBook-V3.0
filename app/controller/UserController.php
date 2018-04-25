@@ -168,4 +168,25 @@ class UserController extends BaseController {
 
     }
 
+    public function getUserInfo(User $user){
+        $dao = UserDao::getInstance();
+        $result = $dao->getUserInfoById($user);
+        try{
+            if($result){
+
+                cast($user,$result);
+                $user->setPassword(null);
+                $user->setFullName($user->getFirstName() . " " . $user->getLastName());
+                return $user;
+            }
+            else{
+                // return false if no user with that id
+                return false;
+            }
+        }
+        catch (\PDOException $e){
+            header('location:'.URL_ROOT.'/index/profile&error=' . $e->getMessage());
+        }
+    }
+
 }

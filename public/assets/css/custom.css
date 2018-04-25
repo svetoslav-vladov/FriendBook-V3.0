@@ -136,7 +136,9 @@ nav li{
 /* layout sidebars fixed*/
 
 .sidebar-nav-fixed {
-    width:14%;
+    width: 18%;
+    min-width: 200px;
+    max-width: 250px;
 }
 
 @media (min-width: 768px) {
@@ -192,4 +194,29 @@ nav li{
 
 .modal-header h5 {
     display: inline-block;
+}
+div#user-nav ul {
+    list-style: none;
+}
+.profile-cover {
+    min-height: 300px;
+    background-size:  cover;
+    background-position:  center;
+    position: relative;
+}
+.card.coverProfilePic img {
+    height:  150px;
+    width: auto;
+}
+
+.card.coverProfilePic {
+    position:  absolute;
+    bottom:  20px;
+    right:  20px;
+    border: 2px solid #ffffff87;
+    box-sizing:  border-box;
+    border-radius: 6px;
+    overflow:  hidden;
+    max-width: 150px;
+    background-color: #ffffffd1;
 }

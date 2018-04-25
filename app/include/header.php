@@ -24,6 +24,6 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<?php require_once "msg_push.php"; ?>
+<?php require_once "php_msg_error.php"; ?>
 <div id='ajax_error'></div>
 <div id='ajax_success'></div>

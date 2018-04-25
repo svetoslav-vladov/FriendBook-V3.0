@@ -5,11 +5,11 @@ var loading_gif = $("<img class='loading-gif' src="+ url_root +"/assets/images/a
 
 function likePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', url_root + '/post/likePost');
+    request.open('POST', url_root + '/post/likePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#dislike-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
                 isLiked(post_id);
                 isDisliked(post_id);
@@ -21,15 +21,17 @@ function likePost(post_id) {
 }
 function unlikePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', url_root + '/post/unlikePost');
+    request.open('POST', url_root + '/post/unlikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#dislike-container'+post_id).empty();
+        $('#like-container'+post_id).append(loading_gif);
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isLiked(post_id);
-            },250);
+                isDisliked(post_id);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
@@ -81,15 +83,16 @@ function getCountLikes(post_id) {
 
 function dislikePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', url_root + '/post/disikePost');
+    request.open('post', url_root + '/post/dislikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isDisliked(post_id);
-            },250);
+                isLiked(post_id);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
@@ -99,12 +102,13 @@ function undislikePost(post_id) {
     request.open('post', url_root + '/post/undislikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
+        $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
-            $('#like-container'+post_id).append(loading_gif);
             setTimeout(function(){
-                loading_gif.remove();
                 isDisliked(post_id);
-            },250);
+                isLiked(post_id);
+                loading_gif.remove();
+            },200);
         }
     };
     request.send("post_id=" + post_id);
@@ -119,12 +123,16 @@ function isDisliked(post_id) {
         if (this.readyState === 4 && this.status === 200) {
             dislikeButton.click(function () {
                 dislikePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#dislike-container'+post_id).append(loading_gif);
+                $('#dislike_counter'+post_id).remove();
+                $('#like-container'+post_id).empty();
                 $(this).remove();
             });
             undislikeButton.click(function () {
                 undislikePost(post_id);
-                $('#counter'+post_id).remove();
+                $('#dislike-container'+post_id).append(loading_gif);
+                $('#dislike_counter'+post_id).remove();
+                $('#like-container'+post_id).empty();
                 $(this).remove();
             });
             getCountDislikes(post_id);
@@ -144,7 +152,7 @@ function getCountDislikes(post_id) {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var dislikeCounter = $(`<span class="likes_counter" id="counter${post_id}">${this.responseText}</span>`);
+            var dislikeCounter = $(`<span class="likes_counter" id="dislike_counter${post_id}">${this.responseText}</span>`);
             $('#dislike'+post_id).append(dislikeCounter);
             $('#undislike'+post_id).append(dislikeCounter);
         }

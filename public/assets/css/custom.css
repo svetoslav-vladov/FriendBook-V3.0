@@ -2,15 +2,11 @@ html,
 body {
     height: 100%;
     padding-bottom: 40px;
-    padding-top: 60px;
+    padding-top: 25px;
 }
 
 div#guest_wrap {
     text-align: center;
-}
-
-body {
-    padding-top: 70px;
 }
 
 .padding-top-register{
@@ -219,4 +215,11 @@ div#user-nav ul {
     overflow:  hidden;
     max-width: 150px;
     background-color: #ffffffd1;
+}
+span.nav-icon {
+    margin-right:  10px;
+}
+
+div#about, div#photos, div#friends {
+    display: none;
 }

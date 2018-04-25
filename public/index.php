@@ -43,8 +43,14 @@ elseif (class_exists($controllerClassName)) {
             $controller->error(401);
         }
         else{
-            $controller = new controller\IndexController();
-            $contoller->$methodName();
+            if (method_exists($contoller, $methodName)) {
+                $controller = new controller\IndexController();
+                $contoller->$methodName();
+            }
+            else{
+                $controller = new controller\IndexController();
+                $controller->error(404);
+            }
         }
     }
     elseif (method_exists($contoller, $methodName)) {

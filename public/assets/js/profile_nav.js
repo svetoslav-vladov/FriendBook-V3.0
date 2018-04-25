@@ -4,7 +4,7 @@ var about = document.querySelector('#about');
 var photos = document.querySelector('#photos');
 var image_list_box = document.querySelector('#image_list');
 
-var photos_btn = document.querySelector('#photos_btn');
+var photos_btn = document.querySelector('#pictures_btn');
 var about_btn = document.querySelector('#about_btn');
 var timeline_btn = document.querySelector('#timeline_btn');
 
@@ -27,9 +27,6 @@ if(document.querySelector('#timeline_btn')){
 if(document.querySelector('#photos')){
     upload_photos.addEventListener('change', addUserPhotos);
 }
-
-
-
 
 function getAllPhotos(e) {
     e.preventDefault();

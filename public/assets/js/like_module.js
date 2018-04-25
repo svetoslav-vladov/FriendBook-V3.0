@@ -1,5 +1,7 @@
 var loading_gif = $('<img class="loading-gif" src="../assets/images/ajax-loading-c4.gif">');
-var url_root = "http://localhost/projects/FriendBook-v3.0";
+// url location build
+var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
+
 function likePost(post_id) {
     var request = new XMLHttpRequest();
     request.open('post', url_root + '/post/likePost');

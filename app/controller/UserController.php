@@ -189,4 +189,9 @@ class UserController extends BaseController {
         }
     }
 
+    public function getUserPhotos($userId){
+        echo 'yes controller';
+    }
+
+
 }

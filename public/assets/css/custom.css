@@ -253,3 +253,39 @@ ul.navbar-nav li a{
 img.logo {
     height: 32px;
 }
+.like_counter {
+    position: relative;
+}
+.loading-gif {
+    width: 25px;
+    position: absolute;
+    left: 72px;
+    top: 256px;
+}
+.like-button, .dislike-button {
+    color: gray;
+    background: none;
+    border: none;
+    cursor:  pointer;
+    transition: background 0.3s ease-in-out;
+}
+.like-button:hover, .dislike-button:hover {
+    color: black;
+}
+.unlike-button, .undislike-button {
+    color: black;
+    border: none;
+    background: none;
+    cursor:  pointer;
+    transition: background 0.3s ease-in-out;
+}
+.unlike-button:hover, .undislike-button:hover {
+    color: black;
+    opacity: 0.8;
+}
+
+.like-button, .unlike-button, .dislike-button, .undislike-button {
+    padding: 10px;
+    width: 100%;
+    outline: none;
+}

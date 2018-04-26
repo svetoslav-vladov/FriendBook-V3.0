@@ -11,8 +11,8 @@ function likePost(post_id) {
         $('#dislike-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
             setTimeout(function(){
-                isDisliked(post_id);
                 isLiked(post_id);
+                isDisliked(post_id);
                 loading_gif.remove();
             },200);
         }
@@ -28,8 +28,8 @@ function unlikePost(post_id) {
         $('#like-container'+post_id).append(loading_gif);
         if (this.readyState === 4 && this.status === 200) {
             setTimeout(function(){
-                isDisliked(post_id);
                 isLiked(post_id);
+                isDisliked(post_id);
                 loading_gif.remove();
             },200);
         }
@@ -72,7 +72,7 @@ function getCountLikes(post_id) {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var likeCounter = $(`<span class="likes_counter" id="counter${post_id}">${this.responseText}</span>`);
+            var likeCounter = $(`<span class="likes_counter" id="like_counter${post_id}">${this.responseText}</span>`);
             $('#like'+post_id).append(likeCounter);
             $('#unlike'+post_id).append(likeCounter);
         }
@@ -83,14 +83,14 @@ function getCountLikes(post_id) {
 
 function dislikePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('post', url_root + '/post/dislikePost');
+    request.open('POST', url_root + '/post/dislikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
             setTimeout(function(){
-                isLiked(post_id);
                 isDisliked(post_id);
+                isLiked(post_id);
                 loading_gif.remove();
             },200);
         }
@@ -105,8 +105,8 @@ function undislikePost(post_id) {
         $('#like-container'+post_id).empty();
         if (this.readyState === 4 && this.status === 200) {
             setTimeout(function(){
-                isLiked(post_id);
                 isDisliked(post_id);
+                isLiked(post_id);
                 loading_gif.remove();
             },200);
         }

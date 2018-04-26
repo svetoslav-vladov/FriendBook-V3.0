@@ -12,7 +12,12 @@ class UserDao {
     const INSERT_USER = "INSERT INTO users (first_name, last_name, email, password, 
                     gender,birthday,profile_pic,profile_cover) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
 
+    const INSERT_SINGLE_PHOTO = "INSERT INTO user_photos (user_id, img_url) 
+                                VALUES (?,?)";
+
     const CHECK_FOR_EMAIL = "SELECT COUNT(*) as row FROM users WHERE email = ?";
+
+    const GET_PROFILE_IMAGES = "SELECT img_url FROM user_photos WHERE user_id = ?;";
 
     const LOGIN_CHECK = "SELECT * FROM users WHERE email = ? AND password = ?";
 
@@ -69,4 +74,19 @@ class UserDao {
         return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
+    public function getUserPhotos(User $user) {
+        $statement = $this->pdo->prepare(self::GET_PROFILE_IMAGES);
+        $statement->execute(array(
+            $user->getId()
+        ));
+        return $statement->fetchALL(\PDO::FETCH_ASSOC);
+    }
+
+    public function insertSignleImage($user, $image) {
+        $statement = $this->pdo->prepare(self::INSERT_SINGLE_PHOTO);
+        return $statement->execute(array(
+            $user->getId(),
+            $image,
+        ));
+    }
 }

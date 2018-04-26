@@ -36,7 +36,7 @@ if(document.querySelector('#timeline')){
     timeline_btn.addEventListener('click', show_feed);
 }
 
-if(document.querySelector('#photos')){
+if(document.querySelector('#photos') && document.querySelector('#upload_photos')){
     upload_photos.addEventListener('change', addUserPhotos);
 }
 
@@ -45,7 +45,7 @@ function getAllPhotos(e) {
 
     var xhr = new XMLHttpRequest();
     // this will get images and albums in future, for now only images
-    xhr.open('get', url_root + '/user/getUserPhotos?user_id='+user_id_nav.value);
+    xhr.open('get', url_root + '/user/getUserPhotos&user_id='+user_id_nav.value);
 
     timeline.style.display = 'none';
     about.style.display = 'none';
@@ -57,7 +57,9 @@ function getAllPhotos(e) {
         $res = JSON.parse(this.responseText);
         for(var i = 0; i < $res.length; i++){
             var img = document.createElement('img');
-            img.src = $res[i]['img_url'];
+            img.classList.add('img-thumbnail');
+            img.classList.add('img_100');
+            img.src = url_root + $res[i]['img_url'];
             image_list_box.appendChild(img);
         }
 
@@ -74,7 +76,7 @@ function addUserPhotos() {
     form_data.append('file', file_data);
 
     $.ajax({
-        url: '../controller/add_photos_controller.php', // point to server-side PHP script
+        url: url_root + '/user/addOnlyImage', // point to server-side PHP script
         dataType: 'text',  // what to expect back from the PHP script, if anything
         cache: false,
         contentType: false,
@@ -88,14 +90,18 @@ function addUserPhotos() {
                 var err = document.querySelector('#ajax_error');
                 err.innerHTML =  res['uplod_max'];
                 err.style.display =  "block";
+                document.querySelector('#ajax_success').style.display =  "none";
             }
             else {
                 var img = document.createElement('img');
-                img.src = res['img_url'];
+                img.src = url_root + res['img_url'];
+                img.classList.add('img-thumbnail');
+                img.classList.add('img_100');
                 image_list_box.appendChild(img);
                 var success = document.querySelector('#ajax_success');
                 success.innerHTML =  "Successfuly uploaded image";
                 success.style.display =  "block";
+                document.querySelector('#ajax_error').style.display =  "none";
             }
         }
 

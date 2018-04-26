@@ -11,7 +11,7 @@
                     <form class="form-inline mr-auto">
                         <input type="text" class="search_input form-control" placeholder="Search for..." onkeyup="searchUser(this.value)">
                         <span class="input-group-btn">
-                            <button type="button" class="search_button btn btn-light"><i class="fa fa-search"></i> Search</button>
+                            <button type="button" class="search_button btn btn-light"><i class="fa fa-search"></i> search</button>
                         </span>
                     </form>
                 </div>

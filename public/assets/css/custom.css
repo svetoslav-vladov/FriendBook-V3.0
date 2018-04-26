@@ -486,6 +486,7 @@ span.likes_counter {
 .search_input {
     border-radius: 7px 0px 0px 0px !important;
     padding: 4px 12px;
+    border: 1px solid whitesmoke;
 }
 .list-group-item {
     padding: 4px 6px;

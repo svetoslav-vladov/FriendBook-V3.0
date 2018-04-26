@@ -1,3 +1,4 @@
+var root = window.location.origin + '/projects/FriendBook-v3.0';
 function getComments(post_id) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
@@ -5,16 +6,17 @@ function getComments(post_id) {
             $('#comment-counter'+post_id).remove();
             var result = JSON.parse(this.responseText);
             var comments = $('#comments'+post_id);
+            console.log(result);
             for(var comment of result) {
                 var commentDiv = $(`
                 <div class="comment comment-${post_id}">
                         <span class="user_pic">
                             <a href="profile.php?id=${comment['owner_id']}">
-                                <img src=${comment['profile_pic']} alt="icon" class="img-rounded center-block"
+                                <img src=${root+comment['profile_pic']} alt="icon" class="img-rounded center-block"
                                  alt="${comment['first_name']} ${comment['last_name']}" title="${comment['first_name']} ${comment['last_name']}">
                             </a>
                         </span>
-                        
+
                         <span class="comment_desc">
                             <p>${comment['description']}</p>
                         </span>
@@ -33,10 +35,9 @@ function getComments(post_id) {
                 $('#comment_btn'+post_id).append(commentCounter);
                 $('#comment_btn'+post_id).attr('disabled', false);
             }
-
         }
     };
-    request.open("GET", "../controller/add_comment_controller.php?post_id="+post_id, true);
+    request.open("GET", url_root + "/comment/addComment&post_id="+post_id);
     request.send();
 }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 use Model\Dao\PostDao;
+use Model\Post;
 
 class PostController extends BaseController{
 
@@ -24,13 +25,14 @@ class PostController extends BaseController{
                 header('location:'.URL_ROOT.'/index/main&error=' . htmlentities($error));
             }
             if (!$error) {
-
+                // create new post for added
+                $post = new Post($user_id, $current_post);
                 if (isset($_POST['user_id'])) {
                     $id = htmlentities($_POST['user_id']);
-                    $dao->addPost($id, $current_post);
-                    header('location:'.URL_ROOT.'/index/main');
+                    $dao->addPost($id, $post->getDescription());
+                    header('location:'.URL_ROOT.'/index/profile');
                 }else {
-                    $dao->addPost($user_id, $current_post);
+                    $dao->addPost($post->getOwnerId(), $post->getDescription());
                     header('location:'.URL_ROOT.'/index/main');
                 }
             }

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light fixed-top bg-success">
     <div class="container">
-        <a class="navbar-brand" href="#">FriendBook</a>
+        <a class="navbar-brand" href="<?php echo URL_ROOT; ?>"><img src="<?php echo URL_ROOT . '/assets/images/mini-logo.png' ?>" alt="FriendBook logo" class="logo"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

@@ -73,9 +73,15 @@ select.form-control:not([size]):not([multiple]) {
 .error_poster{
     width:100%;
 }
-.err_msg {
-    position:  absolute;
-    top: 60px;
+#ajax_error{
+    display: none;
+}
+#ajax_success{
+    display: none;
+}
+.err_msg, #ajax_error {
+    position:  fixed;
+    top: 65px;
     background: #dc3545f2;
     width:  100%;
     text-align:  center;
@@ -88,9 +94,9 @@ select.form-control:not([size]):not([multiple]) {
     border-bottom: 1px solid #90232e;
     color: white;
 }
-.ok_msg {
-    position:  absolute;
-    top: 60px;
+.ok_msg, #ajax_success {
+    position:  fixed;
+    top: 65px;
     background: #47bf62f2;
     width:  100%;
     text-align:  center;
@@ -213,7 +219,6 @@ div#user-nav ul {
     border: 2px solid #ffffff87;
     box-sizing:  border-box;
     border-radius: 6px;
-    overflow:  hidden;
     max-width: 150px;
     background-color: #ffffffd1;
 }
@@ -253,6 +258,11 @@ ul.navbar-nav li a{
 img.logo {
     height: 32px;
 }
+.img_100 {
+    height: 200px;
+    width: 200px;
+}
+
 .like_counter {
     position: relative;
 }

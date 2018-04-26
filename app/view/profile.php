@@ -40,9 +40,19 @@
                             <div class="card coverProfilePic text-center p-1">
                                 <img src="<?php echo URL_ROOT . $theUser->getProfilePic(); ?>" alt="<?php
                                 echo URL_ROOT . $theUser->getFirstName() . 'profile picture'; ?>">
-                                <div class="font-weight-bold py-1 small">
+                                <div class="font-weight-bold py-1 small block-inline">
                                     <?php echo ucwords($theUser->getFullName()); ?>
                                 </div>
+                                <ul class="navbar-nav small block-inline">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" id="friendRequests"
+                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users text-dark"></i></a>
+                                        <div class="dropdown-menu text-white" aria-labelledby="friendRequests">
+                                           <a class="dropdown-item" href="#">Add Friend</a>
+                                           <a class="dropdown-item" href="#">Follow</a>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                             <?php
                         }
@@ -71,9 +81,25 @@
                 </div>
                 <div id="photos" class="card">
                     <h1>Albums</h1>
-                    <p>No albums</p>
+
+                    <div class="holder p-3">
+                        <?php
+                        if (isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId()) {
+
+                        }
+                        else{
+                            ?>
+                            <span id="albumAdd">
+                                <img class="img-thumbnail img_100" src="<?php echo URL_ROOT . '/assets/images/add_album_photos.png' ?>" alt="">
+                            </span>
+                            <?php
+                        }
+                        ?>
+                        <span id="albumList"></span>
+                    </div>
                     <hr>
                     <h1>Photos</h1>
+                    <div class="holder p-3">
                     <?php
                     if (isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId()) {
 
@@ -83,11 +109,14 @@
                         <div id="input_holder">
                             <input type="file" id="upload_photos" class="btn-input" accept="image/*">
                         </div>
+                        <span id="albumAdd">
+                            <img class="img-thumbnail img_100" src="<?php echo URL_ROOT . '/assets/images/add_img.png' ?>" alt="">
+                        </span>
                         <?php
                     }
                     ?>
-                    <p>No photos</p>
-                    <div id="image_list"></div>
+                    <span id="image_list"></span>
+                    </div>
                 </div>
             </div>
 

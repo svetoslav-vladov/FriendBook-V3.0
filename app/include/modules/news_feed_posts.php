@@ -37,13 +37,11 @@
                     </script>
                 </div>
                 <div class="comments-buttons" id=comments-buttons<?php echo $post['post_id']; ?>">
-                    <button onclick="displayComments(<?php echo $post['post_id'] ?>)" type="button"
-                            class="display_comments" name="button" id="comment_btn<?php echo $post['post_id'] ?>">
-                        COMMENTS
+                    <button name="button" id="comment_btn<?php echo $post['post_id'] ?>"
+                            onclick="displayComments(<?php echo $post['post_id'] ?>)" type="button" class="btn btn-success">COMMENTS
                     </button>
-                    <button onclick="hideComments(<?php echo $post['post_id'] ?>)" type="button" name="button"
-                            class="comment_btn_close" id="comment_btn_close<?php echo $post['post_id'] ?>">CLOSE
-                        COMMENTS
+                    <button name="button" id="comment_btn_close<?php echo $post['post_id'] ?>"
+                            onclick="hideComments(<?php echo $post['post_id'] ?>)" type="button" class="btn btn-success comment_btn_close">CLOSE
                     </button>
                 </div>
             </div>

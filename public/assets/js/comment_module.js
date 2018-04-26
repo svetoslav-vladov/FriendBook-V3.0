@@ -1,6 +1,5 @@
 var root = window.location.origin + '/projects/FriendBook-v3.0';
-var gif_root = '/projects/FriendBook-v3.0/';
-var comment_gif = $("<img class='comments_gif' src="+ gif_root +"/assets/images/ajax-loading-c4.gif>");
+var comment_gif = $("<img class='comments_gif' src="+ root +"/assets/images/ajax-loading-c4.gif>");
 function getComments(post_id) {
     var comments = $('#comments'+post_id);
     comments.empty();
@@ -13,22 +12,21 @@ function getComments(post_id) {
             setTimeout(function(){
                 for(var comment of result) {
                     var commentDiv = $(`
-                <div class="comment comment-${post_id}">
-                        <span class="user_pic">
-                            <a href="profile.php?id=${comment['owner_id']}">
-                                <img src=${root+comment['profile_pic']} alt="icon" class="img-rounded center-block"
-                                 alt="${comment['first_name']} ${comment['last_name']}" title="${comment['first_name']} ${comment['last_name']}">
-                            </a>
-                        </span>
-
-                        <span class="comment_desc">
-                            <p>${comment['description']}</p>
-                        </span>
-                        <a href="profile.php?id=${comment['owner_id']}" class="comment_owner ${(comment['gender'] == 'male') ? 'male' : 'female'}">
-                            <p>${(comment['display_name'] == null) ? (comment['first_name'] + " " + comment['last_name']) : comment['display_name']}</p>
-                        </a>
-                        <span class="comment_date">${comment['comment_date']}</span>
-                    </div>`);
+                    <div class="media comment comment-${post_id}">
+                    <a href=${root}/index/profile&id=${comment['owner_id']}>
+                        <img class="user_pic align-self-start mr-3" src=${root+comment['profile_pic']} alt="icon">
+                    </a>
+                      <div class="media-body">
+                        <h5 class="mt-0"><a href="${root}/index/profile&id=${comment['owner_id']}" class="comment_owner ${(comment['gender'] == 'male') ? 'male' : 'female'}">
+                                    ${(comment['display_name'] == null) ? (comment['first_name'] + " " + comment['last_name']) : comment['display_name']}
+                                </a>
+                                <span class="comment_date">${comment['comment_date']}</span>
+                        </h5>
+                        <span><p class="comment-desc">${comment['description']}</p></span>
+                      </div>
+                    </div>
+                    
+                    `);
                     comments.append(commentDiv);
                 }
                 var commentCounter = $(`<span class="comment-counter" id="comment-counter${post_id}">${$("#comments"+post_id+" .comment").length}</span>`);

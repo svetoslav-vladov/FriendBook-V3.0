@@ -259,8 +259,8 @@ img.logo {
 .loading-gif {
     width: 25px;
     position: absolute;
-    left: 72px;
-
+    left: 42px;
+    top: -13px;
 }
 .like-button, .dislike-button {
     color: gray;
@@ -289,6 +289,11 @@ img.logo {
     width: 100%;
     outline: none;
 }
+.comment {
+    border-bottom: 1px solid darkgray;
+    width: 97%;
+    margin-top: 10px;
+}
 
 .comment span img {
     height: 40px;
@@ -297,26 +302,13 @@ img.logo {
     width: 40px;
 }
 
-.comment user_pic img {
-    display: block;
-    height: 20px;
+.user_pic {
+    width: 33px;
+    margin-right: 7px !important;
+    border-radius: 50%;
 }
-
-.comment {
-    display: grid;
-    margin: 0;
-    border-bottom: 1px solid #999;
-    margin-bottom: 15px;
-    grid-gap: 10px;
-    grid-template-areas: 'pic name date '              'desc desc desc ';
-    grid-template-columns: 1fr 4fr;
-}
-
 .comments_box {
-    padding: 0px;
-    display: block;
     height: 0;
-    background: #eee;
     transition: height 0.5s ease-in-out, padding 0.5s ease-in-out;
     overflow: hidden;
     overflow-y: scroll;
@@ -341,7 +333,9 @@ img.logo {
 .description p {
     margin:  0px;
 }
-
+.user_pic_add_comment {
+    display: inline-block;
+}
 span.user_pic_add_comment img {
     height: 100%;
     vertical-align: middle;
@@ -367,45 +361,24 @@ input[type="text"] {
 }
 
 .comment_date {
-    font-size: 0.75em;
+    font-size: 0.6em;
     text-align: center;
     color: #488676;
     font-weight:  bold;
     font-family:  arial;
-    padding-top: 10px;
+    float: right;
+    margin: 8px 21px;
 }
 
-span.comment_date {
-    grid-area: date;
-}
 
-span.comment_desc {
-    grid-area: desc;
-    padding: 0 20px;
-    font-family:  arial;
-    line-height: 2;
-    font-size: 0.85rem;
-    color: #555;
-}
-
-span.user_pic {
-    grid-area: pic;
-    text-align: center;
-}
 a.comment_owner {
-    font-size: 0.9em;
+    font-size: 0.8em;
     font-weight:  bold;
     padding-top: 8px;
 }
-
-.comments-buttons button {
-    background: #f5af48;
-    color: white;
-    font-weight:  bold;
-    font-family:  arial;
-    border: 1px solid #c18a38;
-    transition:  background 0.3s ease-in-out;
-    cursor:  pointer;
+.comments-buttons {
+    display: inline-block;
+    float: right;
 }
 
 .comment_btn_close {
@@ -454,4 +427,48 @@ a.comment_owner {
     height: 31px;
     margin-bottom: 0px !important;
     margin-top: 10px;
+}
+.like-container {
+    width: 68px;
+    display: inline-block;
+    position: relative;
+}
+.like_counter {
+    position: relative;
+}
+
+.like-button, .dislike-button, .unlike-button, .undislike-button {
+    position: absolute;
+    padding: 0px;
+    top: -13px;
+    outline: none !important;
+}
+
+span.likes_counter {
+    background: #ffffffc2;
+    padding: 2px 6px;
+    font-size: 0.6em;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #757575;
+    color: black;
+    margin-left: 7px;
+    outline: none;
+}
+
+.comment-counter {
+    padding: 1px 3px;
+    font-size: 0.8em;
+    color: black;
+
+}
+
+.comment-desc {
+    margin: 0px;
+}
+
+.post_navigation {
+    padding: 10px;
+    border-radius: 11px;
+    box-shadow: 0 0 10px 0px darkgrey;
 }

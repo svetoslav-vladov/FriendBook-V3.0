@@ -1,7 +1,7 @@
 <?php
 namespace Controller;
 use Model\Dao\PostDao;
-use Model\User;
+use Model\Post;
 
 class PostController extends BaseController{
 
@@ -25,13 +25,14 @@ class PostController extends BaseController{
                 header('location:'.URL_ROOT.'/index/main&error=' . htmlentities($error));
             }
             if (!$error) {
-
+                // create new post for added
+                $post = new Post($user_id, $current_post);
                 if (isset($_POST['user_id'])) {
                     $id = htmlentities($_POST['user_id']);
-                    $dao->addPost($id, $current_post);
-                    header('location:'.URL_ROOT.'/index/main');
+                    $dao->addPost($id, $post->getDescription());
+                    header('location:'.URL_ROOT.'/index/profile');
                 }else {
-                    $dao->addPost($user_id, $current_post);
+                    $dao->addPost($post->getOwnerId(), $post->getDescription());
                     header('location:'.URL_ROOT.'/index/main');
                 }
             }
@@ -45,7 +46,7 @@ class PostController extends BaseController{
     public function likePost() {
         $dao = PostDao::getInstance();
         $status = 1;
-            //function for like post
+        //function for like post
         if (isset($_GET['post_id'])) {
             $user_id = $_SESSION['logged']->getId();
             $post_id = htmlentities($_GET['post_id']);
@@ -59,28 +60,15 @@ class PostController extends BaseController{
             $dao->likePost($post_id, $user_id, $status);
         }
     }
-
-    public function unlikePost() {
-        $dao = PostDao::getInstance();
-        if (isset($_POST['post_id'])) {
-            $user_id = $_SESSION['logged']->getId();
-            $post_id = htmlentities($_POST['post_id']);
-            $dao->unlikePost($post_id, $user_id);
-        }
-    }
-
-    public function likeCounter() {
-        $dao = PostDao::getInstance();
-        if (isset($_GET['post_id'])) {
-            $post_id = htmlentities($_GET['post_id']);
-            $dao->getCountLikes($post_id);
-        }
-    }
-
     public function dislikePost() {
         $dao = PostDao::getInstance();
         $status = 0;
         //AJAX REQUEST for dislike a post
+        if (isset($_GET['post_id'])) {
+            $user_id = $_SESSION['logged']->getId();
+            $post_id = htmlentities($_GET['post_id']);
+            $dao->isDisliked($post_id, $user_id);
+        }
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $user_id = $_SESSION['logged']->getId();
@@ -88,19 +76,29 @@ class PostController extends BaseController{
             $dao->unlikePost($post_id, $user_id);
             $dao->dislikePost($post_id, $user_id, $status);
         }
-        if (isset($_GET['post_id'])) {
-            $user_id = $_SESSION['logged']->getId();
-            $post_id = htmlentities($_GET['post_id']);
-            $dao->isDisliked($post_id, $user_id);
-        }
     }
 
+    public function unlikePost() {
+        if (isset($_POST['post_id'])) {
+            $dao = PostDao::getInstance();
+            $user_id = $_SESSION['logged']->getId();
+            $post_id = htmlentities($_POST['post_id']);
+            $dao->unlikePost($post_id, $user_id);
+        }
+    }
     public function undislikePost() {
         $dao = PostDao::getInstance();
         if (isset($_POST['post_id'])) {
             $user_id = $_SESSION['logged']->getId();
             $post_id = htmlentities($_POST['post_id']);
             $dao->unDislikePost($post_id, $user_id);
+        }
+    }
+
+    public function likeCounter() {
+        if (isset($_GET['post_id'])) {
+            $post_id = htmlentities($_GET['post_id']);
+            PostDao::getInstance()->getCountLikes($post_id);
         }
     }
 

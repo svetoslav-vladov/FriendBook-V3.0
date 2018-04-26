@@ -253,5 +253,40 @@ class UserController extends BaseController {
         echo json_encode($message);
     }
 
+    public function searchUser() {
+        $dao = UserDao::getInstance();
+        $users = $dao->getAllUsers($_SESSION['logged']->getId());
 
+        if (isset($_GET['search'])) {
+            $searched_user = htmlentities($_GET['search']);
+            $result = [];
+            $found = false;
+            $counter = 0;
+            foreach ($users as $user) {
+                $fullName = '';
+                $fullName .= $user["first_name"];
+                $fullName .= " ";
+                $fullName .= $user['last_name'];
+                if(strpos(strtolower($fullName), strtolower($searched_user)) === 0) {
+                    $result[] = [
+                        'id' => $user['id'],
+                        'first_name' =>$user['first_name'],
+                        'last_name' => $user['last_name'],
+                        'profile_pic' => $user['profile_pic'],
+                        'gender' => $user['gender']
+                    ];
+                    $found = true;
+                    $counter++;
+                }
+                if ($counter == 6) {
+                    break;
+                }
+            }
+            if (!$found) {
+                echo "Not found!";
+            }else {
+                echo json_encode($result);
+            }
+        }
+    }
 }

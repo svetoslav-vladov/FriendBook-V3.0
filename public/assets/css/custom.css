@@ -482,3 +482,62 @@ span.likes_counter {
     border-radius: 11px;
     box-shadow: 0 0 10px 0px darkgrey;
 }
+
+.search_input {
+    border-radius: 7px 0px 0px 0px !important;
+    padding: 4px 12px;
+}
+.list-group-item {
+    padding: 4px 6px;
+}
+.list-group-item a {
+    text-decoration: none;
+}
+.list-group-item:hover {
+    background: #e7e7e7;
+    transition: all 0.3s;
+    color: black;
+}
+.search_button {
+    border-radius: 0px 7px 0px 0px !important;
+    padding: 4px 12px;
+}
+
+.search_image {
+    width: 30px;
+    border-radius: 50%;
+}
+
+.search_user {
+    font-size: 0.86em;
+    text-decoration: none;
+    display: inline-block;
+    width: 85%;
+}
+
+.users-result {
+    position: absolute;
+    width: 293.156px;
+    min-width: 293.156px;
+    top: 33px;
+    background: white;
+    z-index: 999;
+    box-shadow: 1px 1px 6px #00000073;
+}
+
+.users-list {
+    padding: 0px;
+    list-style: none;
+    margin: 0px;
+}
+.not-found {
+    font-size: 0.8em;
+}
+
+.search-found {
+    font-weight: bold;
+}
+
+.female {
+    color: deeppink !important;
+}

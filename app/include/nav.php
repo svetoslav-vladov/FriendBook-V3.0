@@ -6,10 +6,17 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <form class="form-inline mr-auto">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            <div class="col-lg-7">
+                <div class="input-group">
+                    <form class="form-inline mr-auto">
+                        <input type="text" class="search_input form-control" placeholder="Search for..." onkeyup="searchUser(this.value)">
+                        <span class="input-group-btn">
+                            <button type="button" class="search_button btn btn-outline-dark"><i class="fa fa-search"></i> Search</button>
+                        </span>
+                    </form>
+                </div>
+                <div class="users-result"><ul class="list-group list-group-flush users-list"></div>
+            </div>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item active profile_btn_top">
                     <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/profile">

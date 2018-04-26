@@ -332,14 +332,20 @@ img.logo {
 }
 
 .description {
-    padding: 25px 20px;
-    font-size: 1.2rem;
+    border-bottom: 1px solid darkgray;
+    border-top: 1px solid darkgray;
+    margin: 13px 0px;
+    padding: 10px 2px;
+    color: #5e5e5e;
+}
+.description p {
+    margin:  0px;
 }
 
 span.user_pic_add_comment img {
-    height: 50px;
+    height: 100%;
     vertical-align: middle;
-    border-radius: 5px;
+    border-radius: 50%;
     margin-right: 7px;
 }
 
@@ -351,11 +357,7 @@ span.user_pic_add_comment img {
     border-top: 1px solid #cdcdcd;
 }
 
-span.user_pic_add_comment span input {
-}
-
 input[type="text"] {
-    padding: 16px;
     width: 70%;
     box-sizing: border-box;
 }
@@ -408,4 +410,48 @@ a.comment_owner {
 
 .comment_btn_close {
     display: none;
+}
+
+.last_comment {
+    color: green !important;
+    text-shadow: 0 0 10px green;
+}
+.icon {
+    width: 9%;
+    display: block;
+    float: left;
+    margin-right: 6px;
+}
+
+.icon img {
+    width: 100%;
+}
+.name {
+    font-size: 1.32em;
+    margin-top: 3px;
+    float: left;
+}
+
+.name a {
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.name a:hover {
+    color: black;
+    text-shadow: 0 0 10px darkgray;
+}
+
+.date {
+    float: right;
+    font-size: 0.75em;
+    margin-top: 4px;
+    color: gray;
+}
+
+.add_comment_container {
+    height: 31px;
+    margin-bottom: 0px !important;
+    margin-top: 10px;
 }

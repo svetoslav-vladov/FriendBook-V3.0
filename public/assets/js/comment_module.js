@@ -38,7 +38,7 @@ function getComments(post_id) {
                     $('#comment_btn'+post_id).attr('disabled', false);
                 }
                 comment_gif.remove();
-            },200);
+            },230);
         }
     };
     request.open("GET", url_root + "/comment/addComment&post_id="+post_id);

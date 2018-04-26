@@ -166,9 +166,16 @@ nav li{
 .post_modal {
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 0 14px 0px grey;
+    box-shadow: 0 0 8px 0px grey;
+    transition: all 0.4s ease-in-out;
+    z-index: 0;
 }
-
+.post_modal:hover {
+    cursor: pointer;
+    background: #28a745;
+    color: white;
+    transition: all 0.4s ease-in-out;
+}
 #small_image {
     display: inline-block;
     width: 62px;
@@ -178,6 +185,7 @@ nav li{
 #small_image a img {
     width:100%;
     border-radius: 50%;
+    z-index: 1000000;
 }
 
 #post_input_fake {
@@ -518,8 +526,8 @@ span.likes_counter {
 
 .users-result {
     position: absolute;
-    width: 293.156px;
-    min-width: 293.156px;
+    width: 291.156px;
+    min-width: 291.156px;
     top: 33px;
     background: white;
     z-index: 999;
@@ -541,4 +549,17 @@ span.likes_counter {
 
 .female {
     color: deeppink !important;
+}
+
+input[name="comment_description"] {
+    border-radius: 10px 0px 0px 10px !important;
+}
+.add-comment-btn {
+    border-radius: 0px 8px 8px 0px !important;
+}
+
+.comments_gif {
+    margin: 0px auto;
+    display: block;
+    margin-top: 54px;
 }

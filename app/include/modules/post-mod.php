@@ -1,4 +1,4 @@
-<div id="small_image">
+<div id="small_image" data-toggle="modal" data-target="#exampleModalCenter" >
     <a href="<?php echo URL_ROOT;?>/index/profile">
         <img class="img-rounded" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic();?>" alt="profile_pic">
     </a>

@@ -75,6 +75,13 @@
                                     request.onreadystatechange = function () {
                                         if (this.readyState === 4 && this.status === 200) {
                                             getComments(postId);
+//                                            $('#comments'+postId+ " .comment:nth-child(1)").css({
+//                                                'color':'green',
+//                                                'text-shadow': '0 0 10px green'
+//                                            });
+//                                            setTimeout(function(){
+//                                                // $('#comments'+post_id+ " .media-body").removeClass('last_comment');
+//                                            },3323);
                                         }
                                     };
                                     request.send("comment_description=" + commentDesc.val() + "&post_id=" + postId);
@@ -85,13 +92,6 @@
                     </script>
                 </div>
             </div>
-            <div class="add-comment-div">
-
-
-
-
-            </div>
-
             <div class="input-group mb-3 add_comment_container">
                 <span class="user_pic_add_comment">
                     <img src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic(); ?>" alt="icon"
@@ -99,7 +99,7 @@
                 </span>
                 <input type="text" class="form-control comment-textarea<?= $post['post_id'] ?>" name="comment_description" placeholder="Write comment..." aria-label="Write comment" aria-describedby="basic-addon2">
                 <div class="input-group-append">
-                    <button id="add<?php echo $post['post_id'] ?>" type="button" class="btn btn-sm btn-outline-success">add</button>
+                    <button id="add<?php echo $post['post_id'] ?>" type="button" class="add-comment-btn btn btn-sm btn-outline-success">add</button>
                     <input type="hidden" name="post_id" value="<?php echo $post['post_id'] ?>">
                 </div>
             </div>

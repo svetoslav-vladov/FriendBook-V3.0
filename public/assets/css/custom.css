@@ -266,8 +266,8 @@ img.logo {
     height: 32px;
 }
 .img_100 {
-    height: 200px;
-    width: 200px;
+    height: 100px;
+    width: 100px;
 }
 
 .like_counter {
@@ -545,11 +545,9 @@ span.likes_counter {
 .search-found {
     font-weight: bold;
 }
-
 .female {
     color: deeppink !important;
 }
-
 input[name="comment_description"] {
     border-radius: 10px 0px 0px 10px !important;
 }
@@ -561,4 +559,23 @@ input[name="comment_description"] {
     margin: 0px auto;
     display: block;
     margin-top: 54px;
+}
+div#profile-pic img {
+    height:  150px;
+}
+
+span#ImageAdd img {
+    opacity:  0.7;
+    transition:  opacity 0.4s ease-in-out;
+    cursor:  pointer;
+}
+
+span#ImageAdd img:hover {
+    opacity:  1;
+}
+input#upload_photos {
+    display: none;
+}
+.holder img {
+    margin: 4px;
 }

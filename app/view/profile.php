@@ -17,6 +17,12 @@
     }
 ?>
 <div id="wrap" class="mt-5">
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-lg-3">
@@ -109,13 +115,20 @@
                         <div id="input_holder">
                             <input type="file" id="upload_photos" class="btn-input" accept="image/*">
                         </div>
-                        <span id="albumAdd">
-                            <img class="img-thumbnail img_100" src="<?php echo URL_ROOT . '/assets/images/add_img.png' ?>" alt="">
+                        <span id="ImageAdd">
+                            <img class="img-thumbnail img_100 p-2" id="imageUploadBtn" src="<?php echo URL_ROOT . '/assets/images/add_img.png' ?>" alt="">
                         </span>
+                        <hr>
                         <?php
                     }
                     ?>
-                    <span id="image_list"></span>
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <div class="row" id="image_list">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

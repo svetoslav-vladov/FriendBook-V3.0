@@ -4,6 +4,14 @@ var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
 
 // GLOBAL VARS - end
 
+// GLOBAL FUNCTIONS - start
+    // lightbox gallery popup request
+    $(document).on("click", '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+// GLOBAL FUNCTIONS - end
+
 // PROFILE PAGE UNDER COVER NAV - start
 
 var timeline = document.querySelector('#timeline');
@@ -18,6 +26,7 @@ var timeline_btn = document.querySelector('#myPosts_btn');
 var friends_btn = document.querySelector('#friends_btn');
 
 var upload_photos = document.querySelector('#upload_photos');
+var upload_image_btn = document.querySelector('#imageUploadBtn');
 
 var user_id_nav = document.querySelector('#user_nav_id');
 
@@ -37,6 +46,9 @@ if(document.querySelector('#timeline')){
 }
 
 if(document.querySelector('#photos') && document.querySelector('#upload_photos')){
+    upload_image_btn.addEventListener('click',function () {
+        upload_photos.click();
+    });
     upload_photos.addEventListener('change', addUserPhotos);
 }
 
@@ -57,13 +69,25 @@ function getAllPhotos(e) {
         $res = JSON.parse(this.responseText);
         for(var i = 0; i < $res.length; i++){
             var img = document.createElement('img');
+            img.setAttribute('class','img_100');
+            var big_img = document.createElement('img');
+            var link = document.createElement('a');
             img.classList.add('img-thumbnail');
             img.classList.add('img_100');
             img.src = url_root + $res[i]['img_url'];
-            image_list_box.appendChild(img);
+            big_img = url_root + $res[i]['img_url'];
+
+            link.setAttribute('data-toggle','lightbox');
+            link.setAttribute('data-gallery','single-images');
+            link.setAttribute('class','col-sm-3');
+            link.href = big_img;
+            link.appendChild(img);
+
+            image_list_box.appendChild(link);
         }
 
     };
+
 
     xhr.send();
 }
@@ -97,7 +121,16 @@ function addUserPhotos() {
                 img.src = url_root + res['img_url'];
                 img.classList.add('img-thumbnail');
                 img.classList.add('img_100');
-                image_list_box.appendChild(img);
+
+                var link = document.createElement('a');
+
+                link.setAttribute('data-toggle','lightbox');
+                link.setAttribute('data-gallery','single-images');
+                link.setAttribute('class','col-sm-3');
+                link.href = url_root + res['img_url'];
+                link.appendChild(img);
+
+                image_list_box.appendChild(link);
                 var success = document.querySelector('#ajax_success');
                 success.innerHTML =  "Successfuly uploaded image";
                 success.style.display =  "block";

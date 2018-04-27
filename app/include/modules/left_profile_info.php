@@ -1,14 +1,14 @@
 <div id="profile-pic" class="text-center">
     <a href="<?php echo URL_ROOT; ?>/index/profile">
         <img id="mini-profile-pic" class="img-fluid rounded" src="<?php if(isset($_SESSION["logged"])){ echo URL_ROOT . $_SESSION["logged"]->getProfilePic();} ?>"
-             alt="profile_pic" title=" <?php if(isset($_SESSION["logged"])){ echo URL_ROOT . $_SESSION["logged"]->getFullName();} ?>">
+             alt="profile_pic" title="<?php if(isset($_SESSION["logged"])){ echo URL_ROOT . $_SESSION["logged"]->getFullName();} ?>">
     </a>
     <div class="d-none" id="change_profile_pic">
         <i class="fas fa-edit"></i>
     </div>
 </div>
 
-<form id="upload_left_image" class="d-none" action="../controller/upload_images_controller.php" method="post" enctype="multipart/form-data">
+<form id="upload_left_image" class="d-none" action="<?php echo URL_ROOT . "/user/changeProfilePic" ?>" method="post" enctype="multipart/form-data">
     <label for="profile_image_upload"></label>
     <input type="file" id="profile_image_upload" name="profile_image_upload" accept="image/*">
     <button type="submit"></button>

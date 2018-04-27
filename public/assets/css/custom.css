@@ -168,12 +168,10 @@ nav li{
     overflow: hidden;
     box-shadow: 0 0 8px 0px grey;
     transition: all 0.4s ease-in-out;
-    z-index: 0;
 }
-.post_modal:hover {
+#post-panel:hover {
     cursor: pointer;
     background: #28a745;
-    color: white;
     transition: all 0.4s ease-in-out;
 }
 #small_image {
@@ -185,11 +183,12 @@ nav li{
 #small_image a img {
     width:100%;
     border-radius: 50%;
-    z-index: 1000000;
 }
 
 #post_input_fake {
     display: inline-block;
+    width: 82%;
+    padding: 26px 0px;
 }
 .modal-header {
     display: block;

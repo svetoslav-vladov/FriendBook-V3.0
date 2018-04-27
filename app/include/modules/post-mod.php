@@ -1,4 +1,4 @@
-<div id="small_image" data-toggle="modal" data-target="#exampleModalCenter" >
+<div id="small_image">
     <a href="<?php echo URL_ROOT;?>/index/profile">
         <img class="img-rounded" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic();?>" alt="profile_pic">
     </a>
@@ -16,7 +16,7 @@
                 <a href="<?php echo URL_ROOT;?>/index/profile">
                     <img class="img-rounded" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic();?>" alt="profile_pic">
                 </a>
-                <h5  id="exampleModalLongTitle" class="mb-0">What's on your mind, <?php echo $_SESSION['logged']->getFirstName() . " " . $_SESSION['logged']->getLastName();?>?</h5>
+                <h5 class="mb-0">What's on your mind, <?php echo $_SESSION['logged']->getFirstName() . ' ' . $_SESSION['logged']->getLastName();?>?</h5>
             </div>
             <div class="modal-body">
                 <form method="post" class="post_form" action="<?php echo URL_ROOT?>/post/addPost">

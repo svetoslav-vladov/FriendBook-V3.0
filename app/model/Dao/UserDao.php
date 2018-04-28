@@ -82,12 +82,17 @@ class UserDao {
         return $statement->fetchALL(\PDO::FETCH_ASSOC);
     }
 
-    public function insertSignleImage($user, $image) {
-        $statement = $this->pdo->prepare(self::INSERT_SINGLE_PHOTO);
-        return $statement->execute(array(
-            $user->getId(),
-            $image,
-        ));
+    public function insertUserImages($user, $imagesList) {
+
+        $sql = "INSERT INTO user_photos (user_id,img_url) values (?,?)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        foreach($imagesList as $url) {
+            $stmt->execute(array($user->getId(),$url));
+        }
+
+        return true;
     }
 
     public function getAllUsers($logged_user_id) {

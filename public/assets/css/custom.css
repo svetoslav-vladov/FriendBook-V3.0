@@ -266,8 +266,8 @@ img.logo {
     height: 32px;
 }
 .img_100 {
-    height: 100px;
-    width: 100px;
+    height: 150px;
+    width: auto;
 }
 
 .like_counter {

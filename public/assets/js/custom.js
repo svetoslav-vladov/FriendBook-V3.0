@@ -46,16 +46,22 @@ if(document.querySelector('#timeline')){
 }
 
 if(document.querySelector('#photos') && document.querySelector('#upload_photos')){
+
+    // form upload images
+    var multiImageUpload = document.querySelector('#multiImageUpload');
+
     upload_image_btn.addEventListener('click',function () {
         upload_photos.click();
     });
     upload_photos.addEventListener('change', addUserPhotos);
 }
 
+// get Images with no album on click from db
 function getAllPhotos(e) {
     e.preventDefault();
 
     var xhr = new XMLHttpRequest();
+    var dir = './uploads/users/photos/';
     // this will get images and albums in future, for now only images
     xhr.open('get', url_root + '/user/getUserPhotos&user_id='+user_id_nav.value);
 
@@ -65,17 +71,19 @@ function getAllPhotos(e) {
     friends.style.display = 'none';
     xhr.onload = function () {
         image_list_box.innerHTML = "";
-        console.log(this.responseText);
-        $res = JSON.parse(this.responseText);
-        for(var i = 0; i < $res.length; i++){
+        res = JSON.parse(this.responseText);
+        for(var i = 0; i < res.length; i++){
             var img = document.createElement('img');
             img.setAttribute('class','img_100');
             var big_img = document.createElement('img');
             var link = document.createElement('a');
             img.classList.add('img-thumbnail');
             img.classList.add('img_100');
-            img.src = url_root + $res[i]['img_url'];
-            big_img = url_root + $res[i]['img_url'];
+
+            var urlChunks = res[i]['img_url'].split('/');
+            img.src = url_root + dir + 'thumbs/' + urlChunks[urlChunks.length-1];
+
+            big_img = url_root + res[i]['img_url'];
 
             link.setAttribute('data-toggle','lightbox');
             link.setAttribute('data-gallery','single-images');
@@ -84,61 +92,68 @@ function getAllPhotos(e) {
             link.appendChild(img);
 
             image_list_box.appendChild(link);
+
         }
 
     };
 
-
     xhr.send();
 }
 
+// Add photos no album
 function addUserPhotos() {
 
+    var requestXhr = new XMLHttpRequest();
 
-    var file_data = $('#upload_photos').prop('files')[0];
-    var form_data = new FormData();
-    form_data.append('file', file_data);
+    // form data object js
+    var form = new FormData(multiImageUpload);
 
-    $.ajax({
-        url: url_root + '/user/addOnlyImage', // point to server-side PHP script
-        dataType: 'text',  // what to expect back from the PHP script, if anything
-        cache: false,
-        contentType: false,
-        processData: false,
-        data: form_data,
-        type: 'post',
-        success: function (response) {
+    // .onload <-- status 200 / readyState 4
+    requestXhr.onload = function () {
 
-            var res = JSON.parse(response);
-            if(res.hasOwnProperty('uplod_max')){
-                var err = document.querySelector('#ajax_error');
-                err.innerHTML =  res['uplod_max'];
-                err.style.display =  "block";
-                document.querySelector('#ajax_success').style.display =  "none";
-            }
-            else {
+        var res = JSON.parse(this.responseText);
+        var dir = './uploads/users/photos/';
+        if(res.hasOwnProperty('uplod_max')){
+            var err = document.querySelector('#ajax_error');
+            err.innerHTML =  res['uplod_max'];
+            err.style.display =  "block";
+            document.querySelector('#ajax_success').style.display =  "none";
+        }
+        else {
+
+            for(var i = 0; i < res.length; i++){
                 var img = document.createElement('img');
-                img.src = url_root + res['img_url'];
+                var urlChunks = res[i].split('/');
+                img.src = url_root + dir + 'thumbs/' + urlChunks[urlChunks.length-1];
                 img.classList.add('img-thumbnail');
                 img.classList.add('img_100');
 
                 var link = document.createElement('a');
 
-                link.setAttribute('data-toggle','lightbox');
-                link.setAttribute('data-gallery','single-images');
-                link.setAttribute('class','col-sm-3');
-                link.href = url_root + res['img_url'];
+                link.setAttribute('data-toggle', 'lightbox');
+                link.setAttribute('data-gallery', 'single-images');
+                link.setAttribute('class', 'col-sm-3');
+
+
+                link.href = url_root + res[i];
                 link.appendChild(img);
 
                 image_list_box.appendChild(link);
-                var success = document.querySelector('#ajax_success');
-                success.innerHTML =  "Successfuly uploaded image";
-                success.style.display =  "block";
-                document.querySelector('#ajax_error').style.display =  "none";
             }
+
+            var success = document.querySelector('#ajax_success');
+            success.innerHTML = "Successfully uploaded image";
+            success.style.display = "block";
+            document.querySelector('#ajax_error').style.display = "none";
+
         }
 
-    });
+    };
+
+    requestXhr.open('POST',url_root + '/user/generateImages',true);
+
+    // send form data, this will send all the form like normal post form
+    requestXhr.send(form);
 
 }
 
@@ -166,3 +181,5 @@ function get_about_info() {
 }
 
 // PROFILE PAGE UNDER COVER NAV - END
+
+

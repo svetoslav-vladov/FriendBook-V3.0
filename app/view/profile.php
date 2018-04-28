@@ -112,9 +112,9 @@
                     }
                     else{
                         ?>
-                        <div id="input_holder">
-                            <input type="file" id="upload_photos" class="btn-input" accept="image/*">
-                        </div>
+                        <form id="multiImageUpload" action="<?php echo URL_ROOT . "/user/generateImages"; ?>" method="post" enctype="multipart/form-data">
+                            <input name="images[]" id="upload_photos" type="file" multiple accept="image/*"/>
+                        </form>
                         <span id="ImageAdd">
                             <img class="img-thumbnail img_100 p-2" id="imageUploadBtn" src="<?php echo URL_ROOT . '/assets/images/add_img.png' ?>" alt="">
                         </span>
@@ -124,11 +124,12 @@
                     ?>
                         <div class="row justify-content-center">
                             <div class="col-md-12">
-                                <div class="row" id="image_list">
+                                <div class="row text-center" id="image_list">
 
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

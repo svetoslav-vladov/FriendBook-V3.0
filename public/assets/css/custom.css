@@ -561,7 +561,7 @@ input[name="comment_description"] {
     margin-top: 54px;
 }
 div#profile-pic img {
-    height:  150px;
+    height: 150px;
 }
 
 span#ImageAdd img {
@@ -578,4 +578,33 @@ input#upload_photos {
 }
 .holder img {
     margin: 4px;
+}
+
+div#change_cover_pic:hover {
+    color:  #444;
+}
+#profile-pic a:hover ~ #change_profile_pic {
+    display:block;
+}
+#change_profile_pic:hover {
+    display:block;
+}
+div#change_profile_pic {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    font-size: 1.6rem;
+    color: #000;
+    cursor: help;
+    padding: 10px;
+    transition: color 0.4s ease-in-out;
+    display: none;
+    background: #ffffff8a;
+    border-radius:  0px 0 25px;
+}
+div#change_profile_pic:hover {
+    color: #fff;
+}
+#profile-pic a{
+    display: block;
 }

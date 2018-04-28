@@ -25,6 +25,10 @@ class UserDao {
 
     const GET_INFO_BY_ID = "SELECT * FROM users WHERE id = ?";
 
+    const UPDATE_USER_PICTURE = "UPDATE users SET profile_pic = ? WHERE id = ?";
+
+    const UPDATE_USER_COVER = "UPDATE users SET profile_cover = ? WHERE id = ?";
+
     // getting static connection from DBconnect file
     private function __construct() {
         $this->pdo = DBconnect::getInstance()->dbConnect();
@@ -48,6 +52,14 @@ class UserDao {
             $user->getBirthday(),
             $user->getProfilePic(),
             $user->getProfileCover(),
+        ));
+    }
+
+    public function saveUserProfilePic(User $user) {
+        $statement = $this->pdo->prepare(self::UPDATE_USER_PICTURE);
+        return $statement->execute(array(
+            $user->getProfilePic(),
+            $user->getId(),
         ));
     }
 
@@ -89,7 +101,9 @@ class UserDao {
         $stmt = $this->pdo->prepare($sql);
 
         foreach($imagesList as $url) {
-            $stmt->execute(array($user->getId(),$url));
+            if(!$stmt->execute(array($user->getId(),$url))){
+                throw new \PDOException('failed');
+            }
         }
 
         return true;

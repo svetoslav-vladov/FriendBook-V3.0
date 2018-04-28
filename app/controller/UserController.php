@@ -207,52 +207,6 @@ class UserController extends BaseController {
         echo json_encode($data['data']);
     }
 
-//    public function addOnlyImage(){
-//        if (!empty($_FILES) && $_FILES['file']["size"] < 1000000) {
-//            if (0 < $_FILES['file']['error']) {
-//                $message['file-firs-error'] = $_FILES['file']['error'];
-//            } else {
-//                $tmp_name = $_FILES['file']['tmp_name'];
-//                $orig_name = $_FILES['file']['name'];
-//            }
-//
-//            if (is_uploaded_file($tmp_name)) {
-//                $exploded_name = explode(".", $orig_name);
-//                $ext = $exploded_name[count($exploded_name) - 1];
-//
-//                $image_to_upload = "./uploads/users/photos/" . time() . "-" . $_SESSION['logged']->getId() . "." . $ext;
-//                if (move_uploaded_file($tmp_name, $image_to_upload)) {
-//                    $dao = UserDao::getInstance();
-//                    try {
-//
-//                        if ($dao->insertSignleImage($_SESSION['logged'], $image_to_upload)) {
-//
-//                            $message['img_url'] = $image_to_upload;
-//                        } else {
-//                            $message['error'] = true;
-//                        }
-//
-//                    } catch (\PDOException $e) {
-//                        $message['pdo_error'] = $e->getMessage();
-//                    } catch (\Exception $e) {
-//                        $message['exeption'] = $e->getMessage();
-//                    }
-//
-//                }
-//                else {
-//                    $message['move_error'] = "File not moves successfully";
-//                }
-//            }
-//            else {
-//                $message['upload_error'] = "File not uploaded successfully";
-//            }
-//        }
-//        else {
-//            $message['uplod_max'] = "File max upload size reach, no more than 1MB";
-//        }
-//        echo json_encode($message);
-//    }
-
     public function searchUser() {
         $dao = UserDao::getInstance();
         $users = $dao->getAllUsers($_SESSION['logged']->getId());
@@ -290,7 +244,8 @@ class UserController extends BaseController {
         }
     }
     // Generate images + thumbnail + valid + send to DB
-    public function generateImages() {
+    // @var types - profile, cover, photos
+    public function generateImages($type) {
         if(isset($_POST) && isset($_FILES)){
             $files = [];
             $save_path = './uploads/users/photos';
@@ -315,8 +270,21 @@ class UserController extends BaseController {
                 if(preg_match('/[.](jpg)|(gif)|(png)$/',$fileArr['name'][$i])){
 
                     $files[$i]['name'] = $fileArr['name'][$i];
-                    $files[$i]['newName'] = $_SESSION['logged']->getFirstName().'-'
-                        . time() . '-' . $files[$i]['name'];
+
+                    $ext = pathinfo($fileArr['name'][$i], PATHINFO_EXTENSION);
+
+                    if($type === 'photos'){
+                        $files[$i]['newName'] = $_SESSION['logged']->getFirstName().'-'
+                            . time() . '-' . uniqid() . '-profile.' . $ext;
+                    }
+                    elseif ($type === 'cover'){
+                        $files[$i]['newName'] = $_SESSION['logged']->getFirstName().'-'
+                            . time() . '-' . uniqid() . '-profile.' . $ext;
+                    }
+                    elseif ($type === 'profile'){
+                        $files[$i]['newName'] = $_SESSION['logged']->getFirstName().'-'
+                            . time() . '-' . uniqid() . '-profile.' . $ext;
+                    }
                     $files[$i]['source'] = $fileArr['tmp_name'][$i];
                     $files[$i]['target'] = $save_path .$dir. $files[$i]['newName'];
                     //var_dump($files[$i]['target']);
@@ -332,18 +300,7 @@ class UserController extends BaseController {
                 }
             }
             if(!$error){
-                try{
-                    $dao = UserDao::getInstance();
-                    if($dao->insertUserImages($_SESSION['logged'], $imgUrlList)){
-                        echo json_encode($imgUrlList);
-                    }
-                }
-                catch(\PDOException $e){
-                    foreach ($imgUrlList as $img){
-                        unset($img);
-                    }
-                    header('location:'.URL_ROOT.'/index/profile&error=' . $e);
-                }
+               return $imgUrlList;
             }
            // var_dump($files);
         }
@@ -355,6 +312,62 @@ class UserController extends BaseController {
 
     // list of images - array
     public function uploadImagesValidation($images){
+
+    }
+
+    public function uploadProfilePic(){
+        $imgList = self::generateImages('profile');
+        if($imgList){
+            try{
+                $dao = UserDao::getInstance();
+
+                $newUserData = new User();
+                $newUserData->setId($_SESSION['logged']->getId());
+                $newUserData->setProfilePic($imgList[0]);
+
+                if($dao->saveUserProfilePic($newUserData)){
+                    $oldImgUrl = $_SESSION['logged']->getProfilePic();
+                    if($oldImgUrl != $GLOBALS["male_default_picture"] &&
+                        $oldImgUrl != $GLOBALS["female_default_picture"]){
+                        $fileSplit = explode("/",$oldImgUrl);
+
+                        $oldThumb = './uploads/users/photos/thumbs/' .$fileSplit[count($fileSplit)-1];
+                        unlink($oldImgUrl);
+                        unlink($oldThumb);
+                        $_SESSION['logged']->setProfilePic($imgList[0]);
+                    }
+                    else{
+                        $_SESSION['logged']->setProfilePic($imgList[0]);
+                    }
+                    echo json_encode($imgList);
+                }
+
+            }
+            catch(\PDOException $e){
+                foreach ($imgList as $img){
+                    unset($img);
+                }
+                header('location:'.URL_ROOT.'/index/profile&error=' . $e);
+            }
+        }
+    }
+
+    public function uploadProfilePhotos(){
+        $imgList = self::generateImages('photos');
+        if($imgList){
+            try{
+                $dao = UserDao::getInstance();
+                if($dao->insertUserImages($_SESSION['logged'], $imgList)){
+                    echo json_encode($imgList);
+                }
+            }
+            catch(\PDOException $e){
+                foreach ($imgList as $img){
+                    unset($img);
+                }
+                header('location:'.URL_ROOT.'/index/profile&error=' . $e);
+            }
+        }
 
     }
 

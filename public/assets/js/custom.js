@@ -150,7 +150,7 @@ function addUserPhotos() {
 
     };
 
-    requestXhr.open('POST',url_root + '/user/generateImages',true);
+    requestXhr.open('POST',url_root + '/user/uploadProfilePhotos',true);
 
     // send form data, this will send all the form like normal post form
     requestXhr.send(form);
@@ -180,6 +180,28 @@ function get_about_info() {
 
 }
 
-// PROFILE PAGE UNDER COVER NAV - END
+// PROFILE PAGE UNDER COVER NAV - end
 
+// CHANGE PROFILE IMAGE - start
+var change_profile_pic_btn = document.querySelector('#change_profile_pic');
+var profilePicForm = document.querySelector('#upload_left_image');
+var profile_image_upload = document.querySelector('#profile_image_upload');
+if(change_profile_pic_btn && profilePicForm){
+    profile_image_upload.addEventListener('change', uploadProfilePicture);
+    change_profile_pic_btn.addEventListener('click', function () {
+        profile_image_upload.click();
+    });
 
+    function uploadProfilePicture() {
+        var xhr = new XMLHttpRequest();
+        var formData = new FormData(profilePicForm);
+        xhr.open('post',url_root+'/user/uploadProfilePic');
+        xhr.onload = function () {
+            console.log(this.responseText);
+        };
+
+        xhr.send(formData);
+
+    }
+}
+// CHANGE PROFILE IMAGE - end

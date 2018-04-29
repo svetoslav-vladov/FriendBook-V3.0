@@ -62,7 +62,7 @@ function hideComments(post_id) {
 
 function likeComment(comment_id) {
     var request = new XMLHttpRequest();
-    request.open('POST', url_root + '/comment/likeComment');
+    request.open('POST', root + '/comment/likeComment');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -73,12 +73,12 @@ function likeComment(comment_id) {
             },250);
         }
     };
-    request.send("post_id=" + comment_id);
+    request.send("comment_id=" + comment_id);
 }
 
 function unlikeComment(comment_id) {
     var request = new XMLHttpRequest();
-    request.open('POST', url_root + '/comment/likeComment');
+    request.open('POST', root + '/comment/unlikeComment');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -89,36 +89,36 @@ function unlikeComment(comment_id) {
             },250);
         }
     };
-    request.send("post_id=" + comment_id);
+    request.send("comment_id=" + comment_id);
 }
 
 function isLikedComment(comment_id) {
-    var likeButton = $(`<button class="like-comment-button" id="like_comment${comment_id}"><i class="fas fa-thumbs-up"></i></button>`);
-    var unlikeButton = $(`<button class="unlike-comment-button" id="unlike_comment${comment_id}"><i class="fa fa-thumbs-up"></i></button>`);
+    var likeCommentButton = $(`<button class="like-comment-button" id="like_comment${comment_id}"><i class="fas fa-thumbs-up"></i></button>`);
+    var unlikeCommentButton = $(`<button class="unlike-comment-button" id="unlike_comment${comment_id}"><i class="fa fa-thumbs-up"></i></button>`);
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             console.log(this.responseText);
-            likeButton.click(function () {
+            likeCommentButton.click(function () {
                 likeComment(comment_id);
                 $('#comment_likes_counter'+comment_id).remove();
                 $(this).remove();
             });
-            unlikeButton.click(function () {
+            unlikeCommentButton.click(function () {
                 unlikeComment(comment_id);
                 $('#comment_likes_counter'+comment_id).remove();
                 $(this).remove();
             });
             getCountCommentLikes(comment_id);
             if (this.responseText == 1) {
-                $('#like-comment-container'+comment_id).append(unlikeButton);
+                $('#like-comment-container'+comment_id).append(unlikeCommentButton);
             }
             else {
-                $('#like-comment-container'+comment_id).append(likeButton);
+                $('#like-comment-container'+comment_id).append(likeCommentButton);
             }
         }
     };
-    req.open("GET", url_root + "/comment/likeComment&comment_id="+comment_id);
+    req.open("GET", root + "/comment/likeComment&comment_id="+comment_id);
     req.send();
 }
 

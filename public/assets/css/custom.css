@@ -349,12 +349,15 @@ img.logo {
 }
 .user_pic_add_comment {
     display: inline-block;
+    width: 32px;
+    margin-right: 5px;
 }
 span.user_pic_add_comment img {
     height: 100%;
     vertical-align: middle;
     border-radius: 50%;
     margin-right: 7px;
+    width: 100%;
 }
 
 .input_add_comment {

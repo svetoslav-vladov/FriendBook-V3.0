@@ -26,4 +26,37 @@ class CommentController extends BaseController {
             echo json_encode($result);
         }
     }
+
+    public function likeComment() {
+        $dao = CommentDao::getInstance();
+        //AJAX REQUEST for like a comment
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $user_id = $_SESSION['logged']->getId();
+            $comment_id = htmlentities($_POST['comment_id']);
+            $dao->likeComment($comment_id, $user_id);
+        }
+        // function for check comment if liked
+        if (isset($_GET['comment_id'])) {
+            $user_id = $_SESSION['logged']->getId();
+            $comment_id = htmlentities($_GET['comment_id']);
+            $dao->isLiked($comment_id, $user_id);
+        }
+    }
+
+    public  function unlikeComment() {
+        $dao = CommentDao::getInstance();
+        if (isset($_POST['comment_id'])) {
+            $user_id = $_SESSION['logged']->getId();
+            $comment_id = htmlentities($_POST['comment_id']);
+            $dao->unlikeComment($comment_id, $user_id);
+        }
+    }
+
+    public function likeCounter() {
+        $dao = CommentDao::getInstance();
+        if (isset($_GET['comment_id'])) {
+            $comment_id = htmlentities($_GET['comment_id']);
+            $dao->getCommentCountLikes($comment_id);
+        }
+    }
 }

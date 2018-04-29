@@ -33,4 +33,31 @@ class CommentDao {
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
     }
+
+    function isLiked($comment_id, $user_id) {
+        $statement = $this->pdo->prepare("SELECT COUNT(*) AS isLike 
+                                                    FROM like_comment
+                                                    WHERE comment_id = ? AND user_id = ?");
+        $statement->execute(array($comment_id, $user_id));
+        echo $statement->fetch()['isLike'];
+    }
+
+    function likeComment($comment_id, $user_id) {
+        $statement = $this->pdo->prepare("INSERT INTO like_comment (comment_id, user_id) 
+                                VALUES (?,?)");
+        return $statement->execute(array($comment_id, $user_id));
+    }
+
+    function unlikeComment($comment_id, $user_id) {
+        $statement = $this->pdo->prepare("DELETE FROM like_comment WHERE comment_id = ? AND user_id = ?");
+        return $statement->execute(array($comment_id, $user_id));
+    }
+
+    function getCommentCountLikes($comment_id) {
+        $statement = $this->pdo->prepare("SELECT COUNT(*) AS like_count 
+                            FROM like_comment
+                            WHERE comment_id = ?");
+        $statement->execute(array($comment_id));
+        echo $statement->fetch()['like_count'];
+    }
 }

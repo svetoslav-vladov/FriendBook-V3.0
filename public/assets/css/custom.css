@@ -81,7 +81,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 .err_msg, #ajax_error {
     position:  fixed;
-    top: 65px;
+    top: 93px;
     background: #dc3545f2;
     width:  100%;
     text-align:  center;
@@ -96,7 +96,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 .ok_msg, #ajax_success {
     position:  fixed;
-    top: 65px;
+    top: 93px;
     background: #47bf62f2;
     width:  100%;
     text-align:  center;
@@ -118,10 +118,8 @@ nav li{
 }
 .user_profile_pic {
     border-radius:  50%;
-    height: 35px;
-    position:  absolute;
-    left: -36px;
-    top: 2px;
+    width: 30px;
+    height: 30px;
 }
 .profile_btn_top{
     position:  relative;
@@ -214,7 +212,7 @@ div#user-nav ul {
     background-position:  center;
     position: relative;
 }
-.card.coverProfilePic img {
+.card.coverProfilePic a img {
     height:  150px;
     width: auto;
 }
@@ -226,7 +224,7 @@ div#user-nav ul {
     border: 2px solid #ffffff87;
     box-sizing:  border-box;
     border-radius: 6px;
-    max-width: 150px;
+    max-width: 175px;
     background-color: #ffffffd1;
 }
 span.nav-icon {
@@ -244,7 +242,6 @@ ul.navbar-nav li {
 
 ul.navbar-nav li:hover {
     background: #ffffff1f;
-    border-radius: 5px;
 }
 
 ul.navbar-nav li a{
@@ -414,7 +411,8 @@ a.comment_owner {
 }
 
 .icon img {
-    width: 100%;
+    width: 50px;
+    border-radius:  8px;
 }
 .name {
     font-size: 1.32em;
@@ -562,6 +560,12 @@ input[name="comment_description"] {
 }
 div#profile-pic img {
     height: 150px;
+    border: 1px solid #dfdfdf;
+    padding: 3px;
+}
+#profile-pic{
+    position: relative;
+    text-align: center;
 }
 
 span#ImageAdd img {
@@ -579,32 +583,69 @@ input#upload_photos {
 .holder img {
     margin: 4px;
 }
-
 div#change_cover_pic:hover {
     color:  #444;
 }
-#profile-pic a:hover ~ #change_profile_pic {
+div#zoom_cover_pic:hover {
+    color:  #444;
+}
+#profile-pic a:hover ~ #change_profile_pic, #profile-pic a:hover ~ #zoom_profile_pic {
     display:block;
 }
-#change_profile_pic:hover {
+#change_profile_pic:hover, #zoom_profile_pic:hover {
     display:block;
+}
+#zoom_profile_pic a{
+    display: block;
 }
 div#change_profile_pic {
     position: absolute;
-    top: -10px;
-    left: 0;
-    font-size: 1.6rem;
+    left: 40%;
+    font-size: 1.3rem;
+    top: 0;
+    color: #000;
+    cursor: pointer;
+    padding: 1px 6px;
+    transition: color 0.3s ease-in-out;
+    display: none;
+    background: #f7f7f78c;
+}
+div#zoom_profile_pic {
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+    font-size: 1.3rem;
     color: #000;
     cursor: help;
-    padding: 10px;
-    transition: color 0.4s ease-in-out;
+    padding: 1px 6px;
+    transition: color 0.3s ease-in-out;
     display: none;
-    background: #ffffff8a;
-    border-radius:  0px 0 25px;
+    background: #f7f7f78c;
+    /* border-radius: 0 25px 0 0; */
 }
 div#change_profile_pic:hover {
-    color: #fff;
+    color: #39e05f;
 }
 #profile-pic a{
     display: block;
+    color: black;
+}
+span.user_pic_add_comment img {
+    width: 35px;
+    height: 35px;
+}
+nav {padding: 0 !important;}
+#profile-pic a:hover {
+    color: #39e05f;
+}
+.card.coverProfilePic a img {
+    width: 100%;
+    opacity: 0.7;
+    transition: opacity 0.3s ease-in-out;
+}
+.card.coverProfilePic a img:hover {
+    opacity:  1;
+}
+.card.coverProfilePic ul li a {
+    color: black !important;
 }

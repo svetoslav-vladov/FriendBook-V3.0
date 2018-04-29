@@ -43,22 +43,28 @@
                         }
                         else {
                             ?>
-                            <div class="card coverProfilePic text-center p-1">
-                                <img src="<?php echo URL_ROOT . $theUser->getProfilePic(); ?>" alt="<?php
-                                echo URL_ROOT . $theUser->getFirstName() . 'profile picture'; ?>">
-                                <div class="font-weight-bold py-1 small block-inline">
-                                    <?php echo ucwords($theUser->getFullName()); ?>
-                                </div>
-                                <ul class="navbar-nav small block-inline">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" id="friendRequests"
-                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users text-dark"></i></a>
+                            <div class="coverProfilePic card text-center p-1">
+                                <a data-toggle="lightbox" data-gallery="other_profile_pic" href="<?php echo URL_ROOT . $theUser->getProfilePic(); ?>">
+                                    <img src="<?php if(is_null($theUser->getThumbsProfile())){ echo URL_ROOT . $theUser->getProfilePic(); }
+                                    else{ echo URL_ROOT . $theUser->getThumbsProfile();} ?>" alt="<?php
+                                    echo $theUser->getFullName() . 'profile picture'; ?>">
+                                </a>
+
+
+
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown col-md-12">
+                                        <a class="nav-link dropdown-toggle text-dark" id="friendRequests"
+                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <?php echo ucwords($theUser->getFullName()); ?>
+                                            <i class="fa fa-users text-dark"></i></a>
                                         <div class="dropdown-menu text-white" aria-labelledby="friendRequests">
                                            <a class="dropdown-item" href="#">Add Friend</a>
                                            <a class="dropdown-item" href="#">Follow</a>
                                         </div>
                                     </li>
                                 </ul>
+
                             </div>
                             <?php
                         }

@@ -32,6 +32,9 @@
         private $albums;
         private $photos;
 
+        private $thumbs_profile;
+        private $thumbs_cover;
+
         /**
          * User constructor.
          * @param $email
@@ -56,13 +59,16 @@
          * @param $followers
          * @param $albums
          * @param $photos
+         * @param $thumbs_profile
+         * @param $thumbs_cover
          */
         public function __construct($id = null, $email = null, $first_name = null, $last_name = null, $full_name = null,
                                     $password = null, $reg_date = null, $gender = null, $birthday = null,
                                     $relation_status = null, $profile_pic = null, $cover_pic = null,
                                     $description = null, $display_name = null, $country_id = null,
                                     $mobile_number = null, $www = null, $skype = null,
-                                    $friends = null, $followers = null, $albums = null, $photos = null)
+                                    $friends = null, $followers = null, $albums = null,
+                                    $photos = null, $thumbs_profile = null,$thumbs_cover = null)
         {
             $this->id = $id;
             $this->email = $email;
@@ -86,6 +92,8 @@
             $this->followers = $followers;
             $this->albums = $albums;
             $this->photos = $photos;
+            $this->thumbs_profile = $thumbs_profile;
+            $this->thumbs_cover = $thumbs_cover;
         }
 
         /**
@@ -438,6 +446,38 @@
         public function setPhotos($photos)
         {
             $this->photos = $photos;
+        }
+
+        /**
+         * @return null
+         */
+        public function getThumbsProfile()
+        {
+            return $this->thumbs_profile;
+        }
+
+        /**
+         * @return null
+         */
+        public function getThumbsCover()
+        {
+            return $this->thumbs_cover;
+        }
+
+        /**
+         * @param null $thumbs_profile
+         */
+        public function setThumbsProfile($thumbs_profile)
+        {
+            $this->thumbs_profile = $thumbs_profile;
+        }
+
+        /**
+         * @param null $thumbs_cover
+         */
+        public function setThumbsCover($thumbs_cover)
+        {
+            $this->thumbs_cover = $thumbs_cover;
         }
 
 

@@ -25,7 +25,7 @@ class UserDao {
 
     const GET_INFO_BY_ID = "SELECT * FROM users WHERE id = ?";
 
-    const UPDATE_USER_PICTURE = "UPDATE users SET profile_pic = ? WHERE id = ?";
+    const UPDATE_USER_PICTURE = "UPDATE users SET profile_pic = ?, thumbs_profile = ? WHERE id = ?";
 
     const UPDATE_USER_COVER = "UPDATE users SET profile_cover = ? WHERE id = ?";
 
@@ -59,6 +59,7 @@ class UserDao {
         $statement = $this->pdo->prepare(self::UPDATE_USER_PICTURE);
         return $statement->execute(array(
             $user->getProfilePic(),
+            $user->getThumbsProfile(),
             $user->getId(),
         ));
     }

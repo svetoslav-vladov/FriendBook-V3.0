@@ -6,7 +6,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <div class="col-lg-7">
+            <div class="col-lg-6">
                 <div class="input-group">
                     <form class="form-inline mr-auto">
                         <input type="text" class="search_input form-control" placeholder="Search for..." onkeyup="searchUser(this.value)">
@@ -18,11 +18,19 @@
                 <div class="users-result"><ul class="list-group list-group-flush users-list"></div>
             </div>
             <ul class="navbar-nav my-2 my-lg-0">
+                <li class="nav-item profile_btn_top">
+                    <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/profile">
+                        <img class="img-fluid user_profile_pic" src="
+                                <?php if(is_null($_SESSION["logged"]->getThumbsProfile()))
+                                { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
+                                $_SESSION["logged"]->getThumbsProfile();} ?>"
+                             alt="<?php echo $_SESSION['logged']->getFullName();?> profile picture">
+                    </a>
+                </li>
                 <li class="nav-item active profile_btn_top">
                     <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/profile">
-                        <img class="img-fluid user_profile_pic" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic(); ?>"
-                                                       alt="<?php echo $_SESSION['logged']->getFullName();?> profile picture">
-                        <?php echo $_SESSION['logged']->getFirstName(); ?></a>
+                        <?php echo $_SESSION['logged']->getFirstName(); ?>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/main">Home</a>

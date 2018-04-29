@@ -59,6 +59,7 @@ class UserController extends BaseController {
 
                         $success = "login successfully";
                         $_SESSION['logged'] = $user;
+
                         header('location:'.URL_ROOT.'/index/main&success=' . $success);
                     }
                     else{
@@ -246,7 +247,7 @@ class UserController extends BaseController {
     // Generate images + thumbnail + valid + send to DB
     // @var types - profile, cover, photos
     public function generateImages($type) {
-        if(isset($_POST) && isset($_FILES)){
+        if(isset($type)){
             $files = [];
             $save_path = './uploads/users/photos';
             $dir = '/fullsized/';
@@ -275,11 +276,11 @@ class UserController extends BaseController {
 
                     if($type === 'photos'){
                         $files[$i]['newName'] = $_SESSION['logged']->getFirstName().'-'
-                            . time() . '-' . uniqid() . '-profile.' . $ext;
+                            . time() . '-' . uniqid() . '-photos.' . $ext;
                     }
                     elseif ($type === 'cover'){
                         $files[$i]['newName'] = $_SESSION['logged']->getFirstName().'-'
-                            . time() . '-' . uniqid() . '-profile.' . $ext;
+                            . time() . '-' . uniqid() . '-cover.' . $ext;
                     }
                     elseif ($type === 'profile'){
                         $files[$i]['newName'] = $_SESSION['logged']->getFirstName().'-'
@@ -320,24 +321,31 @@ class UserController extends BaseController {
         if($imgList){
             try{
                 $dao = UserDao::getInstance();
+                $newImgSplit = explode("/", $imgList[0]);
 
                 $newUserData = new User();
                 $newUserData->setId($_SESSION['logged']->getId());
                 $newUserData->setProfilePic($imgList[0]);
+                $newUserData->setThumbsProfile(THUMBS_URI.$newImgSplit[count($newImgSplit)-1]);
 
                 if($dao->saveUserProfilePic($newUserData)){
                     $oldImgUrl = $_SESSION['logged']->getProfilePic();
+
+
                     if($oldImgUrl != $GLOBALS["male_default_picture"] &&
                         $oldImgUrl != $GLOBALS["female_default_picture"]){
                         $fileSplit = explode("/",$oldImgUrl);
 
                         $oldThumb = './uploads/users/photos/thumbs/' .$fileSplit[count($fileSplit)-1];
+
                         unlink($oldImgUrl);
                         unlink($oldThumb);
                         $_SESSION['logged']->setProfilePic($imgList[0]);
+                        $_SESSION['logged']->setThumbsProfile(THUMBS_URI.$newImgSplit[count($newImgSplit)-1]);
                     }
                     else{
                         $_SESSION['logged']->setProfilePic($imgList[0]);
+                        $_SESSION['logged']->setThumbsProfile(THUMBS_URI.$newImgSplit[count($newImgSplit)-1]);
                     }
                     echo json_encode($imgList);
                 }
@@ -373,64 +381,63 @@ class UserController extends BaseController {
 
     // generate thumbnail for uploaded images
     public function generateThumbnail($fileName){
-        $thumbHeight = 150;
-        $im = null;
-        $save_path = './uploads/users/photos';
-        $dir = '/fullsized/';
-        $thumbs = '/thumbs/';
-        if(preg_match('/[.]jpg$/', $fileName)){
-            $im = imagecreatefromjpeg($save_path . $dir . $fileName);
-        }
-        elseif (preg_match('/[.]gif$/', $fileName)){
-            $im = imagecreatefromgif($save_path . $dir . $fileName);
+        if(isset($fileName)){
+            $thumbHeight = 150;
+            $im = null;
+            $save_path = './uploads/users/photos';
+            $dir = '/fullsized/';
+            $thumbs = '/thumbs/';
+            if(preg_match('/[.]jpg$/', $fileName)){
+                $im = imagecreatefromjpeg($save_path . $dir . $fileName);
+            }
+            elseif (preg_match('/[.]gif$/', $fileName)){
+                $im = imagecreatefromgif($save_path . $dir . $fileName);
 
-        }
-        elseif (preg_match('/[.]png$/', $fileName)){
-            $im = imagecreatefrompng($save_path . $dir . $fileName);
-        }
+            }
+            elseif (preg_match('/[.]png$/', $fileName)){
+                $im = imagecreatefrompng($save_path . $dir . $fileName);
+            }
 
-        $ox = imagesx($im);
-        $oy = imagesy($im);
+            $ox = imagesx($im);
+            $oy = imagesy($im);
 
-        $ny = $thumbHeight;
-        $nx =  floor($ox * ($thumbHeight / $oy));
+            $ny = $thumbHeight;
+            $nx =  floor($ox * ($thumbHeight / $oy));
 
 
-        $nm = imagecreatetruecolor($nx,$ny);
+            $nm = imagecreatetruecolor($nx,$ny);
 
-        imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
+            imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
 
-        if(!file_exists($save_path . $thumbs)){
-            if(mkdir($save_path . $thumbs)){
-                self::checkThumbsExtention($nm,$save_path,$thumbs,$fileName);
+            if(!file_exists($save_path . $thumbs)){
+                if(mkdir($save_path . $thumbs)){
+                    self::checkThumbsExtention($nm,$save_path,$thumbs,$fileName);
+                }
+                else{
+                    $msg = "Thumbnail generator problem...";
+                    header('location:'.URL_ROOT.'/index/profile&error=' . $msg);
+                }
             }
             else{
-                $msg = "Thumbnail generator problem...";
-                header('location:'.URL_ROOT.'/index/profile&error=' . $msg);
+                self::checkThumbsExtention($nm,$save_path,$thumbs,$fileName);
             }
         }
-        else{
-            self::checkThumbsExtention($nm,$save_path,$thumbs,$fileName);
-        }
-
     }
 
     // check thumbs extension save method
     public function checkThumbsExtention($nm,$save_path,$thumbs,$fileName){
-        if(preg_match('/[.]jpg$/', $fileName)){
-            imagejpeg($nm, $save_path . $thumbs . $fileName);
-        }
-        elseif (preg_match('/[.]gif$/', $fileName)){
-            imagegif($nm, $save_path . $thumbs . $fileName);
+        if(isset($nm)){
+            if(preg_match('/[.]jpg$/', $fileName)){
+                imagejpeg($nm, $save_path . $thumbs . $fileName);
+            }
+            elseif (preg_match('/[.]gif$/', $fileName)){
+                imagegif($nm, $save_path . $thumbs . $fileName);
 
+            }
+            elseif (preg_match('/[.]png$/', $fileName)){
+                imagepng($nm, $save_path . $thumbs . $fileName);
+            }
         }
-        elseif (preg_match('/[.]png$/', $fileName)){
-            imagepng($nm, $save_path . $thumbs . $fileName);
-        }
-    }
-
-    public function sendImageListDb(){
-
     }
 
 }

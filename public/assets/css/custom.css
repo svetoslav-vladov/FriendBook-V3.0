@@ -652,3 +652,45 @@ nav {padding: 0 !important;}
 .card.coverProfilePic ul li a {
     color: black !important;
 }
+
+.like-comment-container {
+    position: relative;
+    float: left;
+}
+
+.like-comment-container button {
+    position: absolute;
+    left: 214px;
+    font-size: 0.63em;
+    width: 68px;
+    height: 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline:none !important;
+}
+
+.unlike-comment-button {
+    color:black;
+    transition: all 0.2s ease-in-out;
+}
+.unlike-comment-button:hover {
+    opacity: 0.7;
+    transition: all 0.2s ease-in-out;
+}
+.like-comment-button {
+    color: #aaaaaa;
+    transition: all 0.2s ease-in-out;
+}
+
+.like-comment-button:hover {
+    color:black;
+    transition: all 0.2s ease-in-out;
+}
+.like-comment-container img.comments_gif {
+    position: absolute;
+    left: 236px;
+    height: 19px;
+    width: 19px;
+    top: -49px;
+}

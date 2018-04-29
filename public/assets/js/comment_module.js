@@ -13,7 +13,6 @@ function getComments(post_id) {
                 for(var comment of result) {
                     var commentDiv = $(`
                     <div class="media comment comment-${post_id}">
-                    <span id=like-comment-container${comment['comment_id']}></span>
                     <a href=${root}/index/profile&id=${comment['owner_id']}>
                         <img class="user_pic align-self-start mr-3" src=${root+comment['profile_pic']} alt="icon">
                     </a>
@@ -21,6 +20,7 @@ function getComments(post_id) {
                         <h5 class="mt-0"><a href="${root}/index/profile&id=${comment['owner_id']}" class="comment_owner ${(comment['gender'] == 'male') ? 'male' : 'female'}">
                                     ${(comment['display_name'] == null) ? (comment['first_name'] + " " + comment['last_name']) : comment['display_name']}
                                 </a>
+                                <span class="like-comment-container" id=like-comment-container${comment['comment_id']}></span>
                                 <span class="comment_date">${comment['comment_date']}</span>
                         </h5>
                         <span><p class="comment-desc">${comment['description']}</p></span>
@@ -98,7 +98,6 @@ function isLikedComment(comment_id) {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            console.log(this.responseText);
             likeCommentButton.click(function () {
                 likeComment(comment_id);
                 $('#comment_likes_counter'+comment_id).remove();

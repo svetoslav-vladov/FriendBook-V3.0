@@ -114,10 +114,10 @@
             </div>
             <div class="input-group mb-3 add_comment_container">
                 <span class="user_pic_add_comment">
-                    <img src="<?php if(is_null($post['thumbs_profile']))
-                    { echo URL_ROOT . $post['profile_pic']; } else{ echo URL_ROOT .
-                        $post['thumbs_profile'];} ?>"
-                         title="<?php echo $post["first_name"] . " " . $post["last_name"]; ?>" alt="icon"
+                    <img src="<?php if(is_null($_SESSION["logged"]->getThumbsProfile()))
+                    { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
+                        $_SESSION["logged"]->getThumbsProfile();} ?>"
+                         alt="<?php echo $_SESSION['logged']->getFullName();?> profile picture"
                          class="img-rounded center-block">
                 </span>
                 <input type="text" class="form-control comment-textarea<?= $post['post_id'] ?>" name="comment_description" placeholder="Write comment..." aria-label="Write comment" aria-describedby="basic-addon2">

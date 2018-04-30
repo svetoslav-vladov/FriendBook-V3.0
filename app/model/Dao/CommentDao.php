@@ -1,6 +1,8 @@
 <?php
 namespace model\Dao;
 
+use model\Comment;
+
 class CommentDao {
     private function __construct() {
         $this->pdo = DBconnect::getInstance()->dbConnect();

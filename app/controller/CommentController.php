@@ -11,12 +11,13 @@ class CommentController extends BaseController {
             $post_id = htmlentities($_POST['post_id']);
             $comment_desc = htmlentities($_POST['comment_description']);
             $comment_desc = trim($comment_desc);
+            $comment = new Comment($comment_desc, $post_id, $user_id);
             if (isset($_POST['user_id'])) {
                 $id = htmlentities($_POST['user_id']);
-                $dao->addComment($comment_desc, $post_id, $user_id);
+                $dao->addComment($comment->getDescription(), $comment->getPostId(), $comment->getOwnerId());
                 header("location:'.URL_ROOT.'/index/profile.php&id=" . $id);
             }else {
-                $dao->addComment($comment_desc, $post_id, $user_id);
+                $dao->addComment($comment->getDescription(), $comment->getPostId(), $comment->getOwnerId());
                 header('location:'.URL_ROOT.'/index/main');
             }
         }

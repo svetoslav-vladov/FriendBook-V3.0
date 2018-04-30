@@ -149,3 +149,7 @@ function deletePost(post_id) {
     };
     request.send("post_id=" + post_id);
 }
+
+function viewDetails(post_id) {
+
+}

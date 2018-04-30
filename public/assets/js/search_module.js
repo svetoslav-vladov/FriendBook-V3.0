@@ -25,7 +25,7 @@ function searchUser(str) {
                     var li = $(`<li class="list-group-item">
                                 <a href="${url_root}index/profile&id=${user['id']}" class="${(user['gender'] == 'male') ? 'male' : 'female'}">
                                     <img class="img-fluid search_image" src="${(user['thumbs_profile'] == null) ? root+user['profile_pic'] : user['thumbs_profile']}">
-                                    <span class="search_user">${user['first_name']} ${user['last_name']}</span>
+                                    <span class="search_user">${user['first_name'].toLowerCase()} ${user['last_name'].toLowerCase()}</span>
                                 </a>
                               </li>`);
                     usersList.append(li);

@@ -107,7 +107,15 @@ class PostDao {
     }
 
     function deletePost($post_id, $user_id) {
-        $statement = $this->pdo->prepare("DELETE FROM posts WHERE posts.id = ? AND posts.user_id = ?");
+        try {
+//            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare("DELETE FROM posts WHERE posts.id = ? AND posts.user_id = ?");
+//            $this->pdo->commit();
+        }
+        catch (\PDOException $e) {
+            $this->pdo->rollBack();
+            throw new \PDOException($e->getMessage());
+        }
         return $statement->execute(array($post_id, $user_id));
     }
 }

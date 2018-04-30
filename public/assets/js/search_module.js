@@ -24,13 +24,13 @@ function searchUser(str) {
                 for (var user of users) {
                     var li = $(`<li class="list-group-item">
                                 <a href="${url_root}index/profile&id=${user['id']}" class="${(user['gender'] == 'male') ? 'male' : 'female'}">
-                                    <img class="search_image" src=${root+user['profile_pic']}>
+                                    <img class="img-fluid search_image" src="${(user['thumbs_profile'] == null) ? root+user['profile_pic'] : user['thumbs_profile']}">
                                     <span class="search_user">${user['first_name']} ${user['last_name']}</span>
                                 </a>
                               </li>`);
                     usersList.append(li);
                     // Code for make bold found string in the searched string
-                    $('.search_user:contains('+str.toLocaleLowerCase()+')').each( function(i, element) {
+                    $('.search_user:contains('+str+')').each( function(i, element) {
                         var content = $(element).text();
                         content = content.replace(str, `<b>${str}</b>`);
                         $(this).html(content);

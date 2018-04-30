@@ -130,3 +130,22 @@ if(document.querySelector('#post-form')){
     }
 
 }
+
+function deletePost(post_id) {
+    var request = new XMLHttpRequest();
+    request.open('POST', url_root + '/post/deletePost');
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            $('.modal-backdrop.show').remove();
+            $('body').removeClass('modal-open');
+            $('.bd-example-modal-sm').fadeOut();
+            $('#post'+post_id).fadeOut(500);
+            setTimeout(function () {
+                $('#post'+post_id).remove();
+            }, 600);
+
+        }
+    };
+    request.send("post_id=" + post_id);
+}

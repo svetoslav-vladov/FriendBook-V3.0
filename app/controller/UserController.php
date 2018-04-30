@@ -6,7 +6,6 @@ use Model\Dao\UserDao;
 use Model\User;
 
 class UserController extends BaseController {
-
     public function logout(){
         if(isset($_SESSION['logged'])){
             $requestType = $_SERVER['REQUEST_METHOD'];
@@ -228,6 +227,7 @@ class UserController extends BaseController {
                         'first_name' =>$user['first_name'],
                         'last_name' => $user['last_name'],
                         'profile_pic' => $user['profile_pic'],
+                        'thumbs_profile' => $user['thumbs_profile'],
                         'gender' => $user['gender']
                     ];
                     $found = true;

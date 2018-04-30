@@ -14,7 +14,7 @@ function getComments(post_id) {
                     var commentDiv = $(`
                     <div class="media comment comment-${post_id}">
                     <a href=${root}/index/profile&id=${comment['owner_id']}>
-                        <img class="user_pic align-self-start mr-3" src=${root+comment['profile_pic']} alt="icon">
+                        <img class="user_pic align-self-start mr-3" src=${(comment['thumbs_profile'] == null) ? root+comment['profile_pic'] : root+comment['thumbs_profile']} alt="icon">
                     </a>
                       <div class="media-body">
                         <h5 class="mt-0"><a href="${root}/index/profile&id=${comment['owner_id']}" class="comment_owner ${(comment['gender'] == 'male') ? 'male' : 'female'}">

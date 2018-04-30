@@ -178,11 +178,6 @@ nav li{
     margin: 10px;
 }
 
-#small_image a img {
-    width:100%;
-    border-radius: 50%;
-}
-
 #post_input_fake {
     display: inline-block;
     width: 82%;
@@ -318,6 +313,7 @@ img.logo {
 
 .user_pic {
     width: 33px;
+    height: 33px;
     margin-right: 7px !important;
     border-radius: 50%;
 }
@@ -412,14 +408,20 @@ a.comment_owner {
     float: left;
     margin-right: 6px;
 }
-
+.icon a {
+    width: 100%;
+    height: 45px;
+    display: block;
+    border-radius: 50%;
+}
 .icon img {
-    width: 50px;
-    border-radius:  8px;
+    width: 100%;
+    height: -webkit-fill-available;
+    border-radius: 50%;
 }
 .name {
     font-size: 1.32em;
-    margin-top: 3px;
+    margin-top: 5px;
     float: left;
 }
 
@@ -514,7 +516,6 @@ span.likes_counter {
 
 .search_image {
     width: 30px;
-    border-radius: 50%;
 }
 
 .search_user {
@@ -693,4 +694,11 @@ nav {padding: 0 !important;}
     height: 19px;
     width: 19px;
     top: -49px;
+}
+
+.delete-post-button {
+    position: absolute;
+    top: 40px;
+    right: 12px;
+    outline:none !important;
 }

@@ -14,7 +14,7 @@ class CommentController extends BaseController {
             if (isset($_POST['user_id'])) {
                 $id = htmlentities($_POST['user_id']);
                 $dao->addComment($comment_desc, $post_id, $user_id);
-                header("location: ../view/profile.php?id=" . $id);
+                header("location:'.URL_ROOT.'/index/profile.php&id=" . $id);
             }else {
                 $dao->addComment($comment_desc, $post_id, $user_id);
                 header('location:'.URL_ROOT.'/index/main');

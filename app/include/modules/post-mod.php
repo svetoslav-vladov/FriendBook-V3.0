@@ -1,6 +1,9 @@
 <div id="small_image">
     <a href="<?php echo URL_ROOT;?>/index/profile">
-        <img class="img-rounded" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic();?>" alt="profile_pic">
+        <img class="img-thumbnail img-fluid" src="
+                                <?php if(is_null($_SESSION["logged"]->getThumbsProfile()))
+        { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
+            $_SESSION["logged"]->getThumbsProfile();} ?>" alt="profile_pic">
     </a>
 </div>
 <!-- div to Open the Modal -->
@@ -14,7 +17,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <a href="<?php echo URL_ROOT;?>/index/profile">
-                    <img class="img-rounded" src="<?php echo URL_ROOT . $_SESSION['logged']->getProfilePic();?>" alt="profile_pic">
+                    <img class="img-thumbnail img-fluid" src="
+                                <?php if(is_null($_SESSION["logged"]->getThumbsProfile()))
+                    { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
+                        $_SESSION["logged"]->getThumbsProfile();} ?>"
+                         alt="<?php echo $_SESSION['logged']->getFullName();?> profile picture">
                 </a>
                 <h5 class="mb-0">What's on your mind, <?php echo $_SESSION['logged']->getFirstName() . ' ' . $_SESSION['logged']->getLastName();?>?</h5>
             </div>

@@ -111,7 +111,7 @@ class UserDao {
     }
 
     public function getAllUsers($logged_user_id) {
-        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile
                                 FROM users 
                                 WHERE id != ?");
         $statement->execute(array($logged_user_id));

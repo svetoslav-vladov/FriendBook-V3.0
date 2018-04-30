@@ -32,7 +32,7 @@ class PostDao {
     }
 
     public function getAllPosts() {
-        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, users.id AS user_id, users.first_name, users.last_name, users.gender ,users.profile_pic, users.profile_cover
+        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, users.id AS user_id, users.first_name, users.last_name, users.gender ,users.profile_pic, users.profile_cover, thumbs_profile
                                 FROM posts
                                 JOIN users ON posts.user_id = users.id WHERE ?
                                 ORDER BY posts.create_date DESC ");
@@ -104,5 +104,10 @@ class PostDao {
                                 WHERE post_id = ? AND status = 0");
         $statement->execute(array($post_id));
         echo $statement->fetch()['dislike_count'];
+    }
+
+    function deletePost($post_id, $user_id) {
+        $statement = $this->pdo->prepare("DELETE FROM posts WHERE posts.id = ? AND posts.user_id = ?");
+        return $statement->execute(array($post_id, $user_id));
     }
 }

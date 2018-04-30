@@ -277,7 +277,7 @@ class UserController extends BaseController {
 
             // section -> photos, profile, cover, albums, posts
             // this control if you are allowed to send single or many
-            $section = 'photos';
+            $section = 'profile';
             $formImages = $_FILES['images'];
 
             // validation

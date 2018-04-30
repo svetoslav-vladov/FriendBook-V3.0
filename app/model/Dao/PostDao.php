@@ -25,10 +25,10 @@ class PostDao {
     private $pdo;
     private static $instance;
 
-    public function addPost($user_id, $description){
+    public function addPost(Post $post){
         $statement = $this->pdo->prepare("INSERT INTO posts (user_id, description) 
                                 VALUES (?,?);");
-        $statement->execute(array($user_id, $description));
+        return $statement->execute(array($post->getOwnerId(), $post->getDescription()));
     }
 
     public function getAllPosts() {

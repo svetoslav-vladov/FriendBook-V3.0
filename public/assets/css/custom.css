@@ -615,8 +615,8 @@ div#change_profile_pic {
     top: 0;
     color: #000;
     cursor: pointer;
-    padding: 1px 6px;
-    transition: color 0.3s ease-in-out;
+    padding: 1px 5px;
+    /* transition: color 0.3s ease-in-out; */
     display: none;
     background: #f7f7f78c;
 }
@@ -627,7 +627,7 @@ div#zoom_profile_pic {
     font-size: 1.3rem;
     color: #000;
     cursor: help;
-    padding: 1px 6px;
+    padding: 1px 7px;
     transition: color 0.3s ease-in-out;
     display: none;
     background: #f7f7f78c;
@@ -649,15 +649,20 @@ nav {padding: 0 !important;}
     color: #39e05f;
 }
 .card.coverProfilePic a img {
-    width: 100%;
+    width: 99%;
     opacity: 0.7;
     transition: opacity 0.3s ease-in-out;
+    cursor: zoom-in;
 }
 .card.coverProfilePic a img:hover {
     opacity:  1;
 }
 .card.coverProfilePic ul li a {
     color: black !important;
+}
+
+div#image_list img {
+    cursor: zoom-in;
 }
 
 .like-comment-container {

@@ -16,6 +16,10 @@ class IndexController extends \controller\BaseController{
         $this->renderView('register');
     }
 
+    public function settings() {
+        $this->renderView('settings');
+    }
+
     public function main() {
         $this->renderView('main');
     }

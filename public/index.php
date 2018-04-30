@@ -55,7 +55,7 @@ elseif (class_exists($controllerClassName)) {
     }
     elseif (method_exists($contoller, $methodName)) {
         if(isset($_SESSION['logged']) && ($controllerName === "index")  &&
-            ($methodName === "login" || $methodName === "register" )){
+            ($methodName === "login" || $methodName === "register")){
             header('location:'.URL_ROOT.'/index/main');
         }
         $contoller->$methodName();

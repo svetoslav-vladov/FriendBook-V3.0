@@ -109,4 +109,13 @@ class PostController extends BaseController{
             $dao->getCountDislikes($post_id);
         }
     }
+
+    public function deletePost() {
+        $dao = PostDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $user_id = $_SESSION['logged']->getId();
+            $post_id = htmlentities($_POST['post_id']);
+            $dao->deletePost($post_id, $user_id);
+        }
+    }
 }

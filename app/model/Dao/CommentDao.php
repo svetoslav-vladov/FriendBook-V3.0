@@ -1,6 +1,8 @@
 <?php
 namespace model\Dao;
 
+use model\Comment;
+
 class CommentDao {
     private function __construct() {
         $this->pdo = DBconnect::getInstance()->dbConnect();
@@ -23,7 +25,7 @@ class CommentDao {
     }
 
     public function getAllCommentsForCurrentPost($post_id) {
-        $statement = $this->pdo->prepare("SELECT comments.id AS comment_id , comments.description, comment_date, post_id, owner_id, profile_pic, first_name, last_name, users.gender, display_name
+        $statement = $this->pdo->prepare("SELECT comments.id AS comment_id , comments.description, comment_date, post_id, owner_id, profile_pic, first_name, last_name, users.gender, display_name, users.thumbs_profile
                                 FROM comments
                                 JOIN users ON users.id = comments.owner_id
                                 JOIN posts ON posts.id = comments.post_id

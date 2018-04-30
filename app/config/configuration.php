@@ -14,7 +14,7 @@
     // some stuff
     define('THUMB_SIZE', 150);
     define('UPLOAD_PHOTOS', './uploads/users/photos');
-    define('UPLOAD_FULL_SIZE', './uploads/users/photos/fullsize');
+    define('UPLOAD_FULL_SIZE', './uploads/users/photos/fullsized');
     define('UPLOAD_THUMBS', './uploads/users/photos/thumbs');
 
     define('MAX_IMG_UPLOAD_PHOTOS', 15);

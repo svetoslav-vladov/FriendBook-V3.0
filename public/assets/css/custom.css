@@ -178,11 +178,6 @@ nav li{
     margin: 10px;
 }
 
-#small_image a img {
-    width:100%;
-    border-radius: 50%;
-}
-
 #post_input_fake {
     display: inline-block;
     width: 82%;
@@ -318,6 +313,7 @@ img.logo {
 
 .user_pic {
     width: 33px;
+    height: 33px;
     margin-right: 7px !important;
     border-radius: 50%;
 }
@@ -412,14 +408,20 @@ a.comment_owner {
     float: left;
     margin-right: 6px;
 }
-
+.icon a {
+    width: 100%;
+    height: 45px;
+    display: block;
+    border-radius: 50%;
+}
 .icon img {
-    width: 50px;
-    border-radius:  8px;
+    width: 100%;
+    height: -webkit-fill-available;
+    border-radius: 50%;
 }
 .name {
     font-size: 1.32em;
-    margin-top: 3px;
+    margin-top: 5px;
     float: left;
 }
 
@@ -514,7 +516,6 @@ span.likes_counter {
 
 .search_image {
     width: 30px;
-    border-radius: 50%;
 }
 
 .search_user {
@@ -653,6 +654,56 @@ nav {padding: 0 !important;}
 .card.coverProfilePic ul li a {
     color: black !important;
 }
+
 div#image_list img {
-    cursor:  zoom-in;
+    cursor: zoom-in;
+}
+
+.like-comment-container {
+    position: relative;
+    float: left;
+}
+
+.like-comment-container button {
+    position: absolute;
+    left: 214px;
+    font-size: 0.63em;
+    width: 68px;
+    height: 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline:none !important;
+}
+
+.unlike-comment-button {
+    color:black;
+    transition: all 0.2s ease-in-out;
+}
+.unlike-comment-button:hover {
+    opacity: 0.7;
+    transition: all 0.2s ease-in-out;
+}
+.like-comment-button {
+    color: #aaaaaa;
+    transition: all 0.2s ease-in-out;
+}
+
+.like-comment-button:hover {
+    color:black;
+    transition: all 0.2s ease-in-out;
+}
+.like-comment-container img.comments_gif {
+    position: absolute;
+    left: 236px;
+    height: 19px;
+    width: 19px;
+    top: -49px;
+}
+
+.delete-post-button {
+    position: absolute;
+    top: 40px;
+    right: 12px;
+    outline:none !important;
 }

@@ -13,14 +13,14 @@ function getComments(post_id) {
                 for(var comment of result) {
                     var commentDiv = $(`
                     <div class="media comment comment-${post_id}">
-                    <span id=like-comment-container${comment['comment_id']}></span>
                     <a href=${root}/index/profile&id=${comment['owner_id']}>
-                        <img class="user_pic align-self-start mr-3" src=${root+comment['profile_pic']} alt="icon">
+                        <img class="user_pic align-self-start mr-3" src=${(comment['thumbs_profile'] == null) ? root+comment['profile_pic'] : root+comment['thumbs_profile']} alt="icon">
                     </a>
                       <div class="media-body">
                         <h5 class="mt-0"><a href="${root}/index/profile&id=${comment['owner_id']}" class="comment_owner ${(comment['gender'] == 'male') ? 'male' : 'female'}">
                                     ${(comment['display_name'] == null) ? (comment['first_name'] + " " + comment['last_name']) : comment['display_name']}
                                 </a>
+                                <span class="like-comment-container" id=like-comment-container${comment['comment_id']}></span>
                                 <span class="comment_date">${comment['comment_date']}</span>
                         </h5>
                         <span><p class="comment-desc">${comment['description']}</p></span>
@@ -62,7 +62,7 @@ function hideComments(post_id) {
 
 function likeComment(comment_id) {
     var request = new XMLHttpRequest();
-    request.open('POST', url_root + '/comment/likeComment');
+    request.open('POST', root + '/comment/likeComment');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -73,12 +73,12 @@ function likeComment(comment_id) {
             },250);
         }
     };
-    request.send("post_id=" + comment_id);
+    request.send("comment_id=" + comment_id);
 }
 
 function unlikeComment(comment_id) {
     var request = new XMLHttpRequest();
-    request.open('POST', url_root + '/comment/likeComment');
+    request.open('POST', root + '/comment/unlikeComment');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -89,36 +89,35 @@ function unlikeComment(comment_id) {
             },250);
         }
     };
-    request.send("post_id=" + comment_id);
+    request.send("comment_id=" + comment_id);
 }
 
 function isLikedComment(comment_id) {
-    var likeButton = $(`<button class="like-comment-button" id="like_comment${comment_id}"><i class="fas fa-thumbs-up"></i></button>`);
-    var unlikeButton = $(`<button class="unlike-comment-button" id="unlike_comment${comment_id}"><i class="fa fa-thumbs-up"></i></button>`);
+    var likeCommentButton = $(`<button class="like-comment-button" id="like_comment${comment_id}"><i class="fas fa-thumbs-up"></i></button>`);
+    var unlikeCommentButton = $(`<button class="unlike-comment-button" id="unlike_comment${comment_id}"><i class="fa fa-thumbs-up"></i></button>`);
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            console.log(this.responseText);
-            likeButton.click(function () {
+            likeCommentButton.click(function () {
                 likeComment(comment_id);
                 $('#comment_likes_counter'+comment_id).remove();
                 $(this).remove();
             });
-            unlikeButton.click(function () {
+            unlikeCommentButton.click(function () {
                 unlikeComment(comment_id);
                 $('#comment_likes_counter'+comment_id).remove();
                 $(this).remove();
             });
             getCountCommentLikes(comment_id);
             if (this.responseText == 1) {
-                $('#like-comment-container'+comment_id).append(unlikeButton);
+                $('#like-comment-container'+comment_id).append(unlikeCommentButton);
             }
             else {
-                $('#like-comment-container'+comment_id).append(likeButton);
+                $('#like-comment-container'+comment_id).append(likeCommentButton);
             }
         }
     };
-    req.open("GET", url_root + "/comment/likeComment&comment_id="+comment_id);
+    req.open("GET", root + "/comment/likeComment&comment_id="+comment_id);
     req.send();
 }
 

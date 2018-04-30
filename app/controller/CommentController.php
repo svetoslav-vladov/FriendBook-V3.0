@@ -11,12 +11,13 @@ class CommentController extends BaseController {
             $post_id = htmlentities($_POST['post_id']);
             $comment_desc = htmlentities($_POST['comment_description']);
             $comment_desc = trim($comment_desc);
+            $comment = new Comment($comment_desc, $post_id, $user_id);
             if (isset($_POST['user_id'])) {
                 $id = htmlentities($_POST['user_id']);
-                $dao->addComment($comment_desc, $post_id, $user_id);
-                header("location: ../view/profile.php?id=" . $id);
+                $dao->addComment($comment->getDescription(), $comment->getPostId(), $comment->getOwnerId());
+                header("location:'.URL_ROOT.'/index/profile.php&id=" . $id);
             }else {
-                $dao->addComment($comment_desc, $post_id, $user_id);
+                $dao->addComment($comment->getDescription(), $comment->getPostId(), $comment->getOwnerId());
                 header('location:'.URL_ROOT.'/index/main');
             }
         }
@@ -29,17 +30,18 @@ class CommentController extends BaseController {
 
     public function likeComment() {
         $dao = CommentDao::getInstance();
-        //AJAX REQUEST for like a comment
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $user_id = $_SESSION['logged']->getId();
-            $comment_id = htmlentities($_POST['comment_id']);
-            $dao->likeComment($comment_id, $user_id);
-        }
         // function for check comment if liked
         if (isset($_GET['comment_id'])) {
             $user_id = $_SESSION['logged']->getId();
-            $comment_id = htmlentities($_GET['comment_id']);
+            $comment_id = $_GET['comment_id'];
             $dao->isLiked($comment_id, $user_id);
+        }
+
+        //AJAX REQUEST for like a comment
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $user_id = $_SESSION['logged']->getId();
+            $comment_id = $_POST['comment_id'];
+            $dao->likeComment($comment_id, $user_id);
         }
     }
 
@@ -47,7 +49,7 @@ class CommentController extends BaseController {
         $dao = CommentDao::getInstance();
         if (isset($_POST['comment_id'])) {
             $user_id = $_SESSION['logged']->getId();
-            $comment_id = htmlentities($_POST['comment_id']);
+            $comment_id = $_POST['comment_id'];
             $dao->unlikeComment($comment_id, $user_id);
         }
     }

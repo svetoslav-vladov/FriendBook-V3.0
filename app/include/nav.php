@@ -20,7 +20,7 @@
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item profile_btn_top">
                     <a class="nav-link" href="<?php echo URL_ROOT; ?>/index/profile">
-                        <img class="img-fluid user_profile_pic" src="
+                        <img id="profilTopUserPic" class="img-fluid user_profile_pic" src="
                                 <?php if(is_null($_SESSION["logged"]->getThumbsProfile()))
                                 { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
                                 $_SESSION["logged"]->getThumbsProfile();} ?>"

@@ -196,8 +196,86 @@ if(change_profile_pic_btn && profilePicForm){
         var xhr = new XMLHttpRequest();
         var formData = new FormData(profilePicForm);
         xhr.open('post',url_root+'/user/uploadProfilePic');
+
         xhr.onload = function () {
+            var success = document.querySelector('#ajax_success');
+            var error = document.querySelector('#ajax_error');
+            var title = document.createElement('h3');
+            var ul = document.createElement('ul');
+
+            var picFullA = document.getElementById('profile-pic')
+                .getElementsByTagName('a');
+            var picThumbImg = document.querySelector('#mini-profile-pic');
+
+            var picThumbTopNav = document.querySelector('#profilTopUserPic');
+
+            success.innerHTML = '';
+            error.innerHTML = '';
+            title.innerHTML = '';
+            ul.innerHTML= '';
+
             console.log(this.responseText);
+            var res = JSON.parse(this.responseText);
+            if(res.hasOwnProperty('img_count_error')){
+
+                var p = document.createElement('p');
+                title.innerHTML = 'Error:';
+                p.innerHTML = res.img_count_error;
+
+                error.appendChild(title);
+                error.appendChild(p);
+                error.style.display = 'block';
+            }
+            else if(res.hasOwnProperty('error')){
+
+                title.innerHTML = res.error;
+
+                for (var i = 0; i < res.info.length; i++){
+                    var li = document.createElement('li');
+                    li.innerHTML = 'Errors: ' + res.info[i].errors + '<br> File Name: ' + res.info[i].name;
+                    ul.appendChild(li);
+                }
+                error.appendChild(title);
+                error.appendChild(ul);
+
+                error.style.display = 'block';
+            }
+            else if(res.hasOwnProperty('success')){
+
+                title.innerHTML = 'Successfully uploaded images';
+
+                for (var i = 0; i < res.dataNotPassed.length; i++){
+                    //console.log(res.dataNotPassed);
+
+                    var li = document.createElement('li');
+                    li.innerHTML = 'File Name: ' + res.dataNotPassed[i].name + ' ----- Errors: ' + res.dataNotPassed[i].errors[0];
+                    ul.appendChild(li);
+
+                }
+
+                ul.style.backgroundColor = 'red';
+                success.appendChild(title);
+
+                if(res.hasOwnProperty('error')){
+                    var hr = document.createElement('hr');
+                    success.appendChild(hr);
+                    var notUploaded = document.createElement('notUploaded');
+                    notUploaded.innerHTML = 'Files not Uploaded:';
+                    notUploaded.style.fontWeight = 'bold';
+                    success.appendChild(notUploaded);
+                }
+                success.appendChild(ul);
+                success.style.display = 'block';
+
+                //console.log(res.images);
+
+                picFullA.href = url_root + res.images.full;
+                picThumbImg.src = url_root + res.images.thumb;
+                picThumbTopNav.src = url_root + res.images.thumb;
+
+            }
+
+
         };
 
         xhr.send(formData);

@@ -4,4 +4,4 @@ require_once '../app/model/User.php';
 
 require_once '../app/include/session.php';
 require_once '../app/include/functions.php';
-require_once '../app/config/paths.php';
+require_once '../app/config/configuration.php';

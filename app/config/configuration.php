@@ -11,6 +11,15 @@
     // site name
     define('SITE_NAME', 'FriendBook.bg - Your social network');
 
+    // some stuff
+    define('THUMB_SIZE', 150);
+    define('UPLOAD_PHOTOS', './uploads/users/photos');
+    define('UPLOAD_FULL_SIZE', './uploads/users/photos/fullsize');
+    define('UPLOAD_THUMBS', './uploads/users/photos/thumbs');
+
+    define('MAX_IMG_UPLOAD_PHOTOS', 15);
+    define('MAX_IMG_UPLOAD_PHOTO_SIZE', 2097152);
+
     $GLOBALS["male_default_picture"] = '/uploads/male_default_picture.png';
     $GLOBALS["female_default_picture"] = '/uploads/female_default_picture.png';
     $GLOBALS["default_cover_pic"] = '/uploads/default_cover.jpg';

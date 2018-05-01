@@ -180,8 +180,6 @@ nav li{
 
 #post_input_fake {
     display: inline-block;
-    width: 82%;
-    padding: 26px 0px;
 }
 .modal-header {
     display: block;
@@ -322,6 +320,10 @@ img.logo {
     transition: height 0.5s ease-in-out, padding 0.5s ease-in-out;
     overflow: hidden;
     overflow-y: scroll;
+    width: 100%;
+    margin-top: 27px;
+    border-top: 1px solid darkgrey;
+    box-shadow: green -11px 0px 14px 0px inset;
 }
 
 .comment_big {
@@ -380,7 +382,7 @@ input[type="text"] {
     font-weight:  bold;
     font-family:  arial;
     float: right;
-    margin: 8px 21px;
+    margin: 8px 0px;
 }
 
 
@@ -392,6 +394,7 @@ a.comment_owner {
 .comments-buttons {
     display: inline-block;
     float: right;
+    margin-right: 10px;
 }
 
 .comment_btn_close {
@@ -447,6 +450,7 @@ a.comment_owner {
     height: 31px;
     margin-bottom: 0px !important;
     margin-top: 10px;
+    padding: 0px 8px;
 }
 .like-container {
     width: 68px;
@@ -488,9 +492,9 @@ span.likes_counter {
 }
 
 .post_navigation {
-    padding: 10px;
+    padding: 10px 0px;
     border-radius: 11px;
-    box-shadow: 0 0 10px 0px darkgrey;
+    box-shadow: 0 0 10px 0px green;
 }
 
 .search_input {
@@ -636,8 +640,8 @@ div#change_profile_pic:hover {
     color: black;
 }
 span.user_pic_add_comment img {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
 }
 nav {padding: 0 !important;}
 #profile-pic a:hover {
@@ -708,6 +712,7 @@ div#image_list img {
     right: 12px;
     outline:none !important;
 }
+
 .profile_cover_link{
     display: block;
     position:  absolute;
@@ -734,7 +739,11 @@ div#change_profile_cover:hover {
     background-color: #ffffff9c;
 }
 
-#profileCover a:hover + #change_profile_cover{
+#profileCover a:hover + #change_profile_cover {
     display: block;
     background: #ffffff9e;
+}
+
+.comments {
+    padding: 0 0 0 11px;;
 }

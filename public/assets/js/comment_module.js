@@ -1,5 +1,30 @@
 var root = window.location.origin + '/projects/FriendBook-v3.0';
 var comment_gif = $("<img class='comments_gif' src="+ root +"/assets/images/ajax-loading-c4.gif>");
+
+function addComment(post_id) {
+    var commentDesc = $('.comment-textarea' + post_id);
+    var request = new XMLHttpRequest();
+//   validation for text area is empty or contains white spaces
+    if (!$.trim($(".comment-textarea" + post_id).val())) {
+        alert("You can't create empty comment, Please fill the post!");
+    }
+    else if (commentDesc.val().length > 1500) {
+        alert("Your comment contains too many characters! Please enter no more than 1500 characters.");
+    }
+    else {
+        $("#comments" + post_id).empty();
+        request.open('post', url_root + '/comment/addComment');
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        request.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                getComments(post_id);
+            }
+        };
+        request.send("comment_description=" + commentDesc.val() + "&post_id=" + post_id);
+        commentDesc.val('');
+    }
+}
+
 function getComments(post_id) {
     var comments = $('#comments'+post_id);
     comments.empty();

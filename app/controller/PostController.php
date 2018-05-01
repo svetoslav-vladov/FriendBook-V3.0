@@ -27,13 +27,11 @@ class PostController extends BaseController{
             if (!$error) {
                 // create new post for added
                 $post = new Post($user_id, $current_post);
-                if (isset($_POST['user_id'])) {
-                    $id = htmlentities($_POST['user_id']);
-                    $dao->addPost($id, $post->getDescription());
-                    header('location:'.URL_ROOT.'/index/profile');
-                }else {
-                    $dao->addPost($post->getOwnerId(), $post->getDescription());
-                    header('location:'.URL_ROOT.'/index/main');
+                try {
+                   $dao->addPost($post);
+                    header('location:' . URL_ROOT . '/index/main');
+                }catch (\PDOException $e) {
+                    header('location:' . URL_ROOT . '/index/main&error='.$e->getMessage());
                 }
             }
         }

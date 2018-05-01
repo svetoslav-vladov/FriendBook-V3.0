@@ -41,78 +41,41 @@
             <div class="description">
                 <p><?php echo $post["description"]; ?></p>
             </div>
-            <div class="post_navigation">
-                <div class="like-container" id="like-container<?php echo $post['post_id'] ?>">
-                    <script>
-                        $(document).ready(function () {
-                            isLiked(<?php echo $post['post_id']?>);
-                        });
-                    </script>
-                </div>
-                <div class="like-container" id="dislike-container<?php echo $post['post_id'] ?>">
-                    <script>
-                        $(document).ready(function () {
-                            isDisliked(<?php echo $post['post_id'] ?>);
-                        });
-                    </script>
-                </div>
-                <div class="comments-buttons" id=comments-buttons<?php echo $post['post_id']; ?>">
-                    <button name="button" id="comment_btn<?php echo $post['post_id'] ?>"
-                            onclick="displayComments(<?php echo $post['post_id'] ?>)" type="button" class="btn btn-success">COMMENTS
-                    </button>
-                    <button name="button" id="comment_btn_close<?php echo $post['post_id'] ?>"
-                            onclick="hideComments(<?php echo $post['post_id'] ?>)" type="button" class="btn btn-success comment_btn_close">CLOSE
-                    </button>
-                </div>
-            </div>
-            <div class="comments_box" id="comment_box<?php echo $post['post_id'] ?>">
-                <script>
-                    $(document).ready(function () {
-                        /*this function load all comments in current post with AJAX request*/
-                        getComments(<?php echo $post['post_id'] ?>);
-                    });
-                </script>
-                <div class="comments" id="comments<?php echo $post['post_id'] ?>">
-                    <script>
-                        $(document).ready(function () {
-                            var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
-                            var postId = "<?php echo $post['post_id'] ?>";
-                            var addButton = $('#add' + postId);
-                            var commentDesc = $('.comment-textarea' + postId);
-                            var request = new XMLHttpRequest();
-                            addButton.click(function () {
-//                            validation for text area is empty or contains white spaces
-                                if (!$.trim($(".comment-textarea" + postId).val())) {
-                                    alert("You can't create empty comment, Please fill the post!");
-                                }
-                                else if (commentDesc.val().length > 1500) {
-                                    alert("Your comment contains too many characters! Please enter no more than 1500 characters.");
-                                }
-                                else {
-                                    $("#comments" + postId).empty();
-                                    request.open('post', url_root + '/comment/addComment');
-                                    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                                    request.onreadystatechange = function () {
-                                        if (this.readyState === 4 && this.status === 200) {
-                                            getComments(postId);
-//                                            $('#comments'+postId+ " .comment:nth-child(1)").css({
-//                                                'color':'green',
-//                                                'text-shadow': '0 0 10px green'
-//                                            });
-//                                            setTimeout(function(){
-//                                                // $('#comments'+post_id+ " .media-body").removeClass('last_comment');
-//                                            },3323);
-                                        }
-                                    };
-                                    request.send("comment_description=" + commentDesc.val() + "&post_id=" + postId);
-                                    commentDesc.val('');
-                                }
+            <div id="post-details<?php echo $post['post_id']?>">
+                <button>view details</button>
+                <div class="post_navigation">
+                    <div class="like-container" id="like-container<?php echo $post['post_id'] ?>">
+                        <script>
+                            $(document).ready(function () {
+                                isLiked(<?php echo $post['post_id']?>);
                             });
-                        });
-                    </script>
-                </div>
-            </div>
-            <div class="input-group mb-3 add_comment_container">
+                        </script>
+                    </div>
+                    <div class="like-container" id="dislike-container<?php echo $post['post_id'] ?>">
+                        <script>
+                            $(document).ready(function () {
+                                isDisliked(<?php echo $post['post_id'] ?>);
+                            });
+                        </script>
+                    </div>
+                    <div class="comments-buttons" id=comments-buttons<?php echo $post['post_id']; ?>">
+                        <button name="button" id="comment_btn<?php echo $post['post_id'] ?>"
+                                onclick="displayComments(<?php echo $post['post_id'] ?>)" type="button" class="btn btn-success">COMMENTS
+                        </button>
+                        <button name="button" id="comment_btn_close<?php echo $post['post_id'] ?>"
+                                onclick="hideComments(<?php echo $post['post_id'] ?>)" type="button" class="btn btn-success comment_btn_close">CLOSE
+                        </button>
+                    </div>
+                    <div class="comments_box" id="comment_box<?php echo $post['post_id'] ?>">
+                        <script>
+                            $(document).ready(function () {
+                                /*this function load all comments in current post with AJAX request*/
+                                getComments(<?php echo $post['post_id'] ?>);
+                            });
+                        </script>
+                        <div class="comments" id="comments<?php echo $post['post_id'] ?>"></div>
+                    </div>
+                    <div class="input-group mb-3 add_comment_container">
                 <span class="user_pic_add_comment">
                     <img src="<?php if(is_null($_SESSION["logged"]->getThumbsProfile()))
                     { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
@@ -120,10 +83,12 @@
                          alt="<?php echo $_SESSION['logged']->getFullName();?> profile picture"
                          class="img-rounded center-block">
                 </span>
-                <input type="text" class="form-control comment-textarea<?= $post['post_id'] ?>" name="comment_description" placeholder="Write comment..." aria-label="Write comment" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button id="add<?php echo $post['post_id'] ?>" type="button" class="add-comment-btn btn btn-sm btn-outline-success">add</button>
-                    <input type="hidden" name="post_id" value="<?php echo $post['post_id'] ?>">
+                        <input type="text" class="form-control comment-textarea<?= $post['post_id'] ?>" name="comment_description" placeholder="Write comment..." aria-label="Write comment" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button onclick="addComment(<?php echo $post['post_id']?>)" id="add<?php echo $post['post_id'] ?>" type="button" class="add-comment-btn btn btn-sm btn-outline-success">add</button>
+                            <input type="hidden" name="post_id" value="<?php echo $post['post_id'] ?>">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

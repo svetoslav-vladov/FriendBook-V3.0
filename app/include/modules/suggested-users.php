@@ -15,14 +15,14 @@ $dao = UserDao::getInstance();
                     { echo URL_ROOT . $user['profile_pic']; } else{ echo URL_ROOT .
                         $user['thumbs_profile'];} ?>">
                 </a>
-                <div class="media-body">
+                <div class="media-body" id="friendNavigation<?php echo $user['id']?>">
                     <h5 class="mt-0">
                         <a class="<?php echo ($user['gender'] == 'male') ? 'male' : 'female' ?>" href="<?php echo URL_ROOT ?>/index/profile&id=<?=$user['id']?>">
                             <?php echo $user['first_name'] . " " . $user['last_name']?>
                         </a>
                     </h5>
                     <small><i>Registered on: <?php echo $user['reg_date']?></i></small>
-                    <button class="add-friend-button btn btn-primary btn-xs" id="add-friend<?php echo $user['id']?>"><i class="fas fa-user-plus"></i> add friend</button>
+                    <button onclick="sendFriendRequest(<?php echo $user['id']; ?>)" class="add-friend-button btn btn-primary btn-xs" id="sendFriendRequest<?php echo $user['id']?>"><i class="fas fa-user-plus"></i> add friend</button>
                 </div>
             </div>
         <?php } ?>

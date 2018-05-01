@@ -144,8 +144,7 @@ class UserDao {
     }
 
     function cancelFriendRequest($requested_by, $requester_id) {
-        $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?) 
-                                VALUES (?,?,?)");
+        $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?");
         return $statement->execute(array($requested_by, $requester_id));
     }
 }

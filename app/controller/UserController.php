@@ -774,4 +774,24 @@ class UserController extends BaseController {
         }
 
     }
+
+    //function for send request for friend
+    public function sendFriendRequest() {
+        $dao = UserDao::getInstance();
+        $approved = 0;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $requested_by = $_SESSION['logged']->getId();
+            $requester_id = htmlentities($_POST['requester_id']);
+            $dao->sendFriendRequest($requested_by, $requester_id, $approved);
+        }
+    }
+    //function for cancel request for friend
+    public function cancelFriendRequest() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $requested_by = $_SESSION['logged']->getId();
+            $requester_id = htmlentities($_POST['requester_id']);
+            $dao->cancelFriendRequest($requested_by, $requester_id);
+        }
+    }
 }

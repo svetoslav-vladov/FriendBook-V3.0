@@ -17,7 +17,6 @@
     <form id="upload_left_image" class="d-none" action="<?php echo URL_ROOT . "/user/changeProfilePic" ?>" method="post" enctype="multipart/form-data">
         <label for="profile_image_upload"></label>
         <input type="file" id="profile_image_upload" name="images[]" multiple accept="image/*">
-        <button type="submit"></button>
     </form>
 </div>
 

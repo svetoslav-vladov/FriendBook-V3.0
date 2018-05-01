@@ -593,16 +593,17 @@ input#upload_photos {
 .holder img {
     margin: 4px;
 }
-div#change_cover_pic:hover {
-    color:  #444;
-}
 div#zoom_cover_pic:hover {
     color:  #444;
 }
-#profile-pic a:hover ~ #change_profile_pic, #profile-pic a:hover ~ #zoom_profile_pic {
+#profile-pic a:hover ~ #change_profile_pic,
+#profile-pic a:hover ~ #zoom_profile_pic{
+
     display:block;
 }
-#change_profile_pic:hover, #zoom_profile_pic:hover {
+#change_profile_pic:hover,
+#zoom_profile_pic:hover,
+#change_profile_cover:hover {
     display:block;
 }
 #zoom_profile_pic a{
@@ -634,7 +635,7 @@ div#zoom_profile_pic {
     /* border-radius: 0 25px 0 0; */
 }
 div#change_profile_pic:hover {
-    color: #39e05f;
+    color: #1f7d34;
 }
 #profile-pic a{
     display: block;
@@ -646,10 +647,10 @@ span.user_pic_add_comment img {
 }
 nav {padding: 0 !important;}
 #profile-pic a:hover {
-    color: #39e05f;
+    color: #1f7d34;
 }
 .card.coverProfilePic a img {
-    width: 99%;
+    width: 92%;
     opacity: 0.7;
     transition: opacity 0.3s ease-in-out;
     cursor: zoom-in;
@@ -714,6 +715,37 @@ div#image_list img {
     outline:none !important;
 }
 
+.profile_cover_link{
+    display: block;
+    position:  absolute;
+    width: 100%;
+    height:  100%;
+    top: 0;
+    left:  0;
+    cursor:  zoom-in;
+}
+div#change_profile_cover {
+    position:  absolute;
+    right: 15px;
+    top: 6px;
+    font-size:  1.3rem;
+    padding: 2px 10px;
+    border-radius:  5px;
+    z-index: 1000;
+    box-sizing:  border-box;
+    cursor:  pointer;
+    display: none;
+}
+
+div#change_profile_cover:hover {
+    background-color: #ffffff9c;
+}
+
+#profileCover a:hover + #change_profile_cover {
+    display: block;
+    background: #ffffff9e;
+}
+
 .comments {
     padding: 0px 0px 0px 11px;;
 }
@@ -762,4 +794,5 @@ div#image_list img {
 
 .female:hover {
     text-shadow: 0 0 2px deeppink;
+    padding: 0 0 0 11px;;
 }

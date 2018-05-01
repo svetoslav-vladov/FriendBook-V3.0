@@ -12,7 +12,8 @@
     define('SITE_NAME', 'FriendBook.bg - Your social network');
 
     // some stuff
-    define('THUMB_SIZE', 150);
+    define('THUMB_SIZE_HEIGHT', 150); // height !!! px
+    define('COVER_SIZE_WIDTH', 800); // width !!! px
     define('UPLOAD_PHOTOS', './uploads/users/photos');
     define('UPLOAD_FULL_SIZE', './uploads/users/photos/fullsized');
     define('UPLOAD_THUMBS', './uploads/users/photos/thumbs');

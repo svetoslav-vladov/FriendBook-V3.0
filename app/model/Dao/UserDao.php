@@ -27,7 +27,8 @@ class UserDao {
 
     const UPDATE_USER_PICTURE = "UPDATE users SET profile_pic = ?, thumbs_profile = ? WHERE id = ?";
 
-    const UPDATE_USER_COVER = "UPDATE users SET profile_cover = ? WHERE id = ?";
+    const UPDATE_USER_COVER = "UPDATE users SET profile_cover = ?, thumbs_cover = ? WHERE id = ?";
+
 
     // getting static connection from DBconnect file
     private function __construct() {
@@ -60,6 +61,15 @@ class UserDao {
         return $statement->execute(array(
             $user->getProfilePic(),
             $user->getThumbsProfile(),
+            $user->getId(),
+        ));
+    }
+
+    public function saveUserProfileCover(User $user) {
+        $statement = $this->pdo->prepare(self::UPDATE_USER_COVER);
+        return $statement->execute(array(
+            $user->getProfileCover(),
+            $user->getThumbsCover(),
             $user->getId(),
         ));
     }

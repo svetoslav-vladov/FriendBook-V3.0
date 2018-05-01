@@ -1,14 +1,16 @@
-<div id="small_image">
-    <a href="<?php echo URL_ROOT;?>/index/profile">
-        <img class="img-thumbnail img-fluid" src="
+<div data-toggle="modal" data-target="#exampleModalCenter">
+    <div id="small_image">
+        <a href="#">
+            <img class="img-thumbnail img-fluid" src="
                                 <?php if(is_null($_SESSION["logged"]->getThumbsProfile()))
-        { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
-            $_SESSION["logged"]->getThumbsProfile();} ?>" alt="profile_pic">
-    </a>
-</div>
-<!-- div to Open the Modal -->
-<div id="post_input_fake" data-toggle="modal" data-target="#exampleModalCenter">
-    <p id="post-panel" class="mb-0">What's on your mind, <?php echo $_SESSION['logged']->getFirstName() . ' ' . $_SESSION['logged']->getLastName();?>?</p>
+            { echo URL_ROOT . $_SESSION["logged"]->getProfilePic(); } else{ echo URL_ROOT .
+                $_SESSION["logged"]->getThumbsProfile();} ?>" alt="profile_pic">
+        </a>
+    </div>
+    <!-- div to Open the Modal -->
+    <div id="post_input_fake">
+        <p id="post-panel" class="mb-0">What's on your mind, <?php echo $_SESSION['logged']->getFirstName() . ' ' . $_SESSION['logged']->getLastName();?>?</p>
+    </div>
 </div>
 
 <!-- Modal -->

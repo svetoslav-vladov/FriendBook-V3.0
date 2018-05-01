@@ -162,6 +162,7 @@ nav li{
 }
 
 .post_modal {
+    margin-bottom: 1rem !important;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 8px 0px grey;
@@ -314,6 +315,7 @@ img.logo {
     height: 33px;
     margin-right: 7px !important;
     border-radius: 50%;
+    padding-top: 9px;
 }
 .comments_box {
     height: 0;
@@ -714,4 +716,50 @@ div#image_list img {
 
 .comments {
     padding: 0px 0px 0px 11px;;
+}
+
+.suggested-user-img {
+    width: 40px;
+}
+
+.suggested-user-container {
+    border: 1px solid darkgrey;
+    border-radius: 8px;
+    margin: 7px auto;
+    padding: 2px 4px;
+}
+
+.suggested-user-container h5 {
+    margin: 0px 0px -9px 3px !important;
+}
+
+.suggested-user-container a {
+    width:45px;
+    border-radius: 50%;
+    text-decoration: none;
+}
+.suggested-user-container img {
+    width: 100%;
+    margin: 0px;
+    border-radius: 50%;
+}
+
+.suggested-user-container small {
+    font-size: 0.7em;
+    margin: 0px 0px -9px 3px !important;
+}
+
+.add-friend-button {
+    padding: 1px 6px;
+    font-size: 0.7em;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.user_pic {
+    float: left;
+}
+
+.female:hover {
+    text-shadow: 0 0 2  px deeppink;
 }

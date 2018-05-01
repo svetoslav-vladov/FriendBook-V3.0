@@ -27,8 +27,14 @@ class PostDao {
 
     public function addPost(Post $post){
         $statement = $this->pdo->prepare("INSERT INTO posts (user_id, description) 
-                                VALUES (?,?);");
+                                                    VALUES (?,?);");
         return $statement->execute(array($post->getOwnerId(), $post->getDescription()));
+    }
+
+    public function sharePhoto($post_id, $image_url) {
+        $statement = $this->pdo->prepare("INSERT INTO post_images (post_id, image_url) 
+                                                    VALUES (?,?);");
+        $statement->execute(array($post_id, $image_url));
     }
 
     public function getAllPosts() {

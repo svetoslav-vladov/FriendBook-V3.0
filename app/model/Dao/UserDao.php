@@ -118,4 +118,24 @@ class UserDao {
         $result = $statement->fetchAll();
         return $result;
     }
+
+    function getSuggestedUsers($user_id) {
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, email, birthday, gender, profile_pic, profile_cover, relation_status, reg_date, thumbs_profile 
+                                FROM users 
+                                WHERE id != ? LIMIT 6;");
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    function sendFriendRequest($requested_by, $requester_id, $approved) {
+        $statement = $this->pdo->prepare("INSERT INTO friend_requests (requested_by, requester_id, approved) 
+                                VALUES (?,?,?)");
+        return $statement->execute(array($requested_by, $requester_id, $approved));
+    }
+
+    function cancelFriendRequest($requested_by, $requester_id) {
+        $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?) 
+                                VALUES (?,?,?)");
+        return $statement->execute(array($requested_by, $requester_id));
+    }
 }

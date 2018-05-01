@@ -8,6 +8,7 @@ use Model\Picture;
 use model\Thumbnail;
 
 class UserController extends BaseController {
+
     public function logout(){
         if(isset($_SESSION['logged'])){
             $requestType = $_SERVER['REQUEST_METHOD'];
@@ -277,7 +278,7 @@ class UserController extends BaseController {
 
             // section -> photos, profile, cover, albums, posts
             // this control if you are allowed to send single or many
-            $section = 'photos';
+            $section = 'profile';
             $formImages = $_FILES['images'];
 
             // validation
@@ -367,11 +368,109 @@ class UserController extends BaseController {
         }
     }
 
+    public function uploadProfileCover(){
+
+        if(isset($_FILES['images']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
+            // section -> photos, profile, cover, albums, posts
+            // this control if you are allowed to send single or many
+            $section = 'cover';
+            $formImages = $_FILES['images'];
+
+            // validation
+            // returns assoc array -> form key , status key , err key
+            $validResult = self::imageValidation($formImages, $section);
+
+            // if validation err or true / NOTE: wrong files or images wont stop
+            if (isset($validResult['count_err'])) {
+                $status['img_count_error'] = $validResult['count_err'];
+                echo json_encode($status);
+            }
+            elseif (isset($validResult['form']) && empty($validResult['form']['name'])) {
+                $status = array();
+                $status['error'] = 'Failed to upload!';
+                $status['info'] = $validResult['err'];
+                echo json_encode($status);
+            }
+            elseif (isset($validResult['form'])) {
+
+                $formImages = $validResult['form'];
+                $imgObjects = self::generateImagesList($formImages, $section);
+
+                // if img list generated
+                if ($imgObjects) {
+
+                    // if thumbnail generated
+                    self::generateThumbnailsList($imgObjects, $section);
+
+                    try {
+
+                        $dao = UserDao::getInstance();
+
+                        $newUserData = new User();
+                        $newUserData->setId($_SESSION['logged']->getId());
+
+                        // $imgObjects holds array with picture objects
+                        $pic = $imgObjects[0]->getUrlOnDiskPicture();
+                        $thumb = $imgObjects[0]->getUrlOnDiskThumb();
+
+                        $newUserData->setProfileCover($pic);
+                        $newUserData->setThumbsCover($thumb);
+
+                        if($dao->saveUserProfilePic($newUserData)){
+                            $oldImgUrl = $_SESSION['logged']->getProfileCover();
+
+                            if($oldImgUrl != $GLOBALS["default_cover_pic"]){
+                                $fileSplit = explode("/",$oldImgUrl);
+
+                                $oldThumb = THUMBS_URI . $fileSplit[count($fileSplit)-1];
+
+                                if(file_exists($oldImgUrl) && file_exists($oldThumb)){
+                                    unlink($oldImgUrl);
+                                    unlink($oldThumb);
+                                }
+
+                                $_SESSION['logged']->setProfileCover($pic);
+                                $_SESSION['logged']->setThumbsCover($thumb);
+                            }
+                            else{
+                                $_SESSION['logged']->setProfileCover($pic);
+                                $_SESSION['logged']->setThumbsCover($thumb);
+                            }
+
+                            $response = [];
+                            $response['success'] = true;
+                            if (isset($validResult['err'])) {
+                                $response['dataNotPassed'] = $validResult['err'];
+                            }
+                            $response['images']['full'] = $pic;
+                            $response['images']['thumb'] = $thumb;
+                            echo json_encode($response);
+                        }
+
+                    } catch (\PDOException $e) {
+                        echo $e->getMessage();
+                    } catch (\Exception $e) {
+                        echo $e->getMessage();
+                    }
+
+                } else {
+                    echo "images not created";
+                }
+            } else {
+                echo "Validation Error...";
+            }
+        }
+        else{
+            header('location:'.URL_ROOT.'/error/401');
+        }
+    }
+
     // this functions work for single or multi upload;
 
     // validate images - no direct call  !!! Depends on other function - #1
     public function imageValidation($formImages,$section){
-
         if(!isset($formImages)){
             header('location:'.URL_ROOT.'/index/main');
         }
@@ -584,11 +683,22 @@ class UserController extends BaseController {
 
     // create thumb object fill data from picture object, !!! Depends on other function #3
     // save small pic to db - insert url to thumbs in picture object
-    public function generateThumbnailsList($picObjects){
+    public function generateThumbnailsList($picObjects,$section){
         if(!isset($picObjects)){
             header('location:'.URL_ROOT.'/error/401');
         }
         else {
+            $thumb_size = null;
+            $mode = null;
+            switch ($section){
+                case 'cover':
+                    $thumb_size = COVER_SIZE_WIDTH;
+                    $mode = 'width';
+                    break;
+                default:
+                    $thumb_size = THUMB_SIZE_HEIGHT;
+                    break;
+            }
 
             $createdThumbs = array();
 
@@ -621,13 +731,29 @@ class UserController extends BaseController {
                     $ims[$objectIndex] = imagecreatefrompng($picObjects[$objectIndex]->getUrlOnDiskPicture());
                 }
 
-                // setHeight
-                $thumb->setHeight(THUMB_SIZE);
-                // setWidth
-                $thumb->setWidth(floor($picObjects[$objectIndex]->getWidth() * ($thumb->getHeight() / $picObjects[$objectIndex]->getHeight())));
+                if($mode = 'width'){
+                    $thumb->setWidth($thumb_size);
+                    $thumb->setHeight(floor($picObjects[$objectIndex]->getHeight() *
+                        ($thumb->getWidth() / $picObjects[$objectIndex]->getWidth())));
+                }
+                else{
+                    // setHeight
+                    $thumb->setHeight($thumb_size);
+                    // setWidth
+                    $thumb->setWidth(floor($picObjects[$objectIndex]->getWidth() *
+                        ($thumb->getHeight() / $picObjects[$objectIndex]->getHeight())));
+                }
+
+
                 $nms[$objectIndex] = imagecreatetruecolor($thumb->getWidth(), $thumb->getHeight());
 
-                imagecopyresized($nms[$objectIndex], $ims[$objectIndex], 0, 0, 0, 0, $thumb->getWidth(), $thumb->getHeight(), $picObjects[$objectIndex]->getWidth(), $picObjects[$objectIndex]->getHeight());
+                imagecopyresized(
+                    $nms[$objectIndex],
+                    $ims[$objectIndex],
+                    0, 0, 0, 0,
+                    $thumb->getWidth(), $thumb->getHeight(),
+                    $picObjects[$objectIndex]->getWidth(),
+                    $picObjects[$objectIndex]->getHeight());
 
                 if ($thumb->getExtension() === 'jpg') {
                     imagejpeg($nms[$objectIndex], UPLOAD_THUMBS . '/' . $thumb->getNewName() . '.' . $thumb->getExtension());

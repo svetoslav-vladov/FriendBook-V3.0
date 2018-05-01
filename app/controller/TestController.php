@@ -317,7 +317,7 @@
                     }
 
                     // setHeight
-                    $thumb->setHeight(THUMB_SIZE);
+                    $thumb->setHeight(THUMB_SIZE_HEIGHT);
                     // setWidth
                     $thumb->setWidth(floor($picObjects[$objectIndex]->getWidth() * ($thumb->getHeight() / $picObjects[$objectIndex]->getHeight())));
                     $nms[$objectIndex] = imagecreatetruecolor($thumb->getWidth(), $thumb->getHeight());

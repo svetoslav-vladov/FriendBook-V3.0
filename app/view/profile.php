@@ -36,8 +36,36 @@
             </div>
             <!--/span-->
             <div class="col-md-9" id="#main">
-                <div id="profileCover" class="jumbotron profile-cover border border-secondary" style="background-image: url('<?php echo URL_ROOT . $theUser->getProfileCover(); ?>')">
+                <div id="profileCover" class="jumbotron profile-cover border border-secondary" style="background-image: url('<?php
+                    if($theUser->getThumbsCover() !== null){
+                        echo URL_ROOT . $theUser->getThumbsCover();
+                    }
+                    else{
+                        echo URL_ROOT . $theUser->getProfileCover();
+                    }
+                ?>')">
+                    <a id="cover_link" class="profile_cover_link" data-toggle="lightbox" data-gallery="my_profile_cover"
+                       href="<?php echo URL_ROOT . $theUser->getProfileCover(); ?>">
+                    </a>
                     <?php
+                        // button and form for change cover - start
+                        if($theUser->getId() === $_SESSION['logged']->getId()){
+                            ?>
+
+                    <div id="change_profile_cover">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <form id="upload_cover_form" class="d-none" action="<?php echo URL_ROOT . "/user/changeProfilePic" ?>" method="post" enctype="multipart/form-data">
+                        <label for="cover_image_input"></label>
+                        <input type="file" id="cover_image_input" name="images[]" multiple accept="image/*">
+                    </form>
+                    <?php
+                        }
+                        // button and form for change cover - ende
+                    ?>
+
+                    <?php
+
                         if($theUser->getId() === $_SESSION['logged']->getId()){
 
                         }

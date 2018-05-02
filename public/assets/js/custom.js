@@ -1,6 +1,6 @@
 // GLOBAL VARS - start
 
-var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
+var url_root = window.location.origin + '/projects/FriendBook-v3.0';
 var loading_gif_anim = url_root + '/assets/images/ajax-loading-c4.gif';
 var successMark = url_root + '/assets/images/Yes_Check_Circle.svg.png';
 

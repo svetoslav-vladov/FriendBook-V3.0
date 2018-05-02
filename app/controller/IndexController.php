@@ -3,7 +3,8 @@
 namespace controller;
 
 use \model\User;
-
+use model\Dao\PostDao;
+use Model\Dao\UserDao;
 
 class IndexController extends \controller\BaseController{
 
@@ -43,7 +44,24 @@ class IndexController extends \controller\BaseController{
     }
 
     public function main() {
-        $this->renderView('main');
+        $dao = PostDao::getInstance();
+        $userDao = UserDao::getInstance();
+        $data = [];
+        try {
+            $allPosts = $dao->getAllPosts();
+            $data['newsFeed'] = $allPosts;
+        }
+        catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+        try {
+            $suggested_users = $userDao->getSuggestedUsers($_SESSION['logged']->getId());
+            $data['suggestedUsers'] = $suggested_users;
+        }
+        catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+        $this->renderView('main', $data);
     }
 
     public function error($err) {

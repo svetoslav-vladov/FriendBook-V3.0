@@ -32,7 +32,7 @@ class PostDao {
     }
 
     public function sharePhoto($post_id, $image_url) {
-        $statement = $this->pdo->prepare("INSERT INTO post_images (post_id, image_url) 
+        $statement = $this->pdo->prepare("INSERT INTO post_images (post_id, image_url)
                                                     VALUES (?,?);");
         $statement->execute(array($post_id, $image_url));
     }

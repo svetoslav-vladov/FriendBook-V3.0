@@ -1,7 +1,7 @@
 function sendFriendRequest(requester_id) {
     var cancelRequestBtn = $(`<button class="add-friend-button btn btn-primary btn-xs" id="cancelFriendRequest${requester_id}"><i class="fas fa-times"></i> cancel request</button>`);
     var request = new XMLHttpRequest();
-    request.open('post', url_root+'user/sendFriendRequest');
+    request.open('post', url_root+'/user/sendFriendRequest');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -20,7 +20,7 @@ function sendFriendRequest(requester_id) {
 function cancelFriendRequest(requester_id) {
     var sendRequestBtn = $(`<button class="add-friend-button btn btn-primary btn-xs" id="sendFriendRequest${requester_id}"><i class="fas fa-user-plus"></i> add friend</button>`);
     var request = new XMLHttpRequest();
-    request.open('post', url_root+'user/cancelFriendRequest');
+    request.open('post', url_root+'/user/cancelFriendRequest');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {

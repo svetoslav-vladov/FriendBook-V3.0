@@ -132,9 +132,14 @@ class UserDao {
     }
 
     function getSuggestedUsers($user_id) {
-        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, email, birthday, gender, profile_pic, profile_cover, relation_status, reg_date, thumbs_profile 
-                                FROM users 
-                                WHERE id != ? LIMIT 6;");
+        $id = $_SESSION['logged']->getId();
+        $statement = $this->pdo->prepare("SELECT * FROM users 
+                                                    WHERE users.id 
+                                                    NOT IN (SELECT friend_requests.requester_id 
+                                                    FROM friend_requests 
+                                                    WHERE friend_requests.requested_by = ?) 
+                                                    AND users.id != $id 
+                                                    LIMIT 6;");
         $statement->execute(array($user_id));
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }

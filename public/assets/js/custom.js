@@ -420,8 +420,8 @@ function uploadProfilePhotos() {
 
                 var img_photo = document.createElement('img');
                 img_photo.src = root + res.picture_object_data[x].urlOnDiskThumb;
-                img_photo.setAttribute('class','img_100');
-                img_photo.setAttribute('class','img-thumbnail');
+                img_photo.classList.add('img_100');
+                img_photo.classList.add('img-thumbnail');
 
                 link_img.appendChild(img_photo);
                 image_list_box.appendChild(link_img);

@@ -376,8 +376,10 @@ class UserController extends BaseController{
 
                                 $oldThumb = THUMBS_URI . $fileSplit[count($fileSplit)-1];
 
-                                if(file_exists($oldImgUrl) && file_exists($oldThumb)){
+                                if(file_exists($oldImgUrl)) {
                                     unlink($oldImgUrl);
+                                }
+                                elseif(file_exists($oldThumb)){
                                     unlink($oldThumb);
                                 }
 
@@ -467,7 +469,7 @@ class UserController extends BaseController{
                         $newUserData->setProfileCover($pic);
                         $newUserData->setThumbsCover($thumb);
 
-                        if($dao->saveUserProfilePic($newUserData)){
+                        if($dao->saveUserProfileCover($newUserData)){
                             $oldImgUrl = $_SESSION['logged']->getProfileCover();
 
                             if($oldImgUrl != $GLOBALS["default_cover_pic"]){
@@ -695,9 +697,11 @@ class UserController extends BaseController{
             }
 
             // set other properties based on whats given + write img on disk
+            $idx = 0;
             foreach ($createdPics as $img) {
                 // set picure mew name, !!! no extention onlu name
-                $img->setNewName($_SESSION['logged']->getFirstName() . '-' . time() . '-' . uniqid() . '-' . $mode);
+                $img->setNewName($_SESSION['logged']->getFirstName() .
+                    '-' . time() . '-' . uniqid() . '-' . $idx .'-' . $mode);
 
                 // set ext of the file only
                 $splitFile = explode(".", $img->getName());
@@ -718,7 +722,7 @@ class UserController extends BaseController{
                 $dim = getimagesize($img->getUrlOnDiskPicture());
                 $img->setWidth($dim[0]);
                 $img->setHeight($dim[1]);
-
+                $idx++;
             }
 
             if (!isset($error)) {
@@ -827,7 +831,15 @@ class UserController extends BaseController{
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $requested_by = $_SESSION['logged']->getId();
             $requester_id = htmlentities($_POST['requester_id']);
-            $dao->sendFriendRequest($requested_by, $requester_id, $approved);
+            try{
+                $dao->sendFriendRequest($requested_by, $requester_id, $approved);
+                $status['success'] = true;
+                echo json_encode($status);
+            }
+            catch (\PDOException $e){
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
         }
     }
     //function for cancel request for friend
@@ -836,7 +848,15 @@ class UserController extends BaseController{
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $requested_by = $_SESSION['logged']->getId();
             $requester_id = htmlentities($_POST['requester_id']);
-            $dao->cancelFriendRequest($requested_by, $requester_id);
+            try{
+                $dao->cancelFriendRequest($requested_by, $requester_id);
+                $status['success'] = true;
+                echo json_encode($status);
+            }
+            catch (\PDOException $e){
+                    $status['err'] = $e->getMessage();
+                    echo json_encode($status);
+            }
         }
     }
 }

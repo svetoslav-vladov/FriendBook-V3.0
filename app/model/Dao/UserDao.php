@@ -18,7 +18,7 @@ class UserDao {
 
     const CHECK_FOR_EMAIL = "SELECT COUNT(*) as row FROM users WHERE email = ?";
 
-    const GET_PROFILE_IMAGES = "SELECT img_url FROM user_photos WHERE user_id = ?;";
+    const GET_PROFILE_IMAGES = "SELECT img_url FROM user_photos WHERE user_id = ? LIMIT 16;";
 
     const LOGIN_CHECK = "SELECT * FROM users WHERE email = ? AND password = ?";
 

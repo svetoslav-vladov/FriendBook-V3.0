@@ -87,7 +87,7 @@
                                                 <?php echo ucwords($theUser->getFullName()); ?>
                                             <i class="fa fa-users text-dark"></i></a>
                                         <div class="dropdown-menu text-white" aria-labelledby="friendRequests">
-                                           <a class="dropdown-item" href="#">Add Friend</a>
+                                           <a class="dropdown-item" onclick="sendFriendRequest(<?php echo $theUser->getId(); ?>)" href="#">Add Friend</a>
                                            <a class="dropdown-item" href="#">Follow</a>
                                         </div>
                                     </li>
@@ -139,6 +139,7 @@
                     </div>
                     <hr>
                     <h1>Photos</h1>
+                    <p>Limit 16 imgs</p>
                     <div class="holder p-3">
                     <?php
                     if (isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId()) {

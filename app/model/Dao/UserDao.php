@@ -77,6 +77,20 @@ class UserDao {
         ));
     }
 
+    // $imagesList is object but in array...
+    public function saveUserProfilePhotos(User $user, $imagesList) {
+
+        $stmt = $this->pdo->prepare(self::INSERT_USER_PHOTOS);
+
+        foreach($imagesList as $pic_obj) {
+            if(!$stmt->execute(array($user->getId(),$pic_obj->getUrlOnDiskPicture(),$pic_obj->getUrlOnDiskThumb()))){
+                throw new \PDOException('failed');
+            }
+        }
+
+        return true;
+    }
+
     public function loginCheck(User $user){
 
         $statement = $this->pdo->prepare(self::LOGIN_CHECK);
@@ -108,20 +122,6 @@ class UserDao {
         return $statement->fetchALL(\PDO::FETCH_ASSOC);
     }
 
-    // $imagesList is object but in array...
-    public function saveUserProfilePhotos(User $user, $imagesList) {
-
-        $stmt = $this->pdo->prepare(self::INSERT_USER_PHOTOS);
-
-        foreach($imagesList as $pic_obj) {
-            if(!$stmt->execute(array($user->getId(),$pic_obj->getUrlOnDiskPicture(),$pic_obj->getUrlOnDiskThumb()))){
-                throw new \PDOException('failed');
-            }
-        }
-
-        return true;
-    }
-
     public function getAllUsers($logged_user_id) {
         $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile
                                 FROM users 
@@ -129,5 +129,24 @@ class UserDao {
         $statement->execute(array($logged_user_id));
         $result = $statement->fetchAll();
         return $result;
+    }
+
+    function getSuggestedUsers($user_id) {
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, email, birthday, gender, profile_pic, profile_cover, relation_status, reg_date, thumbs_profile 
+                                FROM users 
+                                WHERE id != ? LIMIT 6;");
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    function sendFriendRequest($requested_by, $requester_id, $approved) {
+        $statement = $this->pdo->prepare("INSERT INTO friend_requests (requested_by, requester_id, approved) 
+                                VALUES (?,?,?)");
+        return $statement->execute(array($requested_by, $requester_id, $approved));
+    }
+
+    function cancelFriendRequest($requested_by, $requester_id) {
+        $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?");
+        return $statement->execute(array($requested_by, $requester_id));
     }
 }

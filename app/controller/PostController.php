@@ -116,4 +116,24 @@ class PostController extends BaseController{
             $dao->deletePost($post_id, $user_id);
         }
     }
+
+    public function sharePhoto() {
+        $dao = PostDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            //echo json_encode($_FILES);
+            $user_id = $_SESSION['logged']->getId();
+            $post = new Post($user_id, 'test');
+            try {
+                $dao->addPost($post);
+                $dao->sharePhoto($post->getPostId(), 'test.url');
+                header('location:' . URL_ROOT . '/index/main');
+            }catch (\PDOException $e) {
+                header('location:' . URL_ROOT . '/index/main&error='.$e->getMessage());
+            }
+        }
+        else {
+            $error = 'Wrong action!';
+            header('location:'.URL_ROOT.'/index/main&error=' . $error);
+        }
+    }
 }

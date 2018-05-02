@@ -15,6 +15,9 @@
                 <div class="post_modal mb-5" id="post-panel">
                     <?php require_once '../app/include/modules/post-mod.php';?>
                 </div>
+                <div>
+                    <?php require_once '../app/include/modules/share-photos-mod.php';?>
+                </div>
                 <hr>
                 <h2>News Feed:</h2>
                 <div class="news_feed_posts">
@@ -25,7 +28,7 @@
             <div class="col-md-3 col-lg-3">
                 <div class="sidebar-nav-fixed pull-right affix" id="sidemenu">
                     <div class="well">
-                        <h1>Right Sidebar</h1>
+                        <?php require_once '../app/include/modules/suggested-users.php'; ?>
                     </div>
                     <!--/.well -->
                 </div>

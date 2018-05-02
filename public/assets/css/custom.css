@@ -747,3 +747,7 @@ div#change_profile_cover:hover {
 .comments {
     padding: 0 0 0 11px;;
 }
+form#uploadUserPhotosForm {
+    display: none;
+    visibility:  hidden;
+}

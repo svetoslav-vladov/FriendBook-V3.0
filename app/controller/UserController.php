@@ -5,9 +5,9 @@ namespace Controller;
 use Model\Dao\UserDao;
 use Model\User;
 use Model\Picture;
-use model\Thumbnail;
+use Model\Thumbnail;
 
-class UserController extends BaseController {
+class UserController extends BaseController{
 
     public function logout(){
         if(isset($_SESSION['logged'])){
@@ -249,41 +249,19 @@ class UserController extends BaseController {
     }
 
     // create and validates picture and thumb for user  photos - MAIN CALL #0
-
-    // DO NOT DELETE
-//    public function uploadProfilePhotos(){
-//        $imgList = self::generateImages('photos');
-//        if($imgList){
-//            try{
-//                $dao = UserDao::getInstance();
-//                if($dao->insertUserImages($_SESSION['logged'], $imgList)){
-//                    echo json_encode($imgList);
-//                }
-//            }
-//            catch(\PDOException $e){
-//                foreach ($imgList as $img){
-//                    unset($img);
-//                }
-//                header('location:'.URL_ROOT.'/index/profile&error=' . $e->getMessage());
-//            }
-//        }
-//
-//    }
-
-    // create and validates picture and thumb for user profile picture- MAIN CALL #0
-    public function uploadProfilePic(){
+    public function uploadProfilePhotos(){
 
         if(isset($_FILES['images']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
-            // section -> photos, profile, cover, albums, posts
+            // mode -> photos, profile, cover, albums, posts
             // this control if you are allowed to send single or many
-            $section = 'profile';
+            $mode = 'photos';
             $formImages = $_FILES['images'];
 
             // validation
             // returns assoc array -> form key , status key , err key
-            $validResult = self::imageValidation($formImages, $section);
+            $validResult = self::imageValidation($formImages, $mode);
 
             // if validation err or true / NOTE: wrong files or images wont stop
             if (isset($validResult['count_err'])) {
@@ -296,13 +274,84 @@ class UserController extends BaseController {
                 echo json_encode($status);
             } elseif (isset($validResult['form'])) {
                 $formImages = $validResult['form'];
-                $imgObjects = self::generateImagesList($formImages, $section);
+                $imgObjects = self::generateImagesList($formImages, $mode);
+
+                // if img list generated
+                if ($imgObjects) {
+
+                    //  thumbnail generated
+                    self::generateThumbnailsList($imgObjects, $mode);
+
+                    $dao = UserDao::getInstance();
+                    try {
+
+                        if($dao->saveUserProfilePhotos($_SESSION['logged'],$imgObjects)){
+                            $response = [];
+                            $response['success'] = true;
+                            if (isset($validResult['err'])) {
+                                $response['dataNotPassed'] = $validResult['err'];
+                            }
+
+                            foreach ($imgObjects as $idx=>$row){
+                                $response['picture_object_data'][] = $imgObjects[$idx]->object_to_array($imgObjects[$idx]);
+                            }
+                            echo json_encode($response);
+
+                        }
+
+                    } catch (\PDOException $e) {
+                        $status['error'] = $e->getMessage();
+                        echo json_encode($status);
+                    } catch (\Exception $e) {
+                        $status['error'] = $e->getMessage();
+                        echo json_encode($status);
+                    }
+
+                } else {
+                    echo "images not created";
+                }
+            } else {
+                echo "Validation Error...";
+            }
+        }
+        else{
+            header('location:'.URL_ROOT.'/error/401');
+        }
+    }
+
+    // create and validates picture and thumb for user profile picture- MAIN CALL #0
+    public function uploadProfilePic(){
+
+        if(isset($_FILES['images']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
+            // mode -> photos, profile, cover, albums, posts
+            // this control if you are allowed to send single or many
+            $mode = 'profile';
+            $formImages = $_FILES['images'];
+
+            // validation
+            // returns assoc array -> form key , status key , err key
+            $validResult = self::imageValidation($formImages, $mode);
+
+            // if validation err or true / NOTE: wrong files or images wont stop
+            if (isset($validResult['count_err'])) {
+                $status['img_count_error'] = $validResult['count_err'];
+                echo json_encode($status);
+            } elseif (isset($validResult['form']) && empty($validResult['form']['name'])) {
+                $status = array();
+                $status['error'] = 'Failed to upload!';
+                $status['info'] = $validResult['err'];
+                echo json_encode($status);
+            } elseif (isset($validResult['form'])) {
+                $formImages = $validResult['form'];
+                $imgObjects = self::generateImagesList($formImages, $mode);
 
                 // if img list generated
                 if ($imgObjects) {
 
                     // if thumbnail generated
-                    self::generateThumbnailsList($imgObjects, $section);
+                    self::generateThumbnailsList($imgObjects, $mode);
 
                     try {
 
@@ -373,14 +422,14 @@ class UserController extends BaseController {
         if(isset($_FILES['images']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
-            // section -> photos, profile, cover, albums, posts
+            // mode -> photos, profile, cover, albums, posts
             // this control if you are allowed to send single or many
-            $section = 'cover';
+            $mode = 'cover';
             $formImages = $_FILES['images'];
 
             // validation
             // returns assoc array -> form key , status key , err key
-            $validResult = self::imageValidation($formImages, $section);
+            $validResult = self::imageValidation($formImages, $mode);
 
             // if validation err or true / NOTE: wrong files or images wont stop
             if (isset($validResult['count_err'])) {
@@ -396,13 +445,13 @@ class UserController extends BaseController {
             elseif (isset($validResult['form'])) {
 
                 $formImages = $validResult['form'];
-                $imgObjects = self::generateImagesList($formImages, $section);
+                $imgObjects = self::generateImagesList($formImages, $mode);
 
                 // if img list generated
                 if ($imgObjects) {
 
                     // if thumbnail generated
-                    self::generateThumbnailsList($imgObjects, $section);
+                    self::generateThumbnailsList($imgObjects, $mode);
 
                     try {
 
@@ -470,7 +519,7 @@ class UserController extends BaseController {
     // this functions work for single or multi upload;
 
     // validate images - no direct call  !!! Depends on other function - #1
-    public function imageValidation($formImages,$section){
+    public function imageValidation($formImages,$mode){
         if(!isset($formImages)){
             header('location:'.URL_ROOT.'/index/main');
         }
@@ -521,7 +570,7 @@ class UserController extends BaseController {
             // count how many files are send, MAX 15 with -> type many
             // for profile and cover limit one
 
-            switch ($section) {
+            switch ($mode) {
                 case 'profile':
                 case 'cover':
                     $maxQuantity = 1;
@@ -554,9 +603,13 @@ class UserController extends BaseController {
                     $blackList[$num]['name'] = $formImages['name'][$idx];
                     $blackList[$num]['errors'][] = 'File type not allowed';
                     $num++;
+
+
                 }
 
             }
+
+
 
             // check size for image
             $oldnum = 0;
@@ -582,20 +635,17 @@ class UserController extends BaseController {
 
             // unset not allowed files from original
 
-
             foreach ($formImages as &$item) {
-                $count = 0;
-                foreach ($item as $idx => $param) {
-                    if ($idx > count($blackList) - 1) {
-                        break;
+
+                foreach ($blackList as $idx => $val){
+                    $search = array_key_exists ( $val['idx'] ,$item );
+                    if($search){
+                        unset($item[$val['idx']]);
                     }
-
-                    unset($item[$blackList[$count]['idx']]);
-                    $count++;
-
                 }
-                // reset array indexes
+
                 $item = array_merge($item);
+
             }
 
             $data['status'] = true;
@@ -609,7 +659,7 @@ class UserController extends BaseController {
     }
 
     // creates picture objects fill data and save to disk !!! Depends on other function - #2
-    public function generateImagesList($imgList,$section)
+    public function generateImagesList($imgList,$mode)
     {
         if(!isset($imgList)){
             header('location:'.URL_ROOT.'/error/401');
@@ -649,7 +699,7 @@ class UserController extends BaseController {
             // set other properties based on whats given + write img on disk
             foreach ($createdPics as $img) {
                 // set picure mew name, !!! no extention onlu name
-                $img->setNewName($_SESSION['logged']->getFirstName() . '-' . time() . '-' . uniqid() . '-' . $section);
+                $img->setNewName($_SESSION['logged']->getFirstName() . '-' . time() . '-' . uniqid() . '-' . $mode);
 
                 // set ext of the file only
                 $splitFile = explode(".", $img->getName());
@@ -683,23 +733,20 @@ class UserController extends BaseController {
 
     // create thumb object fill data from picture object, !!! Depends on other function #3
     // save small pic to db - insert url to thumbs in picture object
-    public function generateThumbnailsList($picObjects,$section){
+    public function generateThumbnailsList($picObjects,$mode){
         if(!isset($picObjects)){
             header('location:'.URL_ROOT.'/error/401');
         }
         else {
             $thumb_size = null;
-            $mode = null;
-            switch ($section){
+            switch ($mode){
                 case 'cover':
                     $thumb_size = COVER_SIZE_WIDTH;
-                    $mode = 'width';
                     break;
                 default:
                     $thumb_size = THUMB_SIZE_HEIGHT;
                     break;
             }
-
             $createdThumbs = array();
 
             $imgCount = count($picObjects);
@@ -731,7 +778,7 @@ class UserController extends BaseController {
                     $ims[$objectIndex] = imagecreatefrompng($picObjects[$objectIndex]->getUrlOnDiskPicture());
                 }
 
-                if($mode = 'width'){
+                if($mode = 'cover'){
                     $thumb->setWidth($thumb_size);
                     $thumb->setHeight(floor($picObjects[$objectIndex]->getHeight() *
                         ($thumb->getWidth() / $picObjects[$objectIndex]->getWidth())));

@@ -2,6 +2,7 @@
 
 namespace model\Dao;
 
+use model\Picture;
 use \model\User;
 
 class UserDao {
@@ -28,6 +29,8 @@ class UserDao {
     const UPDATE_USER_PICTURE = "UPDATE users SET profile_pic = ?, thumbs_profile = ? WHERE id = ?";
 
     const UPDATE_USER_COVER = "UPDATE users SET profile_cover = ?, thumbs_cover = ? WHERE id = ?";
+
+    const INSERT_USER_PHOTOS = "INSERT INTO user_photos (user_id,img_url,thumb_url) values (?,?,?)";
 
 
     // getting static connection from DBconnect file
@@ -105,14 +108,13 @@ class UserDao {
         return $statement->fetchALL(\PDO::FETCH_ASSOC);
     }
 
-    public function insertUserImages($user, $imagesList) {
+    // $imagesList is object but in array...
+    public function saveUserProfilePhotos(User $user, $imagesList) {
 
-        $sql = "INSERT INTO user_photos (user_id,img_url) values (?,?)";
+        $stmt = $this->pdo->prepare(self::INSERT_USER_PHOTOS);
 
-        $stmt = $this->pdo->prepare($sql);
-
-        foreach($imagesList as $url) {
-            if(!$stmt->execute(array($user->getId(),$url))){
+        foreach($imagesList as $pic_obj) {
+            if(!$stmt->execute(array($user->getId(),$pic_obj->getUrlOnDiskPicture(),$pic_obj->getUrlOnDiskThumb()))){
                 throw new \PDOException('failed');
             }
         }

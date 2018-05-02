@@ -119,7 +119,7 @@
                 <div id="friends" class="card">
                     <h1>Friend list</h1>
                 </div>
-                <div id="photos" class="card">
+                <div id="photos" class="card p-3">
                     <h1>Albums</h1>
 
                     <div class="holder p-3">
@@ -146,8 +146,8 @@
                     }
                     else{
                         ?>
-                        <form id="multiImageUpload" action="<?php echo URL_ROOT . "/user/generateImages"; ?>" method="post" enctype="multipart/form-data">
-                            <input name="images[]" id="upload_photos" type="file" multiple accept="image/*"/>
+                        <form id="uploadUserPhotosForm" action="<?php echo URL_ROOT . "/user/uploadProfilePhotos"; ?>" method="post" enctype="multipart/form-data">
+                            <input name="images[]" id="uploadPhotosInput" type="file" multiple accept="image/*"/>
                         </form>
                         <span id="ImageAdd">
                             <img class="img-thumbnail img_100 p-2" id="imageUploadBtn" src="<?php echo URL_ROOT . '/assets/images/add_img.png' ?>" alt="">

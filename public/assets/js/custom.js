@@ -1,6 +1,8 @@
 // GLOBAL VARS - start
 
 var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
+var loading_gif_anim = url_root + '/assets/images/ajax-loading-c4.gif';
+var successMark = url_root + '/assets/images/Yes_Check_Circle.svg.png';
 
 // GLOBAL VARS - end
 
@@ -46,17 +48,6 @@ if(document.querySelector('#timeline')){
     timeline_btn.addEventListener('click', show_feed);
 }
 
-if(document.querySelector('#photos') && document.querySelector('#upload_photos')){
-
-    // form upload images
-    var multiImageUpload = document.querySelector('#multiImageUpload');
-
-    upload_image_btn.addEventListener('click',function () {
-        upload_photos.click();
-    });
-    upload_photos.addEventListener('change', addUserPhotos);
-}
-
 // get Images with no album on click from db
 function getAllPhotos(e) {
     e.preventDefault();
@@ -100,64 +91,6 @@ function getAllPhotos(e) {
 
     xhr.send();
 }
-
-// Add photos no album --- start
-function addUserPhotos() {
-
-    var requestXhr = new XMLHttpRequest();
-
-    // form data object js
-    var form = new FormData(multiImageUpload);
-
-    // .onload <-- status 200 / readyState 4
-    requestXhr.onload = function () {
-
-        var res = JSON.parse(this.responseText);
-        var dir = './uploads/users/photos/';
-        if(res.hasOwnProperty('uplod_max')){
-            var err = document.querySelector('#ajax_error');
-            err.innerHTML =  res['uplod_max'];
-            err.style.display =  "block";
-            document.querySelector('#ajax_success').style.display =  "none";
-        }
-        else {
-
-            for(var i = 0; i < res.length; i++){
-                var img = document.createElement('img');
-                var urlChunks = res[i].split('/');
-                img.src = url_root + dir + 'thumbs/' + urlChunks[urlChunks.length-1];
-                img.classList.add('img-thumbnail');
-                img.classList.add('img_100');
-
-                var link = document.createElement('a');
-
-                link.setAttribute('data-toggle', 'lightbox');
-                link.setAttribute('data-gallery', 'single-images');
-                link.setAttribute('class', 'col-sm-3');
-
-
-                link.href = url_root + res[i];
-                link.appendChild(img);
-
-                image_list_box.appendChild(link);
-            }
-
-            var success = document.querySelector('#ajax_success');
-            success.innerHTML = "Successfully uploaded image";
-            success.style.display = "block";
-            document.querySelector('#ajax_error').style.display = "none";
-
-        }
-
-    };
-
-    requestXhr.open('POST',url_root + '/user/uploadProfilePhotos',true);
-
-    // send form data, this will send all the form like normal post form
-    requestXhr.send(form);
-
-}
-// Add photos no album --- end
 
 function show_feed() {
     timeline.style.display = 'block';
@@ -387,4 +320,148 @@ function uploadProfileCover() {
     xhr.send(formData);
 
 }
-// CHANGE profile COVER - end
+
+// CHANGE profile COVER !!! no albums - start
+
+// ADD PROFILE PHOTOS - start
+
+var ImageAdd = document.querySelector('#ImageAdd');
+var uploadUserPhotosForm = document.querySelector('#uploadUserPhotosForm');
+var uploadPhotosInput = document.querySelector('#uploadPhotosInput');
+
+if(ImageAdd && upload_cover_form){
+    // input event listener send data
+    uploadPhotosInput.addEventListener('change', uploadProfilePhotos);
+    // div btn listener
+    ImageAdd.addEventListener('click', function () {
+        // trigger input file selector
+        uploadPhotosInput.click();
+    });
+}
+
+function uploadProfilePhotos() {
+    var xhr = new XMLHttpRequest();
+    var formData = new FormData(uploadUserPhotosForm);
+    xhr.open('post',url_root+'/user/uploadProfilePhotos');
+
+    xhr.onload = function () {
+
+        var success = document.querySelector('#ajax_success');
+        var error = document.querySelector('#ajax_error');
+        var title = document.createElement('h3');
+        var ul = document.createElement('ul');
+
+        var picFullA = document.querySelector('#cover_link');
+        var picThumb = document.querySelector('#profileCover');
+
+        success.innerHTML = '';
+        error.innerHTML = '';
+        title.innerHTML = '';
+        ul.innerHTML= '';
+
+        var res = JSON.parse(this.responseText);
+
+        if(res.img_count_error){
+
+            var p = document.createElement('p');
+            title.innerHTML = 'Error:';
+            p.innerHTML = res.img_count_error;
+
+            error.appendChild(title);
+            error.appendChild(p);
+            error.style.display = 'block';
+        }
+        else if(res.error){
+
+            title.innerHTML = res.error;
+
+            for (var i = 0; i < res.info.length; i++){
+                var li = document.createElement('li');
+                li.innerHTML = 'Errors: ' + res.info[i].errors + '<br> File Name: ' + res.info[i].name;
+                ul.appendChild(li);
+            }
+            error.appendChild(title);
+            error.appendChild(ul);
+
+            error.style.display = 'block';
+        }
+        else if(res.success){
+
+            title.innerHTML = 'Loading...';
+
+            for (var i = 0; i < res.dataNotPassed.length; i++){
+                //console.log(res.dataNotPassed);
+
+                var li = document.createElement('li');
+                li.innerHTML = 'File Name: ' + res.dataNotPassed[i].name + ' ----- Errors: ' + res.dataNotPassed[i].errors[0];
+                ul.appendChild(li);
+
+            }
+
+            ul.style.backgroundColor = 'red';
+            success.appendChild(title);
+
+
+            // appending data after second loop
+
+            success.style.display = 'block';
+
+            success.style.backgroundColor= 'yellow';
+            var loading = document.createElement('img');
+            loading.src = url_root+loading_gif_anim;
+            success.appendChild(loading);
+
+            for (var x = 0; x < res.picture_object_data.length; x++){
+                var link_img = document.createElement('a');
+                link_img.setAttribute('data-toggle','lightbox');
+                link_img.setAttribute('data-gallery','single-images');
+                link_img.setAttribute('class','col-sm-3');
+                link_img.href = root + res.picture_object_data[x].urlOnDiskPicture;
+
+                var img_photo = document.createElement('img');
+                img_photo.src = root + res.picture_object_data[x].urlOnDiskThumb;
+                img_photo.setAttribute('class','img_100');
+                img_photo.setAttribute('class','img-thumbnail');
+
+                link_img.appendChild(img_photo);
+                image_list_box.appendChild(link_img);
+
+            }
+            success.innerHTML ='';
+            loading.src = successMark;
+            loading.style.height = '50px';
+            title.innerHTML = 'Succesfully uploaded';
+            success.style.backgroundColor= 'green';
+            success.appendChild(title);
+            if(res.error){
+                var hr = document.createElement('hr');
+                success.appendChild(hr);
+                var notUploaded = document.createElement('notUploaded');
+                notUploaded.innerHTML = 'Files not Uploaded:';
+                notUploaded.style.fontWeight = 'bold';
+                success.appendChild(notUploaded);
+            }
+
+            success.appendChild(ul);
+            success.appendChild(loading);
+
+
+
+
+            //console.log(res);
+           // console.log(res.picture_object_data[0].urlOnDiskPicture);
+           // console.log(res.picture_object_data[1].urlOnDiskPicture);
+
+
+            // picFullA.href = url_root + res.images.full;
+            // picThumb.style.backgroundImage = "url('" + url_root + res.images.thumb + "')";
+
+        }
+
+
+    };
+
+    xhr.send(formData);
+
+}
+// ADD PROFILE PHOTOS - end !!! no albums

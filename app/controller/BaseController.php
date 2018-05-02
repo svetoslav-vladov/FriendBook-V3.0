@@ -2,7 +2,10 @@
 
 namespace controller;
 
-class BaseController {
+
+class BaseController implements \JsonSerializable {
+
+    public function jsonSerialize(){}
 
     public function renderView($file, $array = []){
 

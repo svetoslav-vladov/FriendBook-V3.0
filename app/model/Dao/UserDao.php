@@ -138,7 +138,7 @@ class UserDao {
                                                     NOT IN (SELECT friend_requests.requester_id 
                                                     FROM friend_requests 
                                                     WHERE friend_requests.requested_by = ?) 
-                                                    AND users.id != $id 
+                                                    AND users.id != $id ORDER BY RAND()
                                                     LIMIT 6;");
         $statement->execute(array($user_id));
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -153,5 +153,14 @@ class UserDao {
     function cancelFriendRequest($requested_by, $requester_id) {
         $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?");
         return $statement->execute(array($requested_by, $requester_id));
+    }
+
+    function getAllFriendRequests($user_id) {
+        $statement = $this->pdo->prepare("SELECT * FROM users 
+                                                    JOIN friend_requests 
+                                                    ON friend_requests.requested_by = users.id 
+                                                    WHERE friend_requests.requester_id = ? AND friend_requests.approved = 0");
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -227,8 +227,8 @@ class UserController extends BaseController{
                 if(strpos(strtolower($fullName), strtolower($searched_user)) === 0) {
                     $result[] = [
                         'id' => $user['id'],
-                        'first_name' =>$user['first_name'],
-                        'last_name' => $user['last_name'],
+                        'first_name' => strtolower($user['first_name']),
+                        'last_name' => strtolower($user['last_name']),
                         'profile_pic' => $user['profile_pic'],
                         'thumbs_profile' => $user['thumbs_profile'],
                         'gender' => $user['gender']
@@ -857,6 +857,14 @@ class UserController extends BaseController{
                     $status['err'] = $e->getMessage();
                     echo json_encode($status);
             }
+        }
+    }
+
+    public function getFriendRequests() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            $user_id = $_SESSION['logged']->getId();
+            echo json_encode($dao->getAllFriendRequests($user_id));
         }
     }
 }

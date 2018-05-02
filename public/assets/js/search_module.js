@@ -1,4 +1,3 @@
-var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
 function searchUser(str) {
     var userListDiv = $('.users-result');
     var usersList = $('.users-list');
@@ -48,7 +47,7 @@ function searchUser(str) {
                 });
             }
         };
-        xmlhttp.open("GET", url_root + "user/searchUser&search="+str, true);
+        xmlhttp.open("GET", url_root + "/user/searchUser&search="+str, true);
         xmlhttp.send();
     }
 }

@@ -7,7 +7,6 @@ function sendFriendRequest(requester_id) {
         if (this.readyState === 4 && this.status === 200) {
             $('#friendNavigation'+requester_id).append(cancelRequestBtn);
             $('#sendFriendRequest'+requester_id).remove();
-            console.log('sent request: requester_id = '+requester_id);
         }
     };
 
@@ -26,13 +25,61 @@ function cancelFriendRequest(requester_id) {
         if (this.readyState === 4 && this.status === 200) {
             $('#friendNavigation'+requester_id).append(sendRequestBtn);
             $('#cancelFriendRequest'+requester_id).remove();
-            console.log('canceled request: requester_id = '+requester_id);
         }
     };
     sendRequestBtn.click(function () {
         sendFriendRequest(requester_id);
     });
     request.send("requester_id="+requester_id);
+}
+
+function getFriendRequests(user_id) {
+    var friendRequestsList = $('#friend-requests'+user_id);
+    friendRequestsList.empty();
+    friendRequestsList.hide();
+    loading_gif.show();
+    $('#requestContainer'+user_id).append(loading_gif);
+    var noRequests = $(`<li class="list-group-item">not requests</li>`);
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var friendRequests = JSON.parse(this.responseText);
+            if (friendRequests.length === 0) {
+                friendRequestsList.append(noRequests);
+            }
+            for(var request of friendRequests) {
+                var friendRequest = $(`<li class="list-group-item">
+                                    <a class="request-user  ${(request['gender'] == 'male') ? 'male' : 'female'}" href="${url_root}/index/profile&id=${request['id']}"> 
+                                        <img class="mr-3" src=${(request['thumbs_profile'] == null) ? root+request['profile_pic'] : root+request['thumbs_profile']}>
+                                    </a>
+                                    <div class="media-body requestNavigation" id="request-navigation${request['id']}">
+                                        <h5 class="mt-0">
+                                            <a class="request-friend-name ${(request['gender'] == 'male') ? 'male' : 'female'}" href="${url_root}/index/profile&id=${request['id']}">
+                                                ${(request['display_name'] == null) ? (request['first_name'] + " " + request['last_name']) : request['display_name']}
+                                            </a>
+                                        </h5>
+                                        <button class="accept-request-button" onclick="acceptRequest()">accept</button>
+                                            <button class="decline-request-button" onclick="declineRequest()">decline</button>
+                                    </div>
+                                </li>`);
+                friendRequestsList.append(friendRequest);
+            }
+            setTimeout(function () {
+                loading_gif.hide();
+                friendRequestsList.show();
+            }, 800);
+        }
+    };
+    req.open("GET", url_root + "/user/getFriendRequests&user_id="+user_id);
+    req.send();
+}
+
+function acceptRequest() {
+    //TODO
+}
+
+function declineRequest() {
+    //TODO
 }
 
 // function isFriend(friend_id) {

@@ -1,3 +1,9 @@
+<?php
+    use Model\Dao\UserDao;
+    $userDao = UserDao::getInstance();
+    $friendRequests = $userDao->getAllFriendRequests($_SESSION['logged']->getId());
+?>
+
 <nav class="navbar navbar-expand-md navbar-light fixed-top bg-success">
     <div class="container">
         <a class="navbar-brand" href="<?php echo URL_ROOT; ?>"><img src="<?php echo URL_ROOT . '/assets/images/mini-logo.png' ?>" alt="FriendBook logo" class="logo"></a>
@@ -37,9 +43,9 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="friendRequests"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users"></i></a>
-                    <div class="dropdown-menu" aria-labelledby="friendRequests">
-                        No friend requests :(
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="getFriendRequests(<?php echo $_SESSION['logged']->getId();?>)"><i class="fa fa-users"></i></a>
+                    <div class="dropdown-menu requestContainer" aria-labelledby="friendRequests" id="requestContainer<?php echo $_SESSION['logged']->getId();?>">
+                        <ul class="list-group list-group-flush" id="friend-requests<?php echo $_SESSION['logged']->getId();?>"></ul>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

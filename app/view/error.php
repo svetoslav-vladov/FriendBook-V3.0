@@ -1,11 +1,10 @@
 <div class="container text-center">
 <?php
     if(isset($array)){
-        $error = $array;
+        $error = $data;
     }
 
      //this handles error.php check htaccess file for more info
-
     if(isset($error) && $error == 403){
         echo "<div class=\"row\">";
         echo "<div class=\"col-sm-12\"\">";

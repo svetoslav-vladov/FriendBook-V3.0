@@ -7,7 +7,7 @@ class BaseController implements \JsonSerializable {
 
     public function jsonSerialize(){}
 
-    public function renderView($file, $array = []){
+    public function renderView($file, $data = []){
 
         require_once '../app/include/header.php';
 

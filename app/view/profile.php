@@ -1,21 +1,9 @@
 
 <?php
-    use \model\User;
-    use Controller\UserController;
-
-    if(isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId() && is_numeric($_GET['id'])){
-        $theUser = new User();
-        $theUser->setId(htmlentities($_GET['id']));
-        $newController = new UserController();
-        $theUser = $newController->getUserInfo($theUser);
-        if($theUser === false){
-            $theUser = $_SESSION["logged"];
-        }
-    }
-    else{
-        $theUser = $_SESSION["logged"];
-    }
+// data generated from the index:profile view
+    $theUser = $data;
 ?>
+
 <div id="wrap" class="mt-5">
     <div id="myModal" class="modal">
         <!-- Modal content -->

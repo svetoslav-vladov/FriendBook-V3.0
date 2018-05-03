@@ -3,6 +3,7 @@
 namespace controller;
 
 use \model\User;
+use Model\Dao\UserDao;
 
 
 class IndexController extends \controller\BaseController{
@@ -39,7 +40,27 @@ class IndexController extends \controller\BaseController{
     }
 
     public function settings() {
-        $this->renderView('settings');
+
+        try{
+            $dao = UserDao::getInstance();
+
+            // getting list of countries in db
+            $data['countries'] = $dao->getCountriesList();
+
+            $data['relationship'] = $dao->getRelationshipList();
+
+            // render settings view with $data array passed
+            $this->renderView('settings',$data);
+        }
+        catch(\PDOException $e){
+            // generating error view with the error
+            $this->renderView('error', $e->getMessage());
+        }
+        catch(\Exception $e){
+            // generating error view with the error
+            $this->renderView('error', $e->getMessage());
+        }
+
     }
 
     public function main() {
@@ -49,4 +70,6 @@ class IndexController extends \controller\BaseController{
     public function error($err) {
         $this->renderView('error', $err);
     }
+
+
 }

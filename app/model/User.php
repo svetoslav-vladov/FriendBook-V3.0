@@ -16,7 +16,7 @@
         private $gender;
         private $birthday;
 
-        private $relation_status;
+        private $relationship_id;
         private $profile_pic;
         private $profile_cover;
         private $description;
@@ -35,10 +35,13 @@
         private $thumbs_profile;
         private $thumbs_cover;
 
+        private $relationship_tag;
+        private $country_name;
+
         /**
          * User constructor.
-         * @param $email
          * @param $id
+         * @param $email
          * @param $first_name
          * @param $last_name
          * @param $full_name
@@ -46,9 +49,9 @@
          * @param $reg_date
          * @param $gender
          * @param $birthday
-         * @param $relation_status
+         * @param $relationship_id
          * @param $profile_pic
-         * @param $cover_pic
+         * @param $profile_cover
          * @param $description
          * @param $display_name
          * @param $country_id
@@ -61,51 +64,48 @@
          * @param $photos
          * @param $thumbs_profile
          * @param $thumbs_cover
+         * @param $relationship_tag
+         * @param $country_name
          */
-        public function __construct($id = null, $email = null, $first_name = null, $last_name = null, $full_name = null,
-                                    $password = null, $reg_date = null, $gender = null, $birthday = null,
-                                    $relation_status = null, $profile_pic = null, $cover_pic = null,
-                                    $description = null, $display_name = null, $country_id = null,
-                                    $mobile_number = null, $www = null, $skype = null,
-                                    $friends = null, $followers = null, $albums = null,
-                                    $photos = null, $thumbs_profile = null,$thumbs_cover = null)
-        {
-            $this->id = $id;
-            $this->email = $email;
-            $this->first_name = $first_name;
-            $this->last_name = $last_name;
-            $this->full_name = $full_name;
-            $this->password = $password;
-            $this->reg_date = $reg_date;
-            $this->gender = $gender;
-            $this->birthday = $birthday;
-            $this->relation_status = $relation_status;
-            $this->profile_pic = $profile_pic;
-            $this->profile_cover = $cover_pic;
-            $this->description = $description;
-            $this->display_name = $display_name;
-            $this->country_id = $country_id;
-            $this->mobile_number = $mobile_number;
-            $this->www = $www;
-            $this->skype = $skype;
-            $this->friends = $friends;
-            $this->followers = $followers;
-            $this->albums = $albums;
-            $this->photos = $photos;
-            $this->thumbs_profile = $thumbs_profile;
-            $this->thumbs_cover = $thumbs_cover;
+        public function __construct(
+            $id=null, $email=null, $first_name=null, $last_name=null,
+            $full_name=null, $password=null, $reg_date=null, $gender=null,
+            $birthday=null, $relationship_id=null, $profile_pic=null,
+            $profile_cover=null, $description=null, $display_name=null,
+            $country_id=null, $mobile_number=null, $www=null, $skype=null, $friends=null,
+            $followers=null, $albums=null, $photos=null, $thumbs_profile=null, $thumbs_cover=null,
+            $relationship_tag=null, $country_name=null){
+
+                $this->id = $id;
+                $this->email = $email;
+                $this->first_name = $first_name;
+                $this->last_name = $last_name;
+                $this->full_name = $full_name;
+                $this->password = $password;
+                $this->reg_date = $reg_date;
+                $this->gender = $gender;
+                $this->birthday = $birthday;
+                $this->relationship_id = $relationship_id;
+                $this->profile_pic = $profile_pic;
+                $this->profile_cover = $profile_cover;
+                $this->description = $description;
+                $this->display_name = $display_name;
+                $this->country_id = $country_id;
+                $this->mobile_number = $mobile_number;
+                $this->www = $www;
+                $this->skype = $skype;
+                $this->friends = $friends;
+                $this->followers = $followers;
+                $this->albums = $albums;
+                $this->photos = $photos;
+                $this->thumbs_profile = $thumbs_profile;
+                $this->thumbs_cover = $thumbs_cover;
+                $this->relationship_tag = $relationship_tag;
+                $this->country_name = $country_name;
         }
 
         /**
-         * @return null
-         */
-        public function getEmail()
-        {
-            return $this->email;
-        }
-
-        /**
-         * @return null
+         * @return mixed
          */
         public function getId()
         {
@@ -113,7 +113,15 @@
         }
 
         /**
-         * @return null
+         * @return mixed
+         */
+        public function getEmail()
+        {
+            return $this->email;
+        }
+
+        /**
+         * @return mixed
          */
         public function getFirstName()
         {
@@ -121,7 +129,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getLastName()
         {
@@ -129,7 +137,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getFullName()
         {
@@ -137,7 +145,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getPassword()
         {
@@ -145,7 +153,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getRegDate()
         {
@@ -153,7 +161,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getGender()
         {
@@ -161,7 +169,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getBirthday()
         {
@@ -169,15 +177,15 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
-        public function getRelationStatus()
+        public function getRelationshipId()
         {
-            return $this->relation_status;
+            return $this->relationship_id;
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getProfilePic()
         {
@@ -185,7 +193,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getProfileCover()
         {
@@ -193,7 +201,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getDescription()
         {
@@ -201,7 +209,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getDisplayName()
         {
@@ -209,7 +217,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getCountryId()
         {
@@ -217,7 +225,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getMobileNumber()
         {
@@ -225,7 +233,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getWww()
         {
@@ -233,7 +241,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getSkype()
         {
@@ -241,7 +249,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getFriends()
         {
@@ -249,7 +257,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getFollowers()
         {
@@ -257,7 +265,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getAlbums()
         {
@@ -265,7 +273,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getPhotos()
         {
@@ -273,183 +281,7 @@
         }
 
         /**
-         * @param null $email
-         */
-        public function setEmail($email)
-        {
-            $this->email = $email;
-        }
-
-        /**
-         * @param null $id
-         */
-        public function setId($id)
-        {
-            $this->id = $id;
-        }
-
-        /**
-         * @param null $first_name
-         */
-        public function setFirstName($first_name)
-        {
-            $this->first_name = $first_name;
-        }
-
-        /**
-         * @param null $last_name
-         */
-        public function setLastName($last_name)
-        {
-            $this->last_name = $last_name;
-        }
-
-        /**
-         * @param null $full_name
-         */
-        public function setFullName($full_name)
-        {
-            $this->full_name = $full_name;
-        }
-
-        /**
-         * @param null $password
-         */
-        public function setPassword($password)
-        {
-            $this->password = $password;
-        }
-
-        /**
-         * @param null $reg_date
-         */
-        public function setRegDate($reg_date)
-        {
-            $this->reg_date = $reg_date;
-        }
-
-        /**
-         * @param null $gender
-         */
-        public function setGender($gender)
-        {
-            $this->gender = $gender;
-        }
-
-        /**
-         * @param null $birthday
-         */
-        public function setBirthday($birthday)
-        {
-            $this->birthday = $birthday;
-        }
-
-        /**
-         * @param null $relation_status
-         */
-        public function setRelationStatus($relation_status)
-        {
-            $this->relation_status = $relation_status;
-        }
-
-        /**
-         * @param null $profile_pic
-         */
-        public function setProfilePic($profile_pic)
-        {
-            $this->profile_pic = $profile_pic;
-        }
-
-        /**
-         * @param null $profile_cover
-         */
-        public function setProfileCover($profile_cover)
-        {
-            $this->profile_cover = $profile_cover;
-        }
-
-        /**
-         * @param null $description
-         */
-        public function setDescription($description)
-        {
-            $this->description = $description;
-        }
-
-        /**
-         * @param null $display_name
-         */
-        public function setDisplayName($display_name)
-        {
-            $this->display_name = $display_name;
-        }
-
-        /**
-         * @param null $country_id
-         */
-        public function setCountryId($country_id)
-        {
-            $this->country_id = $country_id;
-        }
-
-        /**
-         * @param null $mobile_number
-         */
-        public function setMobileNumber($mobile_number)
-        {
-            $this->mobile_number = $mobile_number;
-        }
-
-        /**
-         * @param null $www
-         */
-        public function setWww($www)
-        {
-            $this->www = $www;
-        }
-
-        /**
-         * @param null $skype
-         */
-        public function setSkype($skype)
-        {
-            $this->skype = $skype;
-        }
-
-        /**
-         * @param null $friends
-         */
-        public function setFriends($friends)
-        {
-            $this->friends = $friends;
-        }
-
-        /**
-         * @param null $followers
-         */
-        public function setFollowers($followers)
-        {
-            $this->followers = $followers;
-        }
-
-        /**
-         * @param null $albums
-         */
-        public function setAlbums($albums)
-        {
-            $this->albums = $albums;
-        }
-
-        /**
-         * @param null $photos
-         */
-        public function setPhotos($photos)
-        {
-            $this->photos = $photos;
-        }
-
-        /**
-         * @return null
+         * @return mixed
          */
         public function getThumbsProfile()
         {
@@ -457,7 +289,7 @@
         }
 
         /**
-         * @return null
+         * @return mixed
          */
         public function getThumbsCover()
         {
@@ -465,7 +297,199 @@
         }
 
         /**
-         * @param null $thumbs_profile
+         * @return mixed
+         */
+        public function getRelationshipTag()
+        {
+            return $this->relationship_tag;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getCountryName()
+        {
+            return $this->country_name;
+        }
+
+        /**
+         * @param mixed $id
+         */
+        public function setId($id)
+        {
+            $this->id = $id;
+        }
+
+        /**
+         * @param mixed $email
+         */
+        public function setEmail($email)
+        {
+            $this->email = $email;
+        }
+
+        /**
+         * @param mixed $first_name
+         */
+        public function setFirstName($first_name)
+        {
+            $this->first_name = $first_name;
+        }
+
+        /**
+         * @param mixed $last_name
+         */
+        public function setLastName($last_name)
+        {
+            $this->last_name = $last_name;
+        }
+
+        /**
+         * @param mixed $full_name
+         */
+        public function setFullName($full_name)
+        {
+            $this->full_name = $full_name;
+        }
+
+        /**
+         * @param mixed $password
+         */
+        public function setPassword($password)
+        {
+            $this->password = $password;
+        }
+
+        /**
+         * @param mixed $reg_date
+         */
+        public function setRegDate($reg_date)
+        {
+            $this->reg_date = $reg_date;
+        }
+
+        /**
+         * @param mixed $gender
+         */
+        public function setGender($gender)
+        {
+            $this->gender = $gender;
+        }
+
+        /**
+         * @param mixed $birthday
+         */
+        public function setBirthday($birthday)
+        {
+            $this->birthday = $birthday;
+        }
+
+        /**
+         * @param mixed $relationship_id
+         */
+        public function setRelationshipId($relationship_id)
+        {
+            $this->relationship_id = $relationship_id;
+        }
+
+        /**
+         * @param mixed $profile_pic
+         */
+        public function setProfilePic($profile_pic)
+        {
+            $this->profile_pic = $profile_pic;
+        }
+
+        /**
+         * @param mixed $profile_cover
+         */
+        public function setProfileCover($profile_cover)
+        {
+            $this->profile_cover = $profile_cover;
+        }
+
+        /**
+         * @param mixed $description
+         */
+        public function setDescription($description)
+        {
+            $this->description = $description;
+        }
+
+        /**
+         * @param mixed $display_name
+         */
+        public function setDisplayName($display_name)
+        {
+            $this->display_name = $display_name;
+        }
+
+        /**
+         * @param mixed $country_id
+         */
+        public function setCountryId($country_id)
+        {
+            $this->country_id = $country_id;
+        }
+
+        /**
+         * @param mixed $mobile_number
+         */
+        public function setMobileNumber($mobile_number)
+        {
+            $this->mobile_number = $mobile_number;
+        }
+
+        /**
+         * @param mixed $www
+         */
+        public function setWww($www)
+        {
+            $this->www = $www;
+        }
+
+        /**
+         * @param mixed $skype
+         */
+        public function setSkype($skype)
+        {
+            $this->skype = $skype;
+        }
+
+        /**
+         * @param mixed $friends
+         */
+        public function setFriends($friends)
+        {
+            $this->friends = $friends;
+        }
+
+        /**
+         * @param mixed $followers
+         */
+        public function setFollowers($followers)
+        {
+            $this->followers = $followers;
+        }
+
+        /**
+         * @param mixed $albums
+         */
+        public function setAlbums($albums)
+        {
+            $this->albums = $albums;
+        }
+
+        /**
+         * @param mixed $photos
+         */
+        public function setPhotos($photos)
+        {
+            $this->photos = $photos;
+        }
+
+        /**
+         * @param mixed $thumbs_profile
          */
         public function setThumbsProfile($thumbs_profile)
         {
@@ -473,11 +497,27 @@
         }
 
         /**
-         * @param null $thumbs_cover
+         * @param mixed $thumbs_cover
          */
         public function setThumbsCover($thumbs_cover)
         {
             $this->thumbs_cover = $thumbs_cover;
+        }
+
+        /**
+         * @param mixed $relationship_tag
+         */
+        public function setRelationshipTag($relationship_tag)
+        {
+            $this->relationship_tag = $relationship_tag;
+        }
+
+        /**
+         * @param mixed $country_name
+         */
+        public function setCountryName($country_name)
+        {
+            $this->country_name = $country_name;
         }
 
 

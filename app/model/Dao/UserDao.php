@@ -20,7 +20,21 @@ class UserDao {
 
     const GET_PROFILE_IMAGES = "SELECT img_url FROM user_photos WHERE user_id = ? LIMIT 16;";
 
-    const LOGIN_CHECK = "SELECT * FROM users WHERE email = ? AND password = ?";
+    const LOGIN_CHECK_WITH_FULL_USER_DETAILS = "SELECT u.* , c.country_name, r.status_name as relationship_tag
+                        FROM users as u
+                        LEFT OUTER JOIN countries as c ON (u.country_id = c.id) 
+                        LEFT OUTER JOIN relationship as r ON (u.relationship_id = r.id)
+                        WHERE u.email = ? AND u.password = ?";
+
+    const GET_USER_FULL_DETAILS_BY_ID = "SELECT u.* , c.country_name, r.status_name as relationship_tag
+                        FROM users as u
+                        LEFT OUTER JOIN countries as c ON (u.country_id = c.id) 
+                        LEFT OUTER JOIN relationship as r ON (u.relationship_id = r.id)
+                        WHERE u.id = ?";
+
+    const GET_COUNTRIES_LIST = "SELECT * FROM countries";
+
+    const GET_RELATIONSHIP_LIST = "SELECT * FROM relationship ORDER BY id";
 
     const GET_INFO_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
 
@@ -32,6 +46,16 @@ class UserDao {
 
     const INSERT_USER_PHOTOS = "INSERT INTO user_photos (user_id,img_url,thumb_url) values (?,?,?)";
 
+    const UPDATE_USER_INFO = "UPDATE users u
+                                LEFT OUTER JOIN relationship r on
+                                    ? = r.id
+                                LEFT OUTER JOIN countries c on
+                                    ? = c.id
+                                SET u.relationship_id = r.id, u.country_id = c.id,
+                                first_name = ?,last_name = ?,
+                                gender = ?,birthday = ?, display_name = ?, 
+                                mobile_number = ?, www =?, skype = ?
+                                WHERE u.id = ?";
 
     // getting static connection from DBconnect file
     private function __construct() {
@@ -59,7 +83,25 @@ class UserDao {
         ));
     }
 
-    public function saveUserProfilePic(User $user) {
+    public function saveUserGeneralSettings(User $user) {
+        $statement = $this->pdo->prepare(self::UPDATE_USER_INFO);
+        return $statement->execute(array(
+            $user->getRelationshipId(),
+            $user->getCountryId(),
+
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getGender(),
+            $user->getBirthday(),
+            $user->getDisplayName(),
+            $user->getMobileNumber(),
+            $user->getWww(),
+            $user->getSkype(),
+            $user->getId(),
+        ));
+    }
+
+    public function saveUserProfileInfo(User $user) {
         $statement = $this->pdo->prepare(self::UPDATE_USER_PICTURE);
         return $statement->execute(array(
             $user->getProfilePic(),
@@ -108,6 +150,24 @@ class UserDao {
         return $statement->fetch(\PDO::FETCH_ASSOC)['row'] > 0;
     }
 
+    public function getCountriesList() {
+        $statement = $this->pdo->prepare(self::GET_COUNTRIES_LIST);
+        $statement->execute(array());
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    public function getRelationshipList() {
+        $statement = $this->pdo->prepare(self::GET_RELATIONSHIP_LIST);
+        $statement->execute(array());
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    public function getFullUserInfoById(User $user) {
+        $statement = $this->pdo->prepare(self::GET_USER_FULL_DETAILS_BY_ID);
+        $statement->execute(array($user->getId()));
+        return $statement->fetch(\PDO::FETCH_OBJ);
+    }
+
     public function getUserInfoById(User $user) {
         $statement = $this->pdo->prepare(self::GET_INFO_BY_ID);
         $statement->execute(array($user->getId()));
@@ -132,7 +192,7 @@ class UserDao {
     }
 
     function getSuggestedUsers($user_id) {
-        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, email, birthday, gender, profile_pic, profile_cover, relation_status, reg_date, thumbs_profile 
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, email, birthday, gender, profile_pic, profile_cover, reg_date, thumbs_profile 
                                 FROM users 
                                 WHERE id != ? LIMIT 6;");
         $statement->execute(array($user_id));
@@ -149,4 +209,5 @@ class UserDao {
         $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?");
         return $statement->execute(array($requested_by, $requester_id));
     }
+
 }

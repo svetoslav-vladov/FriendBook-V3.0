@@ -60,8 +60,8 @@
                     <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs"></i></a>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
-                        <a class="dropdown-item" href="#"><i class="fa fa-cog"></i> Settings</a>
-                        <a class="dropdown-item" href="<?php echo URL_ROOT; ?>/user/logout"><i class="fa fa-sign-out-alt"></i> logout</a>
+                        <a class="dropdown-item" href="<?php echo URL_ROOT . '/index/settings'; ?>"><i class="fa fa-cog"></i> Settings</a>
+                        <a class="dropdown-item" href="<?php echo URL_ROOT . '/user/logout'; ?>"><i class="fa fa-sign-out-alt"></i> logout</a>
                     </div>
                 </li>
             </ul>

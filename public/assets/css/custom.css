@@ -800,5 +800,19 @@ form#uploadUserPhotosForm {
 
 .female:hover {
     text-shadow: 0 0 2px deeppink;
->>>>>>> e6e9546a72a4fcbc6f44267aa3cdb0adc2a847e4
+}
+div#security_box {
+    display: none;
+}
+li#general, li#security {
+    cursor:  pointer;
+}
+
+div#settingsStatus {
+    cursor:  pointer;
+}
+
+div#settingsStatus:hover {
+    background: #53c16d61;
+    border-radius: 10px;
 }

@@ -1,42 +1,34 @@
 <div class="container text-center">
 <?php
-    if(isset($array)){
+    if(isset($data)){
         $error = $data;
     }
 
      //this handles error.php check htaccess file for more info
+    echo "<div class=\"row\">";
+    echo "<div class=\"col-sm-12\"\">";
     if(isset($error) && $error == 403){
-        echo "<div class=\"row\">";
-        echo "<div class=\"col-sm-12\"\">";
         require_once "./error_403.php";
-        echo '</div>';
-        echo '</div>';
     }
     elseif(isset($error) && $error == 404){
-        echo "<div class=\"row\">";
-        echo "<div class=\"col-sm-12\"\">";
         require_once "./error_404.php";
-        echo '</div>';
-        echo '</div>';
     }
     elseif(isset($error) && $error == 401){
-        echo "<div class=\"row\"\">";
-        echo "<div class=\"col-sm-12\"\">";
         require_once  "./error_401.php";
-        echo '</div>';
-        echo '</div>';
     }
     elseif(isset($error['pdoexception'])){
        $err = htmlentities($error['PDOException']);
-        echo '<div class="row"><div class="col-sm-12">' . $err . '</div></div>';
+        echo $err;
     }
     elseif(isset($error['exception'])){
         $err = htmlentities($error['PDOException']);
-        echo '<div class="row"><div class="col-sm-12">' . $err . '</div></div>';
+        echo $err;
     }
     else{
-        echo '<div class="row"><div class="col-sm-12">' . $error[0] . '</div></div>';
+        echo $error[0];
     }
+    echo '</div>';
+    echo '</div>';
     //testing
     //var_dump($error);
 

@@ -11,4 +11,8 @@ $(document).ready(function () {
     $('#ajax_success').click(function () {
         $(this).hide();
     });
+    $('#settingsStatus').click(function () {
+        $(this).hide();
+    });
+
 });

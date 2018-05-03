@@ -72,6 +72,15 @@ class UserDao
         return self::$instance;
     }
 
+    public function saveUserProfilePic(User $user) {
+        $statement = $this->pdo->prepare(self::UPDATE_USER_PICTURE);
+        return $statement->execute(array(
+            $user->getProfilePic(),
+            $user->getThumbsProfile(),
+            $user->getId(),
+        ));
+    }
+
     public function insertUserDb(User $user)
     {
         $statement = $this->pdo->prepare(self::INSERT_USER);

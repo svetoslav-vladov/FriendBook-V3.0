@@ -494,7 +494,6 @@ if(general_btn || security_btn || general_box || security_box){
 
     function showGeneralBox(){
         statusBox.innerHTML = '';
-        statusBox.style.display = 'block';
         general_btn.classList.toggle("active_btn");
         general_box.style.display = 'block';
 
@@ -512,7 +511,7 @@ if(general_btn || security_btn || general_box || security_box){
 
     function showSecurityBox(){
         statusBox.innerHTML = '';
-        statusBox.style.display = 'block';
+
         security_btn.classList.toggle("active_btn");
         security_box.style.display = 'block';
 

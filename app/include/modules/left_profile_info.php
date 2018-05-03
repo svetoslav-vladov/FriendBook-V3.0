@@ -25,10 +25,10 @@
 
     if(isset($_SESSION['logged'])){
 
-        if(isset($_SESSION['logged']->getDisplayName) && strlen(trim($_SESSION['logged']->getDisplayName()," ")) > 0){
+        if(!is_null($_SESSION['logged']->getDisplayName())){
 
             echo $_SESSION['logged']->getDisplayName();
-            echo "<div class='small_fullname'>(" . $_SESSION['logged']->getFullName() .")</div>";
+            echo "<div class='small'>(" . $_SESSION['logged']->getFullName() .")</div>";
         }
         else{
             echo $_SESSION['logged']->getFullName();

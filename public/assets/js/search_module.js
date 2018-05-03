@@ -22,8 +22,8 @@ function searchUser(str) {
                 usersList.empty();
                 for (var user of users) {
                     var li = $(`<li class="list-group-item">
-                                <a href="${url_root}index/profile&id=${user['id']}" class="${(user['gender'] == 'male') ? 'male' : 'female'}">
-                                    <img class="img-fluid search_image" src="${(user['thumbs_profile'] == null) ? root+user['profile_pic'] : user['thumbs_profile']}">
+                                <a href="${root}/index/profile&id=${user['id']}" class="${(user['gender'] == 'male') ? 'male' : 'female'}">
+                                    <img class="img-fluid search_image" src="${(user['thumbs_profile'] == null) ? root+user['profile_pic'] : root+user['thumbs_profile']}">
                                     <span class="search_user">${user['first_name']} ${user['last_name']}</span>
                                 </a>
                               </li>`);

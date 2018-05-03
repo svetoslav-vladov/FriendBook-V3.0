@@ -238,12 +238,10 @@ ul.navbar-nav li:hover {
     background: #ffffff1f;
 }
 
-ul.navbar-nav li a{
-    color:#d7eedd !important;
-}
-
 .dropdown-menu {
     background: green;
+    padding: 0px;
+    box-shadow: 2px 4px 4px 0px green;
 }
 
 .dropdown-menu a:hover {
@@ -315,7 +313,6 @@ img.logo {
     height: 33px;
     margin-right: 7px !important;
     border-radius: 50%;
-    padding-top: 9px;
 }
 .comments_box {
     height: 0;
@@ -859,4 +856,48 @@ form#uploadUserPhotosForm {
     cursor: pointer;
     background: #AF0000;
     transition: all 0.3s ease-in-out;
+}
+
+.friendNotifications {
+    border-radius: 5px;
+    font-size: 0.6em;
+    padding: 0px 5px;
+    background: red;
+    color: white;
+    box-shadow: 0 0 12px 2px red;
+    position: absolute;
+    left: 12px;
+    bottom: 4px;
+    text-shadow: 0 0 3px white;
+}
+
+.add-cancel-buttons-container {
+    position: relative;
+    height: 21px;
+}
+
+.add-friend-button {
+    position: absolute;
+}
+
+.message {
+    font-size: 0.8em;
+}
+#friends h1 {
+    text-align: center;
+}
+.friendsContainer {
+    margin-bottom: 20px;
+}
+.friend-card {
+    border: 1px solid darkgrey;
+    border-radius: 8px;
+    padding: 2px 4px;
+    display: inline-block;
+    margin: 2px 8px;
+    width: 246px;
+}
+
+.friends-counter {
+    margin-left: 10px !important;
 }

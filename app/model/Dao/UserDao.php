@@ -6,7 +6,8 @@ use model\Picture;
 use \model\User;
 use function Sodium\add;
 
-class UserDao {
+class UserDao
+{
 
     private $pdo;
     private static $instance;
@@ -14,8 +15,7 @@ class UserDao {
     const INSERT_USER = "INSERT INTO users (first_name, last_name, email, password, 
                     gender,birthday,profile_pic,profile_cover) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
 
-    const INSERT_SINGLE_PHOTO = "INSERT INTO user_photos (user_id, img_url) 
-                                VALUES (?,?)";
+    const INSERT_SINGLE_PHOTO = "INSERT INTO user_photos (user_id, img_url) VALUES (?,?)";
 
     const CHECK_FOR_EMAIL = "SELECT COUNT(*) as row FROM users WHERE email = ?";
 
@@ -59,74 +59,53 @@ class UserDao {
                                 WHERE u.id = ?";
 
     // getting static connection from DBconnect file
-    private function __construct() {
+    private function __construct()
+    {
         $this->pdo = DBconnect::getInstance()->dbConnect();
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance === null) {
             self::$instance = new UserDao();
         }
         return self::$instance;
     }
 
-    public function insertUserDb(User $user) {
+    public function insertUserDb(User $user)
+    {
         $statement = $this->pdo->prepare(self::INSERT_USER);
-        return $statement->execute(array(
-            $user->getFirstName(),
-            $user->getLastName(),
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getGender(),
-            $user->getBirthday(),
-            $user->getProfilePic(),
-            $user->getProfileCover(),
-        ));
+        return $statement->execute(array($user->getFirstName(), $user->getLastName(), $user->getEmail(), $user->getPassword(), $user->getGender(), $user->getBirthday(), $user->getProfilePic(), $user->getProfileCover(),));
     }
 
-    public function saveUserGeneralSettings(User $user) {
+    public function saveUserGeneralSettings(User $user)
+    {
         $statement = $this->pdo->prepare(self::UPDATE_USER_INFO);
-        return $statement->execute(array(
-            $user->getRelationshipId(),
-            $user->getCountryId(),
+        return $statement->execute(array($user->getRelationshipId(), $user->getCountryId(),
 
-            $user->getFirstName(),
-            $user->getLastName(),
-            $user->getGender(),
-            $user->getBirthday(),
-            $user->getDisplayName(),
-            $user->getMobileNumber(),
-            $user->getWww(),
-            $user->getSkype(),
-            $user->getId(),
-        ));
+            $user->getFirstName(), $user->getLastName(), $user->getGender(), $user->getBirthday(), $user->getDisplayName(), $user->getMobileNumber(), $user->getWww(), $user->getSkype(), $user->getId(),));
     }
 
-    public function saveUserProfileInfo(User $user) {
+    public function saveUserProfileInfo(User $user)
+    {
         $statement = $this->pdo->prepare(self::UPDATE_USER_PICTURE);
-        return $statement->execute(array(
-            $user->getProfilePic(),
-            $user->getThumbsProfile(),
-            $user->getId(),
-        ));
+        return $statement->execute(array($user->getProfilePic(), $user->getThumbsProfile(), $user->getId(),));
     }
 
-    public function saveUserProfileCover(User $user) {
+    public function saveUserProfileCover(User $user)
+    {
         $statement = $this->pdo->prepare(self::UPDATE_USER_COVER);
-        return $statement->execute(array(
-            $user->getProfileCover(),
-            $user->getThumbsCover(),
-            $user->getId(),
-        ));
+        return $statement->execute(array($user->getProfileCover(), $user->getThumbsCover(), $user->getId(),));
     }
 
     // $imagesList is object but in array...
-    public function saveUserProfilePhotos(User $user, $imagesList) {
+    public function saveUserProfilePhotos(User $user, $imagesList)
+    {
 
         $stmt = $this->pdo->prepare(self::INSERT_USER_PHOTOS);
 
-        foreach($imagesList as $pic_obj) {
-            if(!$stmt->execute(array($user->getId(),$pic_obj->getUrlOnDiskPicture(),$pic_obj->getUrlOnDiskThumb()))){
+        foreach ($imagesList as $pic_obj) {
+            if (!$stmt->execute(array($user->getId(), $pic_obj->getUrlOnDiskPicture(), $pic_obj->getUrlOnDiskThumb()))) {
                 throw new \PDOException('failed');
             }
         }
@@ -134,56 +113,59 @@ class UserDao {
         return true;
     }
 
-    public function loginCheck(User $user){
+    public function loginCheck(User $user)
+    {
 
-        $statement = $this->pdo->prepare(self::LOGIN_CHECK);
-        $statement->execute(array(
-            $user->getEmail(),
-            $user->getPassword()
-        ));
+        $statement = $this->pdo->prepare(self::LOGIN_CHECK_WITH_FULL_USER_DETAILS);
+        $statement->execute(array($user->getEmail(), $user->getPassword()));
         return $statement->fetch(\PDO::FETCH_OBJ);
 
     }
 
-    public function checkIfExists(User $user) {
+    public function checkIfExists(User $user)
+    {
         $statement = $this->pdo->prepare(self::CHECK_FOR_EMAIL);
         $statement->execute(array($user->getEmail()));
         return $statement->fetch(\PDO::FETCH_ASSOC)['row'] > 0;
     }
 
-    public function getCountriesList() {
+    public function getCountriesList()
+    {
         $statement = $this->pdo->prepare(self::GET_COUNTRIES_LIST);
         $statement->execute(array());
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function getRelationshipList() {
+    public function getRelationshipList()
+    {
         $statement = $this->pdo->prepare(self::GET_RELATIONSHIP_LIST);
         $statement->execute(array());
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function getFullUserInfoById(User $user) {
+    public function getFullUserInfoById(User $user)
+    {
         $statement = $this->pdo->prepare(self::GET_USER_FULL_DETAILS_BY_ID);
         $statement->execute(array($user->getId()));
         return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
-    public function getUserInfoById(User $user) {
+    public function getUserInfoById(User $user)
+    {
         $statement = $this->pdo->prepare(self::GET_INFO_BY_ID);
         $statement->execute(array($user->getId()));
         return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
-    public function getUserPhotos(User $user) {
+    public function getUserPhotos(User $user)
+    {
         $statement = $this->pdo->prepare(self::GET_PROFILE_IMAGES);
-        $statement->execute(array(
-            $user->getId()
-        ));
+        $statement->execute(array($user->getId()));
         return $statement->fetchALL(\PDO::FETCH_ASSOC);
     }
 
-    public function getAllUsers($logged_user_id) {
+    public function getAllUsers($logged_user_id)
+    {
         $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile
                                 FROM users 
                                 WHERE id != ?");
@@ -192,14 +174,8 @@ class UserDao {
         return $result;
     }
 
-
-    function getSuggestedUsers($user_id) {
-        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, email, birthday, gender, profile_pic, profile_cover, reg_date, thumbs_profile 
-                                FROM users 
-                                WHERE id != ? LIMIT 6;");
-        $statement->execute(array($user_id));
-
-    function getSuggestedUsers() {
+    function getSuggestedUsers()
+    {
         $id = $_SESSION['logged']->getId();
         // for suggested users are displayed all
         // without users who have sent an invitation to me
@@ -216,25 +192,27 @@ class UserDao {
                                                     WHERE friend_requests.requested_by = ?) 
                                                     AND users.id != $id ORDER BY RAND()
                                                     LIMIT 6;");
-        $statement->execute(array($id,$id));
+        $statement->execute(array($id, $id));
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function sendFriendRequest($requested_by, $requester_id, $approved) {
+    function sendFriendRequest($requested_by, $requester_id, $approved)
+    {
         $statement = $this->pdo->prepare("INSERT INTO friend_requests (requested_by, requester_id, approved) 
                                 VALUES (?,?,?)");
         return $statement->execute(array($requested_by, $requester_id, $approved));
     }
 
-    function cancelFriendRequest($requested_by, $requester_id) {
+    function cancelFriendRequest($requested_by, $requester_id)
+    {
         $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?");
         return $statement->execute(array($requested_by, $requester_id));
     }
 
-
-    function acceptFriendRequest($requested_by, $requester_id) {
-        $ids = [$requested_by,$requester_id];
+    function acceptFriendRequest($requested_by, $requester_id)
+    {
+        $ids = [$requested_by, $requester_id];
         $insertIds = [$requester_id, $requested_by];
         $transaction = $this->pdo->beginTransaction();
         $statement = $this->pdo->prepare("UPDATE friend_requests 
@@ -251,7 +229,8 @@ class UserDao {
 
     }
 
-    function getAllFriendRequests($user_id) {
+    function getAllFriendRequests($user_id)
+    {
         $statement = $this->pdo->prepare("SELECT * FROM users 
                                                     JOIN friend_requests 
                                                     ON friend_requests.requested_by = users.id 
@@ -260,7 +239,8 @@ class UserDao {
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function checkForFriendRequests($user_id) {
+    function checkForFriendRequests($user_id)
+    {
         $statement = $this->pdo->prepare("SELECT COUNT(*) as check_request 
                                                     FROM friend_requests 
                                                     WHERE friend_requests.requester_id = ? AND friend_requests.approved = 0");
@@ -268,7 +248,8 @@ class UserDao {
         return $statement->fetch()['check_request'];
     }
 
-    function getFriends($user_id) {
+    function getFriends($user_id)
+    {
         $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
                                                     FROM users 
                                                     JOIN friends 
@@ -278,7 +259,8 @@ class UserDao {
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function getOwnFriends() {
+    function getOwnFriends()
+    {
         $user_id = $_SESSION['logged']->getId();
         $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
                                                     FROM users 
@@ -289,18 +271,19 @@ class UserDao {
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function deleteFriend($friend_id) {
+    function deleteFriend($friend_id)
+    {
         $logged_user_id = $_SESSION['logged']->getId();
         $transaction = $this->pdo->beginTransaction();
         $deleteFromRequest = $this->pdo->prepare("DELETE FROM friend_requests 
                                                     WHERE (requested_by = ? AND requester_id = ?) 
                                                     OR (requested_by = ? AND requester_id = ?)");
-        $deleteFromRequest->execute(array($logged_user_id,$friend_id,$friend_id,$logged_user_id));
+        $deleteFromRequest->execute(array($logged_user_id, $friend_id, $friend_id, $logged_user_id));
 
         $deleteFromFriends = $this->pdo->prepare("DELETE FROM friends 
                                                             WHERE (user_id = ? AND friend_id = ?) 
                                                             OR (user_id = ? AND friend_id = ?)");
-        $deleteFromFriends->execute(array($logged_user_id,$friend_id,$friend_id,$logged_user_id));
+        $deleteFromFriends->execute(array($logged_user_id, $friend_id, $friend_id, $logged_user_id));
         $transaction = $this->pdo->commit();
     }
 }

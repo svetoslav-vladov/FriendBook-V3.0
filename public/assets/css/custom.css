@@ -759,6 +759,7 @@ form#uploadUserPhotosForm {
 
 .suggested-user-img {
     width: 40px;
+    border-radius: 50%;
 }
 
 .suggested-user-container {
@@ -900,4 +901,12 @@ form#uploadUserPhotosForm {
 
 .friends-counter {
     margin-left: 10px !important;
+}
+
+.delete-friend-button {
+    padding: 0px 8px;
+}
+
+.friend-card small{
+    font-size: 0.75em;
 }

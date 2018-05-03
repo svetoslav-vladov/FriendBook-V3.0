@@ -484,7 +484,9 @@ var security_box = document.querySelector('#security_box');
 // status box for loading image and success icon
 var statusBox = document.querySelector("#settingsStatus");
 // check if element is on page
-statusBox.style.display = "none";
+if(statusBox){
+    statusBox.style.display = "none";
+}
 if(general_btn || security_btn || general_box || security_box){
 
     general_btn.addEventListener('click', showGeneralBox);

@@ -98,7 +98,6 @@ function acceptRequest(requested_by) {
     };
     request.send("requested_by="+requested_by);
 }
-
 function deleteFriend(friend_id) {
     var request = new XMLHttpRequest();
     request.open('post', url_root+'/user/deleteFriend');
@@ -236,14 +235,12 @@ function  getOwnFriends(session_id) {
                                     </div>`);
                 friendsContainer.append(friendCard);
                 $('#deleteFriend'+user['id']).click(function () {
-                    $('#friend-card'+user['id']).fadeOut(400);
+                    $(this).parent().parent().fadeOut(400);
                     setTimeout(function () {
-                        $('#friend-card'+user['id']).remove();
+                        $(this).parent().parent().remove();
                     },500)
                 });
             }
-
-            $('#friends_btn').append($(`<span class="friends-counter">${friends.length}</span>`));
         }
     };
     req.open("GET", url_root + "/user/getOwnFriends");

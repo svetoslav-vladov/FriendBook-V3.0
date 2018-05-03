@@ -4,6 +4,7 @@ namespace model\Dao;
 
 use model\Picture;
 use \model\User;
+use function Sodium\add;
 
 class UserDao {
 
@@ -191,11 +192,32 @@ class UserDao {
         return $result;
     }
 
+
     function getSuggestedUsers($user_id) {
         $statement = $this->pdo->prepare("SELECT id, first_name, last_name, email, birthday, gender, profile_pic, profile_cover, reg_date, thumbs_profile 
                                 FROM users 
                                 WHERE id != ? LIMIT 6;");
         $statement->execute(array($user_id));
+
+    function getSuggestedUsers() {
+        $id = $_SESSION['logged']->getId();
+        // for suggested users are displayed all
+        // without users who have sent an invitation to me
+        // and users to whom I have sent an invitation
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
+                                                    FROM users 
+                                                    WHERE users.id 
+                                                    NOT IN (SELECT friend_requests.requested_by 
+                                                    FROM friend_requests 
+                                                    WHERE friend_requests.requester_id = ?
+                                                    UNION
+                                                    SELECT friend_requests.requester_id 
+                                                    FROM friend_requests 
+                                                    WHERE friend_requests.requested_by = ?) 
+                                                    AND users.id != $id ORDER BY RAND()
+                                                    LIMIT 6;");
+        $statement->execute(array($id,$id));
+
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
@@ -210,4 +232,75 @@ class UserDao {
         return $statement->execute(array($requested_by, $requester_id));
     }
 
+
+    function acceptFriendRequest($requested_by, $requester_id) {
+        $ids = [$requested_by,$requester_id];
+        $insertIds = [$requester_id, $requested_by];
+        $transaction = $this->pdo->beginTransaction();
+        $statement = $this->pdo->prepare("UPDATE friend_requests 
+                                                    SET approved = 1
+                                                    WHERE requested_by = ? AND requester_id = ?");
+        $statement->execute($ids);
+
+        $addFriend = $this->pdo->prepare("INSERT INTO friends (user_id, friend_id) VALUES (?,?)");
+        $addFriend->execute($insertIds);
+
+        $addFr = $this->pdo->prepare("INSERT INTO friends (friend_id, user_id) VALUES (?,?)");
+        $addFr->execute($insertIds);
+        $transaction = $this->pdo->commit();
+
+    }
+
+    function getAllFriendRequests($user_id) {
+        $statement = $this->pdo->prepare("SELECT * FROM users 
+                                                    JOIN friend_requests 
+                                                    ON friend_requests.requested_by = users.id 
+                                                    WHERE friend_requests.requester_id = ? AND friend_requests.approved = 0");
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    function checkForFriendRequests($user_id) {
+        $statement = $this->pdo->prepare("SELECT COUNT(*) as check_request 
+                                                    FROM friend_requests 
+                                                    WHERE friend_requests.requester_id = ? AND friend_requests.approved = 0");
+        $statement->execute(array($user_id));
+        return $statement->fetch()['check_request'];
+    }
+
+    function getFriends($user_id) {
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
+                                                    FROM users 
+                                                    JOIN friends 
+                                                    ON friends.friend_id = users.id 
+                                                    WHERE friends.user_id = ?");
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    function getOwnFriends() {
+        $user_id = $_SESSION['logged']->getId();
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
+                                                    FROM users 
+                                                    JOIN friends 
+                                                    ON friends.friend_id = users.id 
+                                                    WHERE friends.user_id = ?");
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    function deleteFriend($friend_id) {
+        $logged_user_id = $_SESSION['logged']->getId();
+        $transaction = $this->pdo->beginTransaction();
+        $deleteFromRequest = $this->pdo->prepare("DELETE FROM friend_requests 
+                                                    WHERE (requested_by = ? AND requester_id = ?) 
+                                                    OR (requested_by = ? AND requester_id = ?)");
+        $deleteFromRequest->execute(array($logged_user_id,$friend_id,$friend_id,$logged_user_id));
+
+        $deleteFromFriends = $this->pdo->prepare("DELETE FROM friends 
+                                                            WHERE (user_id = ? AND friend_id = ?) 
+                                                            OR (user_id = ? AND friend_id = ?)");
+        $deleteFromFriends->execute(array($logged_user_id,$friend_id,$friend_id,$logged_user_id));
+        $transaction = $this->pdo->commit();
+    }
 }

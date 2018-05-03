@@ -32,17 +32,24 @@ class PostDao {
     }
 
     public function sharePhoto($post_id, $image_url) {
-        $statement = $this->pdo->prepare("INSERT INTO post_images (post_id, image_url) 
+        $statement = $this->pdo->prepare("INSERT INTO post_images (post_id, image_url)
                                                     VALUES (?,?);");
         $statement->execute(array($post_id, $image_url));
     }
 
     public function getAllPosts() {
-        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, users.id AS user_id, users.first_name, users.last_name, users.gender ,users.profile_pic, users.profile_cover, thumbs_profile
-                                FROM posts
-                                JOIN users ON posts.user_id = users.id WHERE ?
-                                ORDER BY posts.create_date DESC ");
-        $statement->execute(array(1));
+        // this function return my posts and my friends posts
+        $logged_user_id = $_SESSION['logged']->getId();
+        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, posts.user_id AS user_id, users.first_name, users.last_name, users.gender ,users.profile_pic, users.profile_cover, thumbs_profile 
+                                                    FROM posts 
+                                                    JOIN users 
+                                                    ON users.id = posts.user_id 
+                                                    WHERE posts.user_id 
+                                                    IN (SELECT friend_id 
+                                                    FROM friends 
+                                                    WHERE friends.user_id = ?) OR posts.user_id = ?
+                                                    ORDER BY posts.create_date DESC");
+        $statement->execute(array($logged_user_id,$logged_user_id));
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
     }

@@ -1,12 +1,6 @@
 <div id="newsfeed">
     <?php
-
-    use model\Dao\PostDao;
-
-    $dao = PostDao::getInstance();
-    $allPosts = $dao->getAllPosts();
-
-    foreach ($allPosts as $post) { ?>
+    foreach ($data['newsFeed'] as $post) { ?>
         <div class="card p-3 mt-3 mb-3" id="<?php echo "post".$post['post_id']?>">
             <div class="user_info">
                 <div class="icon"><a href="<?php echo URL_ROOT; ?>/index/profile&id=<?php echo $post['user_id'] ?>">

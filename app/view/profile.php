@@ -106,6 +106,21 @@
                 </div>
                 <div id="friends" class="card">
                     <h1>Friend list</h1>
+                    <div class="friendsContainer" id="friendsContainer<?php if(isset($_GET['id'])) { echo $_GET['id'];} else { echo  $_SESSION['logged']->getId();}?>">
+                        <?php if ($theUser->getId() == $_SESSION['logged']->getId()) { ?>
+                            <script>
+                                $(document).ready(function () {
+                                    getOwnFriends(<?php echo $_SESSION['logged']->getId();?>);
+                                });
+                            </script>
+                       <?php } else { ?>
+                            <script>
+                                $(document).ready(function () {
+                                    getFriends(<?php echo $theUser->getId();?>);
+                                });
+                            </script>
+                       <?php }?>
+                    </div>
                 </div>
                 <div id="photos" class="card p-3">
                     <h1>Albums</h1>

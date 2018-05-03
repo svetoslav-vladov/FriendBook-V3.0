@@ -238,12 +238,10 @@ ul.navbar-nav li:hover {
     background: #ffffff1f;
 }
 
-ul.navbar-nav li a{
-    color:#d7eedd !important;
-}
-
 .dropdown-menu {
     background: green;
+    padding: 0px;
+    box-shadow: 2px 4px 4px 0px green;
 }
 
 .dropdown-menu a:hover {
@@ -315,7 +313,6 @@ img.logo {
     height: 33px;
     margin-right: 7px !important;
     border-radius: 50%;
-    padding-top: 9px;
 }
 .comments_box {
     height: 0;
@@ -553,6 +550,10 @@ span.likes_counter {
 .search-found {
     font-weight: bold;
 }
+
+.male {
+    color: dodgerblue; !important;
+}
 .female {
     color: deeppink !important;
 }
@@ -778,6 +779,7 @@ form#uploadUserPhotosForm {
 }
 .suggested-user-container img {
     width: 100%;
+    height: 45px;
     margin: 0px;
     border-radius: 50%;
 }
@@ -801,6 +803,7 @@ form#uploadUserPhotosForm {
 .female:hover {
     text-shadow: 0 0 2px deeppink;
 }
+
 div#security_box {
     display: none;
 }
@@ -815,4 +818,103 @@ div#settingsStatus {
 div#settingsStatus:hover {
     background: #53c16d61;
     border-radius: 10px;
+}
+
+
+.requestContainer {
+    min-width: 14rem;
+}
+.request-user {
+    width: 33px;
+    height: 33px;
+    margin-right: 7px !important;
+    border-radius: 50%;
+    display: block;
+    float: left;
+}
+.request-user img{
+    width: 100%;
+    border-radius: 50%;
+}
+.requestNavigation h5{
+    margin: 0px !important;
+    font-size: 1.3em;
+    line-height: 0.7;
+}
+.request-friend-name {
+    font-size: 0.6em;
+}
+
+.accept-request-button, .decline-request-button {
+    font-size: 0.65em;
+    padding: 0px 5px;
+    background: none;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    line-height: 1.4;
+}
+
+.accept-request-button {
+    background: blue;
+    transition: all 0.3s ease-in-out;
+}
+.accept-request-button:hover {
+    cursor: pointer;
+    background: #0000BC;
+    transition: all 0.3s ease-in-out;
+}
+
+.decline-request-button {
+    background: red;
+    transition: all 0.3s ease-in-out;
+}
+.decline-request-button:hover {
+    cursor: pointer;
+    background: #AF0000;
+    transition: all 0.3s ease-in-out;
+}
+
+.friendNotifications {
+    border-radius: 5px;
+    font-size: 0.6em;
+    padding: 0px 5px;
+    background: red;
+    color: white;
+    box-shadow: 0 0 12px 2px red;
+    position: absolute;
+    left: 12px;
+    bottom: 4px;
+    text-shadow: 0 0 3px white;
+}
+
+.add-cancel-buttons-container {
+    position: relative;
+    height: 21px;
+}
+
+.add-friend-button {
+    position: absolute;
+}
+
+.message {
+    font-size: 0.8em;
+}
+#friends h1 {
+    text-align: center;
+}
+.friendsContainer {
+    margin-bottom: 20px;
+}
+.friend-card {
+    border: 1px solid darkgrey;
+    border-radius: 8px;
+    padding: 2px 4px;
+    display: inline-block;
+    margin: 2px 8px;
+    width: 246px;
+}
+
+.friends-counter {
+    margin-left: 10px !important;
 }

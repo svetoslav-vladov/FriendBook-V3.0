@@ -227,8 +227,8 @@ class UserController extends BaseController{
                 if(strpos(strtolower($fullName), strtolower($searched_user)) === 0) {
                     $result[] = [
                         'id' => $user['id'],
-                        'first_name' =>$user['first_name'],
-                        'last_name' => $user['last_name'],
+                        'first_name' => strtolower($user['first_name']),
+                        'last_name' => strtolower($user['last_name']),
                         'profile_pic' => $user['profile_pic'],
                         'thumbs_profile' => $user['thumbs_profile'],
                         'gender' => $user['gender']
@@ -647,6 +647,95 @@ class UserController extends BaseController{
             }
             else{
                 $status['errors'] = 'No Changes saved!!!';
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function getFriendRequests() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            $user_id = $_SESSION['logged']->getId();
+            echo json_encode($dao->getAllFriendRequests($user_id));
+        }
+    }
+
+    public function declineFriendRequest() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $requested_by = $_SESSION['logged']->getId();
+            $requester_id = htmlentities($_POST['requester_id']);
+            try{
+                $dao->cancelFriendRequest($requester_id, $requested_by);
+                $status['success'] = true;
+                echo json_encode($status);
+            }
+            catch (\PDOException $e){
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function acceptFriendRequest () {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $requester_id = $_SESSION['logged']->getId();
+            $requested_by = htmlentities($_POST['requested_by']);
+            try{
+                $dao->acceptFriendRequest($requested_by, $requester_id);
+                $status['success'] = true;
+                echo json_encode($status);
+            }
+            catch (\PDOException $e){
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function checkForRequests() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            $user_id = $_SESSION['logged']->getId();
+            echo $dao->checkForFriendRequests($user_id);
+        }
+    }
+
+    public function getSuggestedUsers() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            echo json_encode($dao->getSuggestedUsers());
+        }
+    }
+
+    public function getFriends() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            $user_id = htmlentities($_GET['user_id']);
+            echo json_encode($dao->getFriends($user_id));
+        }
+    }
+
+    public function getOwnFriends() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            echo json_encode($dao->getOwnFriends());
+        }
+    }
+
+    public function deleteFriend() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $session_user_id = $_SESSION['logged']->getId();
+            $friend_id = htmlentities($_POST['friend_id']);
+            try{
+                $dao->deleteFriend($friend_id);
+                $status['success'] = true;
+                echo json_encode($status);
+            }
+            catch (\PDOException $e){
+                $status['err'] = $e->getMessage();
                 echo json_encode($status);
             }
         }

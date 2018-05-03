@@ -3,45 +3,45 @@
 namespace controller;
 
 use \model\User;
+use model\Dao\PostDao;
 use Model\Dao\UserDao;
 
+class IndexController extends \controller\BaseController
+{
 
-class IndexController extends \controller\BaseController{
-
-    public function login() {
+    public function login(){
         $this->renderView('login');
     }
 
-    public function profile() {
+    public function profile()
+    {
 
-        if(isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId() && is_numeric($_GET['id'])){
+        if (isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId() && is_numeric($_GET['id'])) {
             $theUser = new User();
             $theUser->setId(htmlentities($_GET['id']));
             $newController = new UserController();
-            try{
+            try {
                 $theUser = $newController->getUserInfo($theUser);
+            } catch (\PDOException $e) {
+                header('location:' . URL_ROOT . '/index/main&error=' . $e->getMessage());
             }
-            catch (\PDOException $e){
-                header('location:'.URL_ROOT.'/index/main&error=' . $e->getMessage());
-            }
-            if($theUser === false){
+            if ($theUser === false) {
                 $theUser = $_SESSION["logged"];
             }
-        }
-        else{
+        } else {
             $theUser = $_SESSION["logged"];
         }
 
-        $this->renderView('profile',$theUser);
+        $this->renderView('profile', $theUser);
     }
 
-    public function register() {
+    public function register(){
         $this->renderView('register');
     }
 
-    public function settings() {
 
-        try{
+    public function settings(){
+        try {
             $dao = UserDao::getInstance();
 
             // getting list of countries in db
@@ -50,24 +50,38 @@ class IndexController extends \controller\BaseController{
             $data['relationship'] = $dao->getRelationshipList();
 
             // render settings view with $data array passed
-            $this->renderView('settings',$data);
-        }
-        catch(\PDOException $e){
+            $this->renderView('settings', $data);
+        } catch (\PDOException $e) {
+            // generating error view with the error
+            $this->renderView('error', $e->getMessage());
+        } catch (\Exception $e) {
             // generating error view with the error
             $this->renderView('error', $e->getMessage());
         }
-        catch(\Exception $e){
-            // generating error view with the error
-            $this->renderView('error', $e->getMessage());
+    }
+
+    public function main(){
+        $dao = PostDao::getInstance();
+        $userDao = UserDao::getInstance();
+        $data = [];
+        try {
+            $allPosts = $dao->getAllPosts();
+            $data['newsFeed'] = $allPosts;
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+        try {
+            $suggested_users = $userDao->getSuggestedUsers($_SESSION['logged']->getId());
+            $data['suggestedUsers'] = $suggested_users;
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
         }
 
+        $this->renderView('main', $data);
     }
 
-    public function main() {
-        $this->renderView('main');
-    }
-
-    public function error($err) {
+    public function error($err)
+    {
         $this->renderView('error', $err);
     }
 

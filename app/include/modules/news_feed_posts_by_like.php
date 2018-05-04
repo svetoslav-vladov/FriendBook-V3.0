@@ -1,8 +1,4 @@
 <div id="newsfeed">
-    testtesttesttesttest
-    testtesttesttesttest
-    testtesttesttesttest
-    testtesttesttesttest
     <?php
     use model\Dao\PostDao;
     $dao = PostDao::getInstance();

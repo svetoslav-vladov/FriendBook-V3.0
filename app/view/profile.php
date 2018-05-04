@@ -100,9 +100,63 @@
                     <h1>Your Posts:</h1>
                     <?php var_dump($theUser); ?>
                 </div>
-                <div id="about" class="card">
+                <div id="about" class="card p-3">
                     <h1>About</h1>
-
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-calendar-alt"></i></span>
+                                    <span class="aboutTag">Registered on:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getRegDate(); ?></span>
+                                </div>
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-transgender"></i></span>
+                                    <span class="aboutTag">Gender:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getGender() ?></span>
+                                </div>
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-birthday-cake"></i></span>
+                                    <span class="aboutTag">Birthday on:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getBirthday(); ?></span>
+                                </div>
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-university"></i></span>
+                                    <span class="aboutTag">Country on:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getCountryName(); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-heartbeat"></i></span>
+                                    <span class="aboutTag">Relationship:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getRelationshipTag(); ?></span>
+                                </div>
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-mobile-alt"></i></span>
+                                    <span class="aboutTag">Phone:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getMobileNumber() ?></span>
+                                </div>
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-globe"></i></span>
+                                    <span class="aboutTag">Website:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getWww(); ?></span>
+                                </div>
+                                <div>
+                                    <span class="nav-icon"><i class="fas fa-skype"></i></span>
+                                    <span class="aboutTag">Skype:</span>
+                                    <span class="aboutValue"><?php echo $theUser->getSkype(); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm">
+                                <h5>Description</h5>
+                                <div><p id="descAboutText"><?php echo $theUser->getDescription(); ?></p></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="friends" class="card">
                     <h1>Friend list</h1>

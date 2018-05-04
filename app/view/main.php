@@ -20,7 +20,7 @@
                 </div>
                 <hr>
                 <h2>News Feed:</h2>
-                <a href="<?php echo URL_ROOT; ?>/postsbylike">Sort posts by like</a>
+                <a href="<?php echo URL_ROOT; ?>/index/postsbylike">Sort posts by like</a>
                 <div class="news_feed_posts">
                     <?php require_once '../app/include/modules/news_feed_posts.php'; ?>
                 </div>

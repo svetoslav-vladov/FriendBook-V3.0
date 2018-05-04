@@ -41,9 +41,9 @@
     <ul class="list-group">
         <li><a class="text-success list-group-item list-group-item-action" href="<?php echo URL_ROOT; ?>/index/main"><span class="nav-icon"><i class="fas fa-newspaper"></i></span>News Feed</a></li>
         <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/profile"><span class="nav-icon"><i class="fas fa-user nav-icon"></i></span>Profile page</a></li>
-        <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/messages"><span class="nav-icon"><i class="fas fa-envelope nav-icon"></i></span>Messages</a></li>
+        <li><a class="text-success list-group-item list-group-item-action mt-2" href="#"><span class="nav-icon"><i class="fas fa-envelope nav-icon"></i></span>Messages</a></li>
         <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/settings"><span class="nav-icon"><i class="fas fa-cog nav-icon"></i></span>Settings</a></li>
-        <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/friends"><span class="nav-icon"><i class="fas fa-users nav-icon"></i></span>Friends</a></li>
-        <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/followed"><span class="nav-icon"><i class="fas fa-eye nav-icon"></i></span>Followed</a></li>
+        <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/friends" ><span class="nav-icon"><i class="fas fa-users nav-icon"></i></span>Friends</a></li>
+        <li><a class="text-success list-group-item list-group-item-action mt-2" href="#"><span class="nav-icon"><i class="fas fa-eye nav-icon"></i></span>Followed</a></li>
     </ul>
 </div>

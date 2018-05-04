@@ -87,7 +87,6 @@ class IndexController extends \controller\BaseController
 
     public function main(){
         $dao = PostDao::getInstance();
-        $userDao = UserDao::getInstance();
         $data = [];
         try {
             $allPosts = $dao->getAllPosts();
@@ -100,12 +99,7 @@ class IndexController extends \controller\BaseController
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }
-        try {
-            $suggested_users = $userDao->getSuggestedUsers($_SESSION['logged']->getId());
-            $data['suggestedUsers'] = $suggested_users;
-        } catch (\PDOException $e) {
-            echo $e->getMessage();
-        }
+
 
         $this->renderView('main', $data);
     }

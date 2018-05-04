@@ -177,24 +177,22 @@ class PostDao {
     }
 
     function getAllPostsByLike() {
-        try {
-            $logged_user_id = $_SESSION['logged']->getId();
-            //database query for get all posts ordering by most likes
-            $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, posts.user_id AS user_id, users.first_name, users.last_name, users.gender ,users.profile_pic, users.profile_cover, thumbs_profile, COUNT(*) AS most_liked
-                                                        FROM posts
-                                                        JOIN users ON users.id = posts.user_id
-                                                        JOIN like_post ON like_post.post_id = posts.id
-                                                        WHERE posts.user_id
-                                                        IN (SELECT friend_id
-                                                        FROM friends
-                                                        WHERE friends.user_id = ?) OR posts.user_id = ?
-                                                        GROUP BY like_post.post_id
-                                                        ORDER BY most_liked DESC;");
-            $statement->execute(array($logged_user_id, $logged_user_id));
-            $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
-            return $result;
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+
+        $logged_user_id = $_SESSION['logged']->getId();
+        //database query for get all posts ordering by most likes
+        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, posts.user_id AS user_id, users.first_name, users.last_name, users.gender ,users.profile_pic, users.profile_cover, thumbs_profile, COUNT(*) AS most_liked
+                                                    FROM posts
+                                                    JOIN users ON users.id = posts.user_id
+                                                    JOIN like_post ON like_post.post_id = posts.id
+                                                    WHERE posts.user_id
+                                                    IN (SELECT friend_id
+                                                    FROM friends
+                                                    WHERE friends.user_id = ?) OR posts.user_id = ?
+                                                    GROUP BY like_post.post_id
+                                                    ORDER BY most_liked DESC;");
+        $statement->execute(array($logged_user_id, $logged_user_id));
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+
     }
 }

@@ -777,7 +777,7 @@ class UserController extends BaseController{
     public function getSuggestedUsers() {
         $dao = UserDao::getInstance();
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
-            echo json_encode($dao->getSuggestedUsers());
+            echo json_encode($dao->getSuggestedUsers($_SESSION['logged']->getId()));
         }
     }
 

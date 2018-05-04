@@ -230,7 +230,7 @@ function  getOwnFriends(session_id) {
                                                 </a>
                                             </h5>
                                             <small><i>Registered on: ${user['reg_date']}</i></small>
-                                            <button onclick="deleteFriend(${user['id']})" class="delete-friend-button btn btn-danger btn-sm" id="deleteFriend${user['id']}"><i class="fas fa-user-plus"></i>delete friend</button>
+                                            <button onclick="deleteFriend(${user['id']})" class="delete-friend-button btn btn-danger btn-sm" id="deleteFriend${user['id']}"><i class="fas fa fa-trash"></i> delete friend</button>
                                         </div>
                                     </div>`);
                 friendsContainer.append(friendCard);

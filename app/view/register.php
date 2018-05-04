@@ -39,13 +39,13 @@
 
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <div class="form-control-feedback">
-                    <span class="text-danger align-middle">
-                        <i class="fa fa-close">Example Error Message</i>
-                    </span>
-                    </div>
-                </div>
+<!--                <div class="col-md-1">-->
+<!--                    <div class="form-control-feedback">-->
+<!--                    <span class="text-danger align-middle">-->
+<!--                        <i class="fa fa-close">Example Error Message</i>-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
@@ -60,13 +60,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <div class="form-control-feedback">
-                    <span class="text-danger align-middle">
-                        <i class="fa fa-close">Example Error Message</i>
-                    </span>
-                    </div>
-                </div>
+<!--                <div class="col-md-1">-->
+<!--                    <div class="form-control-feedback">-->
+<!--                    <span class="text-danger align-middle">-->
+<!--                        <i class="fa fa-close">Example Error Message</i>-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
@@ -81,13 +81,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <div class="form-control-feedback">
-                    <span class="text-danger align-middle">
-                        <i class="fa fa-close">Example Error Message</i>
-                    </span>
-                    </div>
-                </div>
+<!--                <div class="col-md-1">-->
+<!--                    <div class="form-control-feedback">-->
+<!--                    <span class="text-danger align-middle">-->
+<!--                        <i class="fa fa-close">Example Error Message</i>-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
@@ -104,13 +104,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <div class="form-control-feedback">
-                    <span class="text-danger align-middle">
-                        <i class="fa fa-close">Example Error Message</i>
-                    </span>
-                    </div>
-                </div>
+<!--                <div class="col-md-1">-->
+<!--                    <div class="form-control-feedback">-->
+<!--                    <span class="text-danger align-middle">-->
+<!--                        <i class="fa fa-close">Example Error Message</i>-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
@@ -130,13 +130,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <div class="form-control-feedback">
-                    <span class="text-danger align-middle">
-                        <i class="fa fa-close">Example Error Message</i>
-                    </span>
-                    </div>
-                </div>
+<!--                <div class="col-md-1">-->
+<!--                    <div class="form-control-feedback">-->
+<!--                    <span class="text-danger align-middle">-->
+<!--                        <i class="fa fa-close">Example Error Message</i>-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
@@ -153,13 +153,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <div class="form-control-feedback">
-                    <span class="text-danger align-middle">
-                        <i class="fa fa-close">Example Error Message</i>
-                    </span>
-                    </div>
-                </div>
+<!--                <div class="col-md-1">-->
+<!--                    <div class="form-control-feedback">-->
+<!--                    <span class="text-danger align-middle">-->
+<!--                        <i class="fa fa-close">Example Error Message</i>-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="row">
                 <div class="col-md-4"></div>

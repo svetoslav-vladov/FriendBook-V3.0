@@ -206,42 +206,34 @@ class UserDao
 
     public function getAllUsers($logged_user_id)
     {
-        try {
-            $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile
-                                    FROM users 
-                                    WHERE id != ?");
-            $statement->execute(array($logged_user_id));
-            $result = $statement->fetchAll();
-            return $result;
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile
+                                                    FROM users 
+                                                    WHERE id != ?");
+        $statement->execute(array($logged_user_id));
+        $result = $statement->fetchAll();
+        return $result;
     }
 
-    function getSuggestedUsers()
+    function getSuggestedUsers($user_id)
     {
-        try {
-            $id = $_SESSION['logged']->getId();
-            // for suggested users are displayed all
-            // without users who have sent an invitation to me
-            // and users to whom I have sent an invitation
-            $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
-                                                        FROM users 
-                                                        WHERE users.id 
-                                                        NOT IN (SELECT friend_requests.requested_by 
-                                                        FROM friend_requests 
-                                                        WHERE friend_requests.requester_id = ?
-                                                        UNION
-                                                        SELECT friend_requests.requester_id 
-                                                        FROM friend_requests 
-                                                        WHERE friend_requests.requested_by = ?) 
-                                                        AND users.id != $id ORDER BY RAND()
-                                                        LIMIT 6;");
-            $statement->execute(array($id, $id));
-            return $statement->fetchAll(\PDO::FETCH_ASSOC);
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+        $id = $user_id;
+        // for suggested users are displayed all
+        // without users who have sent an invitation to me
+        // and users to whom I have sent an invitation
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
+                                                    FROM users 
+                                                    WHERE users.id 
+                                                    NOT IN (SELECT friend_requests.requested_by 
+                                                    FROM friend_requests 
+                                                    WHERE friend_requests.requester_id = ?
+                                                    UNION
+                                                    SELECT friend_requests.requester_id 
+                                                    FROM friend_requests 
+                                                    WHERE friend_requests.requested_by = ?) 
+                                                    AND users.id != $id ORDER BY RAND()
+                                                    LIMIT 6;");
+        $statement->execute(array($user_id, $user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     function sendFriendRequest($requested_by, $requester_id, $approved)
@@ -353,8 +345,8 @@ class UserDao
             $logged_user_id = $_SESSION['logged']->getId();
             $transaction = $this->pdo->beginTransaction();
             $deleteFromRequest = $this->pdo->prepare("DELETE FROM friend_requests 
-                                                        WHERE (requested_by = ? AND requester_id = ?) 
-                                                        OR (requested_by = ? AND requester_id = ?)");
+                                                                WHERE (requested_by = ? AND requester_id = ?) 
+                                                                OR (requested_by = ? AND requester_id = ?)");
             $deleteFromRequest->execute(array($logged_user_id, $friend_id, $friend_id, $logged_user_id));
 
             $deleteFromFriends = $this->pdo->prepare("DELETE FROM friends 

@@ -10,6 +10,7 @@
     <script src="<?php echo URL_ROOT; ?>/assets/js/close_messages.js"></script>
     <script src="<?php echo URL_ROOT; ?>/assets/js/share-photos.js"></script>
     <script src="<?php echo URL_ROOT; ?>/assets/js/friend_module.js"></script>
+    <script src="<?php echo URL_ROOT; ?>/assets/js/get_all_posts.js"></script>
     <!--  custom JS always last!!!  -->
     <script src="<?php echo URL_ROOT; ?>/assets/js/custom.js" integrity=""></script>
     </body>

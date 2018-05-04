@@ -5,6 +5,16 @@ use Model\Post;
 
 class PostController extends BaseController{
 
+    public function getAllPosts() {
+        $dao = PostDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            try {
+                echo json_encode($dao->getAllPosts());
+            } catch (\PDOException $e) {
+                echo $e->getMessage();
+            }
+        }
+    }
     public function addPost() {
         $dao = PostDao::getInstance();
         if (isset($_POST['add_post'])) {

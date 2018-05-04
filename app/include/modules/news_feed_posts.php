@@ -1,4 +1,9 @@
 <div id="newsfeed">
+    <script>
+        $(document).ready(function () {
+            getAllPosts();
+        });
+    </script>
     <?php
     foreach ($data['newsFeed'] as $post) { ?>
         <div class="card p-3 mt-3 mb-3" id="<?php echo "post".$post['post_id']?>">
@@ -36,7 +41,6 @@
                 <p><?php echo $post["description"]; ?></p>
             </div>
             <div id="post-details<?php echo $post['post_id']?>">
-                <button>view details</button>
                 <div class="post_navigation">
                     <div class="like-container" id="like-container<?php echo $post['post_id'] ?>">
                         <script>

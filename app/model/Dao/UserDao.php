@@ -47,16 +47,29 @@ class UserDao
 
     const INSERT_USER_PHOTOS = "INSERT INTO user_photos (user_id,img_url,thumb_url) values (?,?,?)";
 
-    const UPDATE_USER_INFO = "UPDATE users u
-                                LEFT OUTER JOIN relationship r on
-                                    ? = r.id
-                                LEFT OUTER JOIN countries c on
-                                    ? = c.id
-                                SET u.relationship_id = r.id, u.country_id = c.id,
-                                first_name = ?,last_name = ?,
-                                gender = ?,birthday = ?, display_name = ?, 
-                                mobile_number = ?, www =?, skype = ?
-                                WHERE u.id = ?";
+    const UPDATE_USER_GENERAL_INFO = "UPDATE users u
+                                        LEFT OUTER JOIN relationship r on
+                                        ? = r.id
+                                        LEFT OUTER JOIN countries c on
+                                        ? = c.id
+                                        SET u.relationship_id = r.id, u.country_id = c.id,
+                                        first_name = ?,last_name = ?,
+                                        gender = ?,birthday = ?, display_name = ?, 
+                                        mobile_number = ?, www =?, skype = ?
+                                        WHERE u.id = ?";
+
+    const UPDATE_USER_SECURITY_INFO = "UPDATE users u
+                                        LEFT OUTER JOIN relationship r on
+                                        ? = r.id
+                                        LEFT OUTER JOIN countries c on
+                                        ? = c.id
+                                        SET u.relationship_id = r.id, u.country_id = c.id,
+                                        first_name = ?,last_name = ?,
+                                        gender = ?,birthday = ?, display_name = ?, 
+                                        mobile_number = ?, www =?, skype = ?
+                                        WHERE u.id = ?";
+
+    const UPDATE_USER_DESCRIPTION_INFO = "UPDATE users SET description = ? WHERE id = ?";
 
     // getting static connection from DBconnect file
     private function __construct()
@@ -87,12 +100,30 @@ class UserDao
         return $statement->execute(array($user->getFirstName(), $user->getLastName(), $user->getEmail(), $user->getPassword(), $user->getGender(), $user->getBirthday(), $user->getProfilePic(), $user->getProfileCover(),));
     }
 
-    public function saveUserGeneralSettings(User $user)
-    {
-        $statement = $this->pdo->prepare(self::UPDATE_USER_INFO);
-        return $statement->execute(array($user->getRelationshipId(), $user->getCountryId(),
+    public function saveUserGeneralSettings(User $user){
 
-            $user->getFirstName(), $user->getLastName(), $user->getGender(), $user->getBirthday(), $user->getDisplayName(), $user->getMobileNumber(), $user->getWww(), $user->getSkype(), $user->getId(),));
+        $statement = $this->pdo->prepare(self::UPDATE_USER_GENERAL_INFO);
+        $statement->execute(array($user->getRelationshipId(), $user->getCountryId(),
+            $user->getFirstName(), $user->getLastName(), $user->getGender(), $user->getBirthday(),
+            $user->getDisplayName(), $user->getMobileNumber(), $user->getWww(), $user->getSkype(), $user->getId()));
+        return $statement->rowCount();
+
+
+    }
+
+    public function saveUserDescriptionSettings(User $user){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_DESCRIPTION_INFO);
+        return $statement->execute(array($user->getDescription(),$user->getId()));
+    }
+
+    public function saveUserSecuritySettings(User $user){
+
+        $statement = $this->pdo->prepare(self::UPDATE_USER_GENERAL_INFO);
+        $statement->execute(array($user->getRelationshipId(), $user->getCountryId(),
+            $user->getFirstName(), $user->getLastName(), $user->getGender(), $user->getBirthday(),
+            $user->getDisplayName(), $user->getMobileNumber(), $user->getWww(), $user->getSkype(), $user->getId()));
+        return $statement->rowCount();
+
     }
 
     public function saveUserProfileInfo(User $user)

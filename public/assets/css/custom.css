@@ -808,7 +808,7 @@ form#uploadUserPhotosForm {
 div#security_box {
     display: none;
 }
-li#general, li#security {
+li#general, li#security,li#description {
     cursor:  pointer;
 }
 
@@ -927,4 +927,13 @@ div#settingsStatus:hover {
 .friend-card small{
     font-size: 0.75em;
 }
+div#desc_box {
+    display: none;
+}
+span.aboutTag {
+    font-weight:  bold;
+}
 
+span.aboutValue {
+    float: right;
+}

@@ -4,6 +4,7 @@ var url_root = window.location.origin + '/projects/FriendBook-v3.0';
 var loading_gif_anim = url_root + '/assets/images/ajax-loading-c4.gif';
 var successMark = url_root + '/assets/images/Yes_Check_Circle.svg.png';
 var attention = url_root + '/assets/images/attention.png';
+var denied = url_root + '/assets/images/denied.png';
 
 // GLOBAL VARS - end
 
@@ -472,14 +473,17 @@ function uploadProfilePhotos() {
 // Left menu buttons
 var general_btn = document.querySelector('#general');
 var security_btn = document.querySelector('#security');
+var description_btn = document.querySelector('#description');
 
 // getting submit btn's
 var general_submit = document.querySelector('#general_submit');
 var security_submit = document.querySelector('#security_submit');
+var description_submit = document.querySelector('#description_submit');
 
 // div boxes
 var general_box = document.querySelector('#general_box');
 var security_box = document.querySelector('#security_box');
+var desc_box = document.querySelector('#desc_box');
 
 // status box for loading image and success icon
 var statusBox = document.querySelector("#settingsStatus");
@@ -491,6 +495,7 @@ if(general_btn || security_btn || general_box || security_box){
 
     general_btn.addEventListener('click', showGeneralBox);
     security_btn.addEventListener('click', showSecurityBox);
+    description_btn.addEventListener('click', showDescriptionBox);
 
     function showGeneralBox(){
         statusBox.innerHTML = '';
@@ -498,7 +503,9 @@ if(general_btn || security_btn || general_box || security_box){
         general_box.style.display = 'block';
 
         security_box.style.display = 'none';
-        security_btn.classList.toggle("active_btn");
+        desc_box.style.display = 'none';
+
+
 
         if(document.querySelector('.success')){
             general_box.removeChild(document.querySelector('.success'));
@@ -516,7 +523,26 @@ if(general_btn || security_btn || general_box || security_box){
         security_box.style.display = 'block';
 
         general_box.style.display = 'none';
-        general_btn.classList.toggle("active_btn");
+        desc_box.style.display = 'none';
+
+
+        if(document.querySelector('.success')){
+            general_box.removeChild(document.querySelector('.success'));
+        }
+        if(document.querySelector('.error')){
+            general_box.removeChild(document.querySelector('.error'));
+        }
+    }
+
+    function showDescriptionBox(){
+        statusBox.innerHTML = '';
+
+        security_btn.classList.toggle("active_btn");
+        desc_box.style.display = 'block';
+
+        general_box.style.display = 'none';
+        security_box.style.display = 'none';
+
 
         if(document.querySelector('.success')){
             general_box.removeChild(document.querySelector('.success'));
@@ -529,6 +555,10 @@ if(general_btn || security_btn || general_box || security_box){
 
 if(document.querySelector('#general_submit')){
     general_submit.addEventListener('click', saveGeneralSettings);
+}
+
+if(desc_box){
+    description_submit.addEventListener('click', saveDescriptionSettings);
 }
 
 function saveGeneralSettings(e) {
@@ -572,32 +602,132 @@ function saveGeneralSettings(e) {
     img.classList.add('img_100');
     statusBox.appendChild(img);
 
-    setTimeout(function(){
-        xhr.onload = function() {
+    if(first_name.value.length > 30 || last_name.value.length > 30 ||
+        display_name.value.length > 30 || relation_status.value.length > 30 ||
+        gender.value.length > 30 || birthday.value.length > 30 ||
+        country.value.length > 30 || website.value.length > 30 ||
+        mobile_number.value.length > 30 || skype_name.value.length > 30
+    ){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit max 30 char!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+        setTimeout(function(){
+            xhr.onload = function() {
 
-            statusBox.innerHTML = '';
-            statusBox.style.display = 'block';
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
 
-            var res = JSON.parse(this.responseText);
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+            };
+            xhr.send('general' + '&data=' + JSON.stringify(data));
+        },500);
 
-            if(res.errors){
-                var p = document.createElement('p');
-                p.innerHTML = res.errors;
-                img.src = attention;
-                statusBox.appendChild(img);
-                statusBox.appendChild(p);
-            }
-            else{
-                var p = document.createElement('p');
-                p.innerHTML = "Saved Successfuly";
-                img.src = successMark;
-                statusBox.appendChild(img);
-                statusBox.appendChild(p);
-            }
-        };
+    }
 
-        xhr.send('general' + '&data=' + JSON.stringify(data));
-    },500);
+}
+
+function saveDescriptionSettings(e) {
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/saveDescriptionSettings');
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // .onload is status 200 / ready 4
+
+    var descText = document.querySelector('#descText');
+
+    var data = {
+        'description': descText.value
+    };
+
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(document.querySelector('#descText').value.length > 1500){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit max 1500 char!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else if(document.querySelector('#descText').value.trim().length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Empty field';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+            };
+
+            xhr.send('description' + '&data=' + JSON.stringify(data));
+        },500);
+    }
+
+
 
 }
 

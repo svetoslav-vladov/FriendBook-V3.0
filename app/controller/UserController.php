@@ -577,6 +577,7 @@ class UserController extends BaseController{
             $newUserInfo = clone $_SESSION['logged'];
 
             $status = [];
+            var_dump(strlen($_POST['data']));
 
             // THIS IFs have to modify them with something more dynamic for or fore
             if(strlen(trim($first_name)) > 0){
@@ -599,8 +600,7 @@ class UserController extends BaseController{
                 $newUserInfo->setCountryId($data->country);
             }
 
-            if(is_null($loggedUsr->getRelationshipId()) &&
-                strlen(trim($relation_status)) > 0){
+            if(strlen(trim($relation_status)) > 0){
                 $newUserInfo->setRelationshipId($data->relation_status);
             }
 
@@ -619,11 +619,12 @@ class UserController extends BaseController{
             if(strlen(trim($skype_name)) > 0){
                 $newUserInfo->setSkype($data->skype_name);
             }
-
+            var_dump($_POST['data']);
             if($newUserInfo != $loggedUsr){
                 try{
                     $dao = UserDao::getInstance();
                     // passing new user info which is cloned from session
+
                     if($dao->saveUserGeneralSettings($newUserInfo)){
 
                         $newUserInfo = $dao->getFullUserInfoById($loggedUsr);
@@ -635,7 +636,10 @@ class UserController extends BaseController{
                         $_SESSION['logged']->setPassword('');
                         $status['success'] = true;
                         echo json_encode($status);
-
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
                     }
                 }catch (\PDOException $e){
                     $status['errors'] = $e->getMessage();
@@ -649,6 +653,74 @@ class UserController extends BaseController{
                 $status['errors'] = 'No Changes saved!!!';
                 echo json_encode($status);
             }
+        }
+        else{
+            $msg = 'Wrong action...';
+            header('location:'.URL_ROOT.'/index/login&error=' . $msg);
+        }
+    }
+
+    public function saveDescriptionSettings(){
+        if(isset($_POST['data'])){
+            // working with objects
+            $data = json_decode(trim(($_POST['data'])));
+        }
+        if(isset($_POST['description']) && count($_POST['data'])>0){
+
+            $description = htmlentities($data->description);
+
+            $loggedUsr = $_SESSION['logged'];
+
+            $newUserInfo = clone $_SESSION['logged'];
+
+            $status = [];
+
+            // THIS IFs have to modify them with something more dynamic for or fore
+            if(strlen($description) > 0 && strlen($description) < 1500){
+                $newUserInfo->setDescription($data->description);
+            }
+            else{
+                $status['errors'] = 'Length error';
+                echo json_encode($status);
+            }
+
+            if($newUserInfo != $loggedUsr && !isset($status['errors'])){
+                try{
+                    $dao = UserDao::getInstance();
+                    // passing new user info which is cloned from session
+
+                    if($dao->saveUserDescriptionSettings($newUserInfo)){
+
+                        $newUserInfo = $dao->getFullUserInfoById($loggedUsr);
+
+                        // this is setting = object from db with User Class
+                        cast($_SESSION['logged'],$newUserInfo);
+                        $fullname = $_SESSION['logged']->getFirstName() . " " . $_SESSION['logged']->getLastName();
+                        $_SESSION['logged']->setFullName($fullname);
+                        $_SESSION['logged']->setPassword('');
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                $status['errors'] = 'No Changes saved!!!';
+                echo json_encode($status);
+            }
+        }
+        else{
+            $msg = 'Wrong action...';
+            header('location:'.URL_ROOT.'/index/login&error=' . $msg);
         }
     }
 

@@ -11,7 +11,11 @@
                                     <span class="nav-icon"><i class="fas fa-cogs"></i></span>General
                                 </li>
                                 <li class="text-success list-group-item list-group-item-action"
-                                id="security">
+                                id="description">
+                                    <span class="nav-icon"><i class="fas fa-pencil-alt"></i></span>Description
+                                </li>
+                                <li class="text-success list-group-item list-group-item-action"
+                                    id="security">
                                     <span class="nav-icon"><i class="fas fa-key"></i></span>Security
                                 </li>
                             </ul>
@@ -85,13 +89,13 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="web_addres">Website address</label>
-                                <input type="text" name="web_addres" id="web_addres" class="form-control">
+                                <label for="mobile_number">Mobile Number</label>
+                                <input type="number" name="mobile_number" id="mobile_number" class="form-control">
                             </div>
 
                             <div class="form-group">
-                                <label for="mobile_number">Mobile Number</label>
-                                <input type="number" name="mobile_number" id="mobile_number" class="form-control">
+                                <label for="web_addres">Website address</label>
+                                <input type="text" name="web_addres" id="web_addres" class="form-control">
                             </div>
 
                             <div class="form-group">
@@ -137,6 +141,27 @@
 
                             <div class="form-group">
                                 <input type="submit" name="security" id="security" class="btn btn-warning btn-lg" value="SAVE">
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="card p-3" id="desc_box">
+                    <form id="desc_form" action="<?php echo URL_ROOT . '/user/saveDescriptionSettings'; ?>" method="post">
+                        <fieldset>
+                            <legend>Description information:</legend>
+
+                            <div class="form-group">
+                                <label for="descText">Describe yourself:</label>
+                                <br>
+                                <textarea name="descText" id="descText" cols="30" rows="10" class="form-control"><?php
+                                    if(!is_null($_SESSION['logged']->getDescription()))
+                                    { echo $_SESSION['logged']->getDescription();} ?></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="submit" name="description_submit" id="description_submit"
+                                       class="btn btn-green btn-lg" value="SAVE">
                             </div>
 
                         </fieldset>

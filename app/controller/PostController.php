@@ -58,7 +58,7 @@ class PostController extends BaseController{
         if (isset($_GET['post_id'])) {
             $user_id = $_SESSION['logged']->getId();
             $post_id = htmlentities($_GET['post_id']);
-            $dao->isLiked($post_id, $user_id);
+            echo $dao->isLiked($post_id, $user_id);
         }
             //AJAX REQUEST for like a post
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -75,7 +75,7 @@ class PostController extends BaseController{
         if (isset($_GET['post_id'])) {
             $user_id = $_SESSION['logged']->getId();
             $post_id = htmlentities($_GET['post_id']);
-            $dao->isDisliked($post_id, $user_id);
+            echo $dao->isDisliked($post_id, $user_id);
         }
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -106,7 +106,7 @@ class PostController extends BaseController{
     public function likeCounter() {
         if (isset($_GET['post_id'])) {
             $post_id = htmlentities($_GET['post_id']);
-            PostDao::getInstance()->getCountLikes($post_id);
+            echo PostDao::getInstance()->getCountLikes($post_id);
         }
     }
 
@@ -114,7 +114,7 @@ class PostController extends BaseController{
         $dao = PostDao::getInstance();
         if (isset($_GET['post_id'])) {
             $post_id = htmlentities($_GET['post_id']);
-            $dao->getCountDislikes($post_id);
+            echo $dao->getCountDislikes($post_id);
         }
     }
 

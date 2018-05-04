@@ -69,6 +69,11 @@ class IndexController extends \controller\BaseController
             $data['newsFeed'] = $allPosts;
         } catch (\PDOException $e) {
             echo $e->getMessage();
+        }try {
+            $allPostsByLike = $dao->getAllPostsByLike();
+            $data['postsByLike'] = $allPostsByLike;
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
         }
         try {
             $suggested_users = $userDao->getSuggestedUsers($_SESSION['logged']->getId());

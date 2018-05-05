@@ -224,7 +224,7 @@ class UserController extends BaseController{
                 $fullName .= $user["first_name"];
                 $fullName .= " ";
                 $fullName .= $user['last_name'];
-                if(strpos(strtolower($fullName), strtolower($searched_user)) === 0) {
+                if(strstr(strtolower($fullName), strtolower($searched_user))) {
                     $result[] = [
                         'id' => $user['id'],
                         'first_name' => strtolower($user['first_name']),

@@ -94,8 +94,7 @@ class UserDao
         ));
     }
 
-    public function insertUserDb(User $user)
-    {
+    public function insertUserDb(User $user){
         $statement = $this->pdo->prepare(self::INSERT_USER);
         return $statement->execute(array($user->getFirstName(), $user->getLastName(), $user->getEmail(), $user->getPassword(), $user->getGender(), $user->getBirthday(), $user->getProfilePic(), $user->getProfileCover(),));
     }
@@ -236,30 +235,18 @@ class UserDao
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function sendFriendRequest($requested_by, $requester_id, $approved)
-    {
-        try {
-            $statement = $this->pdo->prepare("INSERT INTO friend_requests (requested_by, requester_id, approved) 
-                                    VALUES (?,?,?)");
-            return $statement->execute(array($requested_by, $requester_id, $approved));
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+    function sendFriendRequest($requested_by, $requester_id, $approved) {
+        $statement = $this->pdo->prepare("INSERT INTO friend_requests (requested_by, requester_id, approved) 
+                                VALUES (?,?,?)");
+        return $statement->execute(array($requested_by, $requester_id, $approved));
     }
 
-    function cancelFriendRequest($requested_by, $requester_id)
-    {
-        try {
-            $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?");
-            return $statement->execute(array($requested_by, $requester_id));
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+    function cancelFriendRequest($requested_by, $requester_id) {
+        $statement = $this->pdo->prepare("DELETE FROM friend_requests WHERE requested_by = ? AND requester_id = ?");
+        return $statement->execute(array($requested_by, $requester_id));
     }
 
-    function acceptFriendRequest($requested_by, $requester_id)
-    {
-        try {
+    function acceptFriendRequest($requested_by, $requester_id) {
             $ids = [$requested_by, $requester_id];
             $insertIds = [$requester_id, $requested_by];
             $transaction = $this->pdo->beginTransaction();
@@ -274,73 +261,47 @@ class UserDao
             $addFr = $this->pdo->prepare("INSERT INTO friends (friend_id, user_id) VALUES (?,?)");
             $addFr->execute($insertIds);
             $transaction = $this->pdo->commit();
-            return true;
-        }catch (\PDOException $e) {
-            $transaction = $this->pdo->rollBack();
-            return $e->getMessage();
-        }
     }
 
-    function getAllFriendRequests($user_id)
-    {
-        try {
-            $statement = $this->pdo->prepare("SELECT * FROM users 
-                                                        JOIN friend_requests 
-                                                        ON friend_requests.requested_by = users.id 
-                                                        WHERE friend_requests.requester_id = ? AND friend_requests.approved = 0");
-            $statement->execute(array($user_id));
-            return $statement->fetchAll(\PDO::FETCH_ASSOC);
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
-    }
-
-    function checkForFriendRequests($user_id)
-    {
-        try {
-            $statement = $this->pdo->prepare("SELECT COUNT(*) as check_request 
-                                                    FROM friend_requests 
+    function getAllFriendRequests($user_id) {
+        $statement = $this->pdo->prepare("SELECT * FROM users 
+                                                    JOIN friend_requests 
+                                                    ON friend_requests.requested_by = users.id 
                                                     WHERE friend_requests.requester_id = ? AND friend_requests.approved = 0");
-            $statement->execute(array($user_id));
-            return $statement->fetch()['check_request'];
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function getFriends($user_id)
-    {
-        try {
-            $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
+    function checkForFriendRequests($user_id) {
+        $statement = $this->pdo->prepare("SELECT COUNT(*) as check_request 
+                                                FROM friend_requests 
+                                                WHERE friend_requests.requester_id = ? AND friend_requests.approved = 0");
+        $statement->execute(array($user_id));
+        return $statement->fetch()['check_request'];
+    }
+
+    function getFriends($user_id) {
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
                                                     FROM users 
                                                     JOIN friends 
                                                     ON friends.friend_id = users.id 
                                                     WHERE friends.user_id = ?");
-            $statement->execute(array($user_id));
-            return $statement->fetchAll(\PDO::FETCH_ASSOC);
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function getOwnFriends()
-    {
-        try {
-            $user_id = $_SESSION['logged']->getId();
-            $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
-                                                        FROM users 
-                                                        JOIN friends 
-                                                        ON friends.friend_id = users.id 
-                                                        WHERE friends.user_id = ?");
-            $statement->execute(array($user_id));
-            return $statement->fetchAll(\PDO::FETCH_ASSOC);
-        }catch (\PDOException $e) {
-            return $e->getMessage();
-        }
+    function getOwnFriends() {
+        $user_id = $_SESSION['logged']->getId();
+        $statement = $this->pdo->prepare("SELECT id, first_name, last_name, gender, profile_pic, thumbs_profile, reg_date, display_name
+                                                    FROM users 
+                                                    JOIN friends 
+                                                    ON friends.friend_id = users.id 
+                                                    WHERE friends.user_id = ?");
+        $statement->execute(array($user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function deleteFriend($friend_id)
-    {
+    function deleteFriend($friend_id) {
         try {
             $logged_user_id = $_SESSION['logged']->getId();
             $transaction = $this->pdo->beginTransaction();
@@ -356,8 +317,7 @@ class UserDao
             $transaction = $this->pdo->commit();
             return true;
         }catch (\PDOException $e) {
-            $transaction = $this->pdo->rollBack();
-            return $e->getMessage();
+            throw new \PDOException($e->getMessage());
         }
     }
 }

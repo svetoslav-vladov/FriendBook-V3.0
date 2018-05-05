@@ -2,7 +2,7 @@
     <?php
     use model\Dao\PostDao;
     $dao = PostDao::getInstance();
-    $allPostsByLike = $dao->getAllPostsByLike();
+    $allPostsByLike = $dao->getAllPostsByLike($_SESSION['logged']->getId());
     foreach ($allPostsByLike as $post) { ?>
         <div class="card p-3 mt-3 mb-3" id="<?php echo "post".$post['post_id']?>">
             <div class="user_info">

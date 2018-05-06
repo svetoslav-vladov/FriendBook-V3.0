@@ -43,7 +43,7 @@ class PostDao {
                                                     posts.create_date, posts.user_id AS user_id, 
                                                     users.first_name, users.last_name, users.gender, 
                                                     users.profile_pic, users.profile_cover, 
-                                                    thumbs_profile, IF(posts.user_id = ?, 1, 0) as isMyPost
+                                                    thumbs_profile, users.display_name, IF(posts.user_id = ?, 1, 0) as isMyPost
                                                     FROM posts 
                                                     JOIN users 
                                                     ON users.id = posts.user_id 
@@ -133,7 +133,7 @@ class PostDao {
         //database query for get all posts ordering by most likes
         $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, 
                                                     posts.user_id AS user_id, users.first_name, users.last_name, users.gender, 
-                                                    users.profile_pic, users.profile_cover, thumbs_profile, 
+                                                    users.profile_pic, users.profile_cover, thumbs_profile, users.display_name, 
                                                     COUNT(like_post.post_id) AS most_liked, IF(posts.user_id = ?, 1, 0) as isMyPost
                                                     FROM posts
                                                     JOIN users ON users.id = posts.user_id

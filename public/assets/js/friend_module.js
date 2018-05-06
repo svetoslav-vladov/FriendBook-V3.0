@@ -250,7 +250,7 @@ function  getOwnFriends(session_id) {
 setInterval(function(){
     checkForRequests();
     getSuggestedUsers();
-}, 10000);
+}, 300000);
 $(document).ready(function () {
     checkForRequests();
     getSuggestedUsers();

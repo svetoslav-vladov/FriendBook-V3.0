@@ -1,7 +1,11 @@
 <div id="newsfeed">
+<!--    <script>-->
+<!--        $(document).ready(function () {-->
+<!--            getAllPosts();-->
+<!--        });-->
+<!--    </script>-->
     <?php
     foreach ($data['newsFeed'] as $post) { ?>
-<!--        foreach ($data['postsByLike'] as $post) { ?>-->
         <div class="card p-3 mt-3 mb-3" id="<?php echo "post".$post['post_id']?>">
             <div class="user_info">
                 <div class="icon"><a href="<?php echo URL_ROOT; ?>/index/profile&id=<?php echo $post['user_id'] ?>">

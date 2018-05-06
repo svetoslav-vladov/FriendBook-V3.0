@@ -1,4 +1,9 @@
 <div id="newsfeed">
+<!--    <script>-->
+<!--        $(document).ready(function () {-->
+<!--            getAllPostsByLike();-->
+<!--        });-->
+<!--    </script>-->
     <?php
     use model\Dao\PostDao;
     $dao = PostDao::getInstance();

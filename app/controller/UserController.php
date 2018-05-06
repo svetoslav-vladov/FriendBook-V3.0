@@ -59,10 +59,9 @@ class UserController extends BaseController{
                         $user->setPassword(null);
                         $user->setFullName($user->getFirstName() ." ". $user->getLastName());
 
-                        $success = "login successfully";
                         $_SESSION['logged'] = $user;
 
-                        header('location:'.URL_ROOT.'/index/main&success=' . $success);
+                        header('location:'.URL_ROOT.'/index/main');
                     }
                     else{
                         $nosuccess = "Wrong email or password";

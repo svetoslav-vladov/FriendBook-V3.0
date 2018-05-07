@@ -35,7 +35,7 @@ class UserDao
 
     const GET_COUNTRIES_LIST = "SELECT * FROM countries";
 
-    const GET_RELATIONSHIP_LIST = "SELECT * FROM relationship ORDER BY id";
+    const GET_RELATIONSHIPS_LIST = "SELECT * FROM relationship ORDER BY id";
 
     const GET_INFO_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
 
@@ -66,6 +66,10 @@ class UserDao
     const UPDATE_USER_WEBSITE = "UPDATE users SET www = ? WHERE id = ?";
 
     const UPDATE_USER_SKYPE_NAME = "UPDATE users SET skype = ? WHERE id = ?";
+
+    const UPDATE_USER_EMAIL = "UPDATE users SET email = ? WHERE id = ? AND password = ?";
+
+    const UPDATE_USER_PASSWORD = "UPDATE users SET password = ? WHERE id = ? AND password = ?";
 
     const GET_USER_RELATIONSHIP_STATUS_NAME = "SELECT r.status_name
                                             FROM relationship as r
@@ -197,7 +201,17 @@ class UserDao
     }
 
     // SECURITY SETTINGS
+    public function saveEmail($id, $email, $password){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_EMAIL);
+        $statement->execute(array($email, $id, $password));
+        return $statement->rowCount();
+    }
 
+    public function savePassword($id, $oldPassword, $password){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_PASSWORD);
+        $statement->execute(array($password, $id, $oldPassword));
+        return $statement->rowCount();
+    }
 
     // UPLOAD IMAGES
     public function saveUserProfileInfo(User $user)
@@ -236,10 +250,10 @@ class UserDao
 
     }
 
-    public function checkIfExists(User $user)
+    public function checkIfExistsEmail($email)
     {
         $statement = $this->pdo->prepare(self::CHECK_FOR_EMAIL);
-        $statement->execute(array($user->getEmail()));
+        $statement->execute(array($email));
         return $statement->fetch(\PDO::FETCH_ASSOC)['row'] > 0;
     }
 
@@ -252,7 +266,7 @@ class UserDao
 
     public function getRelationshipList()
     {
-        $statement = $this->pdo->prepare(self::GET_RELATIONSHIP_LIST);
+        $statement = $this->pdo->prepare(self::GET_RELATIONSHIPS_LIST);
         $statement->execute(array());
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }

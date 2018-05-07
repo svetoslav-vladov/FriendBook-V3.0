@@ -116,7 +116,7 @@ class UserController extends BaseController{
             $user = new User();
             $user->setEmail($email);
 
-            $checkUserExists = $dao->checkIfExists($user);
+            $checkUserExists = $dao->checkIfExistsEmail($user);
 
             if ($checkUserExists) {
                 $error = 'Username is already taken.';
@@ -1158,6 +1158,124 @@ class UserController extends BaseController{
 
     }
 
+    public function changeEmail(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['email'])){
+
+            $email = htmlentities(trim($_POST['email']));
+            $password = htmlentities(trim($_POST['emailPassword']));
+            $status = array();
+
+            if($email === $_SESSION['logged']->getEmail()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $status['errors'] = 'Not a valid email';
+            }
+            elseif(!(mb_strlen($email) > 0)){
+                $status['errors'] = 'Email cannot be empty';
+            }
+            elseif (mb_strlen($email) > 40){
+                $status['errors'] = 'Email cannot be more than 40 digits';
+            }
+            elseif(!(mb_strlen($password) > 0)){
+                $status['errors'] = 'Password cannot be empty';
+            }
+            elseif (mb_strlen($password) > 40){
+                $status['errors'] = 'Password cannot be more than 40 digits';
+            }
+            elseif (mb_strlen($password) < 2){
+                $status['errors'] = 'Password cannot be less than 3 symbols';
+            }
+
+            $dao = UserDao::getInstance();
+
+            if($dao->checkIfExistsEmail($email)){
+                $status['denied'] = 'Save denied, email exists';
+                echo json_encode($status);
+            }
+            elseif(!isset($status['errors'])){
+
+                try{
+                    if($dao->saveEmail($_SESSION['logged']->getId(),$email,sha1($password))){
+                        $_SESSION['logged']->setEmail($email);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied, password incorrect';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+
+    public function changePassword(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" &&
+            (isset($_POST['oldPass']) && isset($_POST['newPass']) && isset($_POST['newPassValid']))){
+
+            $oldPass = htmlentities(trim($_POST['oldPass']));
+            $newPass = htmlentities(trim($_POST['newPass']));
+            $newPassValid = htmlentities(trim($_POST['newPassValid']));
+            $status = array();
+
+            if(!self::validPassLength($oldPass)){
+                $res = self::validPassLength($oldPass);
+                $status['errors'] = $res['error'];
+            }
+            if(!self::validPassLength($newPass)){
+                $res = self::validPassLength($oldPass);
+                $status['errors'] = $res['error'];
+            }
+            if(!self::validPassLength($newPassValid)){
+                $res = self::validPassLength($newPassValid);
+                $status['errors'] = $res['error'];
+            }
+            if($newPass !== $newPassValid){
+                $status['errors'] = 'New Password do not match with password confirm';
+                echo json_encode($status);
+            }
+
+            if(!isset($status['errors'])){
+                $dao = UserDao::getInstance();
+                try{
+                    if($dao->savePassword($_SESSION['logged']->getId(),sha1($oldPass),sha1($newPass))){
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied, password incorrect';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+
     // DESCRIPTION SETTINGS PAGE
     public function saveDescriptionSettings(){
         if(isset($_POST['data'])){
@@ -1309,6 +1427,17 @@ class UserController extends BaseController{
                 $status['err'] = $e->getMessage();
                 echo json_encode($status);
             }
+        }
+    }
+
+    private function validPassLength($value){
+        $status = array();
+        if(mb_strlen($value) < 3 && mb_strlen($value) > 40){
+            $status['error'] = 'Cannot be less than 3 or 40 characters';
+            return $status;
+        }
+        else{
+            return true;
         }
     }
 }

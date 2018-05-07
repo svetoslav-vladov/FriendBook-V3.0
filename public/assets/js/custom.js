@@ -1369,6 +1369,196 @@ function changeWebsite(e){
     }
 }
 
+// CHANGE user email / login
+    // this is in modal
+var emailInput = document.querySelector("#email");
+var emailPasswordInput = document.querySelector("#emailPassword");
+var changeUserEmailForm = document.querySelector("#changeUserEmailForm");
+
+var emailChangeSubmit = document.querySelector("#emailChangeSubmit");
+    //this is in general settings
+var labelValueEmail = document.querySelector("#labelValueEmail");
+var currentStateEmail = document.querySelector("#currentStateEmail");
+
+if(emailChangeSubmit){
+    emailChangeSubmit.addEventListener('click', changeUserEmail);
+}
+function changeUserEmail(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeEmail');
+    var formData = new FormData(changeUserEmailForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(!validateEmail(emailInput.value)){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML =emailInput.value + ' is not valid email!!!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else if(emailPasswordInput.value.length > 40 || emailInput.value.length < 2){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Password cannot be empty or less than 2 symbols, max 40';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    labelValueEmail.innerHTML = emailInput.value;
+                    currentStateEmail.innerHTML = emailInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE user Password
+// this is in modal
+var oldPassInput = document.querySelector("#oldPass");
+var newPassInput = document.querySelector("#newPass");
+var newPassValidInput = document.querySelector("#newPassValid");
+
+var changeUserPassForm = document.querySelector("#changeUserPassForm");
+
+var changePasswordSubmit = document.querySelector("#changePasswordSubmit");
+
+if(changePasswordSubmit){
+    changePasswordSubmit.addEventListener('click', changeUserPassword);
+}
+function changeUserPassword(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changePassword');
+    var formData = new FormData(changeUserPassForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(!oldPassInput.value.length < 3 && oldPassInput.value.length > 40){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML ='Old Password min 3 char max 40 char';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    if(!newPassInput.value.length < 3 && newPassInput.value.length > 40){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML ='New Password min 3 char max 40 char';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    if(!newPassValidInput.value.length < 3 && newPassValidInput.value.length > 40){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'New Password Confirm min 3 char max 40 char';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    if(newPassInput.value !== newPassValidInput.value){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML ='New Passwords do not match with password confirm';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
 
 // prevent enter submit for forms
 function stopRKey(evt) {
@@ -1379,3 +1569,8 @@ function stopRKey(evt) {
 }
 
 document.onkeypress = stopRKey;
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}

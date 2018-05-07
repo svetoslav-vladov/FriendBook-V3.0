@@ -10,9 +10,13 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form id="changeUserEmail" action="<?php echo URL_ROOT . '/user/changeEmail' ?>" method="post">
+                <form id="changeUserEmailForm" action="<?php echo URL_ROOT . '/user/changeEmail' ?>" method="post">
                     <div class="form-group">
-                        <label for="email">Email:<span id="emailCheckStatus"></span></label>
+                        <label for="email">Email:
+                            <span class="currentState" id="currentStateEmail">
+                                <?php echo $_SESSION['logged']->getEmail(); ?>
+                            </span>
+                        </label>
                         <input type="email" name="email" id="email" class="form-control" placeholder="Type new email">
                     </div>
                     <div class="form-group">
@@ -25,7 +29,7 @@
             <!-- Modal footer -->
             <div class="modal-footer">
                 <div id="responseStatusEmail"></div>
-                <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" id="emailChangeSubmit">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
 
@@ -45,7 +49,7 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form id="changeUserPass" action="<?php echo URL_ROOT . '/user/changePassword' ?>" method="post">
+                <form id="changeUserPassForm" action="<?php echo URL_ROOT . '/user/changePassword' ?>" method="post">
                     <div class="form-group">
                         <label for="oldPass">Old Password:</label>
                         <input type="password" name="oldPass" id="oldPass" class="form-control">
@@ -55,7 +59,7 @@
                         <input type="password" name="newPass" id="newPass" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="newPassValid">New Password again:</label>
+                        <label for="newPassValid">New Password confirm:</label>
                         <input type="password" name="newPassValid" id="newPassValid" class="form-control">
                     </div>
                 </form>
@@ -63,7 +67,7 @@
             <!-- Modal footer -->
             <div class="modal-footer">
                 <div id="responseStatusPassword"></div>
-                <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" id="changePasswordSubmit">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
 

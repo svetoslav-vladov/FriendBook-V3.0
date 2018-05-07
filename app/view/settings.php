@@ -177,7 +177,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <span class="labelName">Email:</span>
-                            <span class="labelValue">
+                            <span class="labelValue" id="labelValueEmail">
                                 <?php echo $_SESSION['logged']->getEmail(); ?>
                             </span>
                             <div class="small">( This will change your login )</div>

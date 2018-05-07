@@ -143,7 +143,7 @@
                                     <span class="aboutValue"><?php echo $theUser->getWww(); ?></span>
                                 </div>
                                 <div>
-                                    <span class="nav-icon"><i class="fas fa-skype"></i></span>
+                                    <span class="nav-icon"><i class="fab fa-skype"></i></span>
                                     <span class="aboutTag">Skype:</span>
                                     <span class="aboutValue"><?php echo $theUser->getSkype(); ?></span>
                                 </div>

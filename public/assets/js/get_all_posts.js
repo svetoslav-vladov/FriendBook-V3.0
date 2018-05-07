@@ -1,12 +1,12 @@
 function getAllPosts(limit,offset) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
-        posts = JSON.parse(this.responseText);
-        if (posts.length == 0) {
-            $('.loading_posts').remove();
-            return;
-        }
         if (this.readyState === 4 && this.status === 200) {
+            posts = JSON.parse(this.responseText);
+            if (posts.length == 0) {
+                $('.loading_posts').remove();
+                return;
+            }
             for(var post of posts) {
                 var postCard = $(`
                 <div class="card p-3 mt-3 mb-3" id="post${post['post_id']}">

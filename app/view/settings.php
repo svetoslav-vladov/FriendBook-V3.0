@@ -29,122 +29,176 @@
             <!--/span-->
             <div class="col-md-9" id="#main">
                 <div class="card p-3" id="general_box">
-                    <form id="general_form" action="<?php echo URL_ROOT . '/users/saveGeneralSettings'; ?>" method="post">
-                        <fieldset>
-                            <legend>General Settings</legend>
-                            <div class="form-group">
-                                <label for="first_name">First Name</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="last_name">Last Name</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <ul>
-                                    <li>If Display name is set, it will show instead of Full name, as your tag for others!</li>
-                                </ul>
-                                Display Name</label>
-                                <input type="text" name="display_name" id="display_name" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-
-                                <label for="relation_status">Relationship status</label>
-                                <select name="relation_status" id="relation_status" class="form-control">
-                                    <option value="" selected>Select option</option>
-                                    <?php
-                                    foreach ($data['relationship'] as $status){
-                                        echo "<option value=\"$status->id\">$status->status_name</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="gender">Gender</label>
-                                <select name="gender" id="gender" class="form-control">
-                                    <option value="" selected>Select option</option>
-                                    <option value="male">Male</option>
-                                    <option value="male">Female</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="birthday">Your BirthDay</label>
-                                <input type="date" name="birthday" id="birthday" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="country">Country</label>
-                                <select name="country" id="country" class="form-control">
-                                    <option value="" selected>Select option</option>
-                                    <?php
-                                        foreach ($data['countries'] as $country){
-                                            echo "<option value=\"$country->id\">$country->country_name</option>";
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="mobile_number">Mobile Number</label>
-                                <input type="number" name="mobile_number" id="mobile_number" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="web_addres">Website address</label>
-                                <input type="text" name="web_addres" id="web_addres" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="skype_name">Skype username</label>
-                                <input type="text" name="skype_name" id="skype_name" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <input type="submit" name="general" id="general_submit" class="btn btn-success btn-lg" value="SAVE">
-                            </div>
-
-                        </fieldset>
-                    </form>
+                    <h1 class="mb-4">General information:</h1>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">First Name:</span>
+                            <span class="labelValue" id="lableValueFirstName">
+                                <?php echo $_SESSION['logged']->getFirstName(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#firstNameChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Last Name:</span>
+                            <span class="labelValue" id="lableValueLastName">
+                                <?php echo $_SESSION['logged']->getLastName(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#lastNameChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Display Name:</span>
+                            <span class="labelValue" id="lableValueDisplayName">
+                                <?php echo $_SESSION['logged']->getDisplayName(); ?>
+                            </span>
+                            <div class="small">( This will show instead of Full name, as your tag for others! )</div>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#displayNameChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Relationship status:</span>
+                            <span class="labelValue" id="lableValueRelationship">
+                                <?php echo $_SESSION['logged']->getRelationshipTag(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#relationshipStatus">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Gender:</span>
+                            <span class="labelValue" id="lableValueGender">
+                                <?php echo $_SESSION['logged']->getGender(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#genderChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Birthday status:</span>
+                            <span class="labelValue" id="lableValueBirthday">
+                                <?php echo $_SESSION['logged']->getBirthday(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#birthdayChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Country:</span>
+                            <span class="labelValue" id="lableValueCountry">
+                                <?php echo $_SESSION['logged']->getCountryName(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#CountryChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Mobile Number:</span>
+                            <span class="labelValue" id="lableValueMobileNumber">
+                                <?php echo $_SESSION['logged']->getMobileNumber(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#MobileChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Your Website:</span>
+                            <span class="labelValue" id="lableValueWebsite">
+                                <?php echo $_SESSION['logged']->getWww(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#websiteChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Skype name:</span>
+                            <span class="labelValue" id="lableValueSkype">
+                                <?php echo $_SESSION['logged']->getSkype(); ?>
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#skypeChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
                 </div>
                 <div class="card p-3" id="security_box">
-                    <h1>Security information:</h1>
-                    <form id="security_form" action="<?php echo URL_ROOT . '/user/saveSecuritySettings'; ?>" method="post">
-                        <fieldset>
-                            <legend>Security Settings</legend>
-
-                            <div class="form-group">
-                                <ul>
-                                    <li>This will change your login!!!</li>
-                                </ul>
-                                <label for="email">Email</label>
-                                <input type="email" name="email" id="email" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="old_password">Old password</label>
-                                <input type="text" name="old_password" id="old_password" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="new_password">New Password</label>
-                                <input type="text" name="new_password" id="new_password" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="new_password_valid">New Password validation</label>
-                                <input type="text" name="new_password_valid" id="new_password_valid" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <input type="submit" name="security" id="security" class="btn btn-warning btn-lg" value="SAVE">
-                            </div>
-
-                        </fieldset>
-                    </form>
+                    <h1 class="mb-4">Security information:</h1>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Email:</span>
+                            <span class="labelValue">
+                                <?php echo $_SESSION['logged']->getEmail(); ?>
+                            </span>
+                            <div class="small">( This will change your login )</div>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#emailChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="labelName">Your Password</span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#passwordChange">
+                                Change
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card p-3" id="desc_box">
                     <form id="desc_form" action="<?php echo URL_ROOT . '/user/saveDescriptionSettings'; ?>" method="post">
@@ -174,3 +228,9 @@
     </div>
     <!--/.fluid-container-->
 </div>
+
+<?php
+    require_once '../app/view/modalGeneralSettings.php';
+    require_once '../app/view/modalSecuritySettigns.php';
+
+?>

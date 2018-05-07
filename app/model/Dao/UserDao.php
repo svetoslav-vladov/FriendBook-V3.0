@@ -47,29 +47,27 @@ class UserDao
 
     const INSERT_USER_PHOTOS = "INSERT INTO user_photos (user_id,img_url,thumb_url) values (?,?,?)";
 
-    const UPDATE_USER_GENERAL_INFO = "UPDATE users u
-                                        LEFT OUTER JOIN relationship r on
-                                        ? = r.id
-                                        LEFT OUTER JOIN countries c on
-                                        ? = c.id
-                                        SET u.relationship_id = r.id, u.country_id = c.id,
-                                        first_name = ?,last_name = ?,
-                                        gender = ?,birthday = ?, display_name = ?, 
-                                        mobile_number = ?, www =?, skype = ?
-                                        WHERE u.id = ?";
-
-    const UPDATE_USER_SECURITY_INFO = "UPDATE users u
-                                        LEFT OUTER JOIN relationship r on
-                                        ? = r.id
-                                        LEFT OUTER JOIN countries c on
-                                        ? = c.id
-                                        SET u.relationship_id = r.id, u.country_id = c.id,
-                                        first_name = ?,last_name = ?,
-                                        gender = ?,birthday = ?, display_name = ?, 
-                                        mobile_number = ?, www =?, skype = ?
-                                        WHERE u.id = ?";
+    // SETTINGS PAGE QUERY's
 
     const UPDATE_USER_DESCRIPTION_INFO = "UPDATE users SET description = ? WHERE id = ?";
+
+    const UPDATE_USER_FIRST_NAME = "UPDATE users SET first_name = ? WHERE id = ?";
+
+    const UPDATE_USER_LAST_NAME = "UPDATE users SET first_name = ? WHERE id = ?";
+
+    const UPDATE_USER_DISPLAY_NAME = "UPDATE users SET display_name = ? WHERE id = ?";
+
+    const GET_USER_RELATIONSHIP_STATUS_NAME = "SELECT r.status_name
+                                            FROM relationship as r
+                                            JOIN users as u ON u.relationship_id = r.id
+                                            WHERE u.id = ?";
+
+    const UPDATE_USER_RELATIONSHIP = "UPDATE users as u,
+                                            relationship as r
+                                            SET
+                                            u.relationship_id = r.id
+                                            WHERE
+                                            u.id = ? AND r.id = ?";
 
     // getting static connection from DBconnect file
     private function __construct()
@@ -99,15 +97,36 @@ class UserDao
         return $statement->execute(array($user->getFirstName(), $user->getLastName(), $user->getEmail(), $user->getPassword(), $user->getGender(), $user->getBirthday(), $user->getProfilePic(), $user->getProfileCover(),));
     }
 
-    public function saveUserGeneralSettings(User $user){
-
-        $statement = $this->pdo->prepare(self::UPDATE_USER_GENERAL_INFO);
-        $statement->execute(array($user->getRelationshipId(), $user->getCountryId(),
-            $user->getFirstName(), $user->getLastName(), $user->getGender(), $user->getBirthday(),
-            $user->getDisplayName(), $user->getMobileNumber(), $user->getWww(), $user->getSkype(), $user->getId()));
+    // SETTINGS PAGE dao functions
+    public function saveFirstName($id, $firstName){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_FIRST_NAME);
+        $statement->execute(array($firstName, $id));
         return $statement->rowCount();
+    }
 
+    public function saveLastName($id, $lastName){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_LAST_NAME);
+        $statement->execute(array($lastName, $id));
+        return $statement->rowCount();
+    }
 
+    public function saveDisplayName($id, $displayName){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_DISPLAY_NAME);
+        $statement->execute(array($displayName, $id));
+        return $statement->rowCount();
+    }
+
+    public function saveRelationship($id, $relationshipId){
+
+        $statement = $this->pdo->prepare(self::UPDATE_USER_RELATIONSHIP);
+        $statement->execute(array($id, $relationshipId));
+        return $statement->rowCount();
+    }
+    public function getRelationshipStatus($id){
+
+        $statement = $this->pdo->prepare(self::GET_USER_RELATIONSHIP_STATUS_NAME);
+        $statement->execute(array($id));
+        return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
     public function saveUserDescriptionSettings(User $user){
@@ -125,6 +144,7 @@ class UserDao
 
     }
 
+    // UPLOAD IMAGES
     public function saveUserProfileInfo(User $user)
     {
         $statement = $this->pdo->prepare(self::UPDATE_USER_PICTURE);

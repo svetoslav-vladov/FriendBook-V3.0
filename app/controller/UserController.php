@@ -59,10 +59,9 @@ class UserController extends BaseController{
                         $user->setPassword(null);
                         $user->setFullName($user->getFirstName() ." ". $user->getLastName());
 
-                        $success = "login successfully";
                         $_SESSION['logged'] = $user;
 
-                        header('location:'.URL_ROOT.'/index/main&success=' . $success);
+                        header('location:'.URL_ROOT.'/index/main');
                     }
                     else{
                         $nosuccess = "Wrong email or password";
@@ -535,6 +534,7 @@ class UserController extends BaseController{
             }
         }
     }
+
     //function for cancel request for friend
     public function cancelFriendRequest() {
         $dao = UserDao::getInstance();
@@ -660,6 +660,206 @@ class UserController extends BaseController{
         }
     }
 
+    // GENERAL SETTINGS PAGE
+    public function changeFirstName(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['firstName'])){
+
+            $firstName = htmlentities(trim($_POST['firstName']));
+            $status = array();
+
+            if($firstName === $_SESSION['logged']->getFirstName()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($firstName) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (mb_strlen($firstName) > 15){
+                $status['errors'] = 'Input cannot be more than 15 characters';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+                    if($dao->saveFirstName($_SESSION['logged']->getId(),$firstName)){
+
+                        $fullName = $firstName . " " . $_SESSION['logged']->getLastName();
+                        $_SESSION['logged']->setFullName($fullName);
+                        $_SESSION['logged']->setFirstName($firstName);
+
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+    public function changeLastName(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['lastName'])){
+
+            $lastName = htmlentities(trim($_POST['lastName']));
+            $status = array();
+
+            if($lastName === $_SESSION['logged']->getLastName()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($lastName) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (mb_strlen($lastName) > 15){
+                $status['errors'] = 'Input cannot be more than 15 characters';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+                    if($dao->saveLastName($_SESSION['logged']->getId(),$lastName)){
+
+                        $fullName = $_SESSION['logged']->getFirstName() . " " . $lastName;
+                        $_SESSION['logged']->setLastName($lastName);
+                        $_SESSION['logged']->setFullName($fullName);
+
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+    public function changeDisplayName(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['displayName'])){
+
+            $displayName = htmlentities(trim($_POST['displayName']));
+            $status = array();
+
+            if($displayName === $_SESSION['logged']->getDisplayName()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($displayName) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (mb_strlen($displayName) > 20){
+                $status['errors'] = 'Input cannot be more than 20 characters';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+                    if($dao->saveDisplayName($_SESSION['logged']->getId(),$displayName)){
+                        $_SESSION['logged']->setDisplayName($displayName);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+    public function changeRelationship(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['relationStatus'])){
+
+            $relationshipId = htmlentities(trim($_POST['relationStatus']));
+            $status = array();
+
+            if($relationshipId === $_SESSION['logged']->getRelationshipId()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($relationshipId) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (!is_numeric($relationshipId)){
+                $status['errors'] = 'Wrong Input value';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+
+
+                    if($dao->saveRelationship($_SESSION['logged']->getId(),$relationshipId)){
+                        $relation_name = $dao->getRelationshipStatus($_SESSION['logged']->getId());
+
+                        $_SESSION['logged']->setRelationshipId($relationshipId);
+                        $_SESSION['logged']->setRelationshipTag($relation_name->status_name);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+
+    // DESCRIPTION SETTINGS PAGE
     public function saveDescriptionSettings(){
         if(isset($_POST['data'])){
             // working with objects

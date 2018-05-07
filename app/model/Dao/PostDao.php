@@ -60,13 +60,20 @@ class PostDao {
         return $result;
     }
 
-    public function getOwnPosts($user_id) {
-        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, users.id AS user_id, users.first_name, users.last_name, users.profile_pic, users.profile_cover,users.gender
-                                FROM posts
-                                JOIN users ON posts.user_id = users.id 
-                                WHERE users.id = ? 
-                                ORDER BY posts.create_date DESC;");
-        $statement->execute(array($user_id));
+    public function getOwnPosts($logged_user_id, $user_id, $limit, $offset) {
+        $lim = intval($limit);
+        $off = intval($offset);
+        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, 
+                                                    posts.create_date, users.id AS user_id, 
+                                                    users.first_name, users.last_name, 
+                                                    users.profile_pic, users.profile_cover, 
+                                                    users.gender, IF(posts.user_id = ?, 1, 0) as isMyPost
+                                                    FROM posts
+                                                    JOIN users ON posts.user_id = users.id 
+                                                    WHERE users.id = ? 
+                                                    ORDER BY posts.create_date DESC
+                                                    LIMIT $lim OFFSET $off");
+        $statement->execute(array($logged_user_id, $user_id));
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
     }
@@ -132,7 +139,9 @@ class PostDao {
         return $statement->execute(array($post_id, $user_id));
     }
 
-    function getAllPostsByLike($session_logged_id) {
+    function getAllPostsByLike($session_logged_id, $limit, $offset) {
+        $lim = intval($limit);
+        $off = intval($offset);
         //database query for get all posts ordering by most likes
         $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, 
                                                     posts.user_id AS user_id, users.first_name, users.last_name, users.gender, 
@@ -146,7 +155,8 @@ class PostDao {
                                                     FROM friends
                                                     WHERE friends.user_id = ?) OR posts.user_id = ?
                                                     GROUP BY posts.id,posts.description
-                                                    ORDER BY most_liked DESC;");
+                                                    ORDER BY most_liked DESC
+                                                    LIMIT $lim OFFSET $off");
         $statement->execute(array($session_logged_id, $session_logged_id, $session_logged_id));
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;

@@ -5,6 +5,21 @@ use Model\Post;
 
 class PostController extends BaseController{
 
+    public function getOwnPosts() {
+        $dao = PostDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id'])) {
+            try {
+                $user_id = htmlentities($_GET['user_id']);
+                $logged_user_id = htmlentities($_SESSION['logged']->getId());
+                $limit = htmlentities($_GET['limit']);
+                $offset = htmlentities($_GET['offset']);
+                echo json_encode($dao->getOwnPosts($logged_user_id, $user_id, $limit, $offset));
+            } catch (\PDOException $e) {
+                echo $e->getMessage();
+            }
+        }
+    }
+
     public function getAllPosts() {
         $dao = PostDao::getInstance();
         if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_SESSION['logged'])) {
@@ -22,12 +37,15 @@ class PostController extends BaseController{
         $dao = PostDao::getInstance();
         if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_SESSION['logged'])) {
             try {
-                echo json_encode($dao->getAllPostsByLike($_SESSION['logged']->getId()));
+                $limit = htmlentities($_GET['limit']);
+                $offset = htmlentities($_GET['offset']);
+                echo json_encode($dao->getAllPostsByLike($_SESSION['logged']->getId(), $limit, $offset));
             } catch (\PDOException $e) {
                 echo $e->getMessage();
             }
         }
     }
+
     public function addPost() {
         $dao = PostDao::getInstance();
         if (isset($_POST['add_post'])) {
@@ -81,6 +99,7 @@ class PostController extends BaseController{
             $dao->likePost($post_id, $user_id, $status);
         }
     }
+
     public function dislikePost() {
         $dao = PostDao::getInstance();
         $status = 0;
@@ -107,6 +126,7 @@ class PostController extends BaseController{
             $dao->unlikePost($post_id, $user_id);
         }
     }
+
     public function undislikePost() {
         $dao = PostDao::getInstance();
         if (isset($_POST['post_id'])) {

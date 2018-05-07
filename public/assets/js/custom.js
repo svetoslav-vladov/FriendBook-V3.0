@@ -857,13 +857,14 @@ function changeDisplayName(e){
     }
 }
 
-// CHANGE Last Name
+// CHANGE Relationship
     // this is in modal
 var relationStatusInput = document.querySelector("#relationStatus");
 var userRelationshipForm = document.querySelector("#userRelationshipForm");
 var relationSubmit = document.querySelector("#relationSubmit");
     //this is in general settings
 var lableValueRelationship = document.querySelector("#lableValueRelationship");
+var currentStateRelationship = document.querySelector("#currentStateRelationship");
 
 if(relationSubmit){
     relationSubmit.addEventListener('click', changeRelationship);
@@ -925,6 +926,7 @@ function changeRelationship(e){
                     statusBox.appendChild(img);
                     statusBox.appendChild(p);
                     lableValueRelationship.innerHTML = relationStatusInput.options[relationStatusInput.value].text;
+                    currentStateRelationship.innerHTML = relationStatusInput.options[relationStatusInput.value].text;
                 }
             };
             xhr.send(formData);
@@ -933,11 +935,447 @@ function changeRelationship(e){
     }
 }
 
+// CHANGE gender
+    // this is in modal
+var genderInput = document.querySelector("#gender");
+var userGenderForm = document.querySelector("#userGenderForm");
+var genderSubmit = document.querySelector("#genderSubmit");
+    //this is in general settings
+var lableValueGender = document.querySelector("#lableValueGender");
+var currentStateGender = document.querySelector("#currentStateGender");
+
+if(genderSubmit){
+    genderSubmit.addEventListener('click', changeGender);
+}
+
+function changeGender(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeGender');
+    var formData = new FormData(userGenderForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(!(genderInput.value === 'male') && !(genderInput.value === 'female')){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Value must be male or female!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueGender.innerHTML = genderInput.value;
+                    currentStateGender.innerHTML = genderInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE gender
+// this is in modal
+var birthdayInput = document.querySelector("#birthday");
+var userBirthdayForm = document.querySelector("#userBirthdayForm");
+var birthdaySubmit = document.querySelector("#birthdaySubmit");
+//this is in general settings
+var lableValueBirthday = document.querySelector("#lableValueBirthday");
+var currentStateBirthday = document.querySelector("#currentStateBirthday");
+
+if(birthdaySubmit){
+    birthdaySubmit.addEventListener('click', changeBirthday);
+}
+
+function changeBirthday(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeBirthday');
+    var formData = new FormData(userBirthdayForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    setTimeout(function(){
+        xhr.onload = function() {
+
+            statusBox.innerHTML = '';
+            statusBox.style.display = 'block';
+
+            var res = JSON.parse(this.responseText);
+            if(res.denied){
+                var p = document.createElement('p');
+                p.innerHTML = res.denied;
+                img.src = denied;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else if(res.errors){
+                var p = document.createElement('p');
+                p.innerHTML = res.errors;
+                img.src = attention;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else{
+                var p = document.createElement('p');
+                p.innerHTML = "Saved Successfuly";
+                img.src = successMark;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+                lableValueBirthday.innerHTML = birthdayInput.value;
+                currentStateBirthday.innerHTML = birthdayInput.value;
+            }
+        };
+        xhr.send(formData);
+    },500);
+}
+
+// CHANGE Contry
+    // this is in modal
+var countryInput = document.querySelector("#country");
+var userCountryForm = document.querySelector("#userCountryForm");
+var countrySubmit = document.querySelector("#countrySubmit");
+    //this is in general settings
+var lableValueCountry = document.querySelector("#lableValueCountry");
+var currentStateCountry = document.querySelector("#currentStateCountry");
+
+if(countrySubmit){
+    countrySubmit.addEventListener('click', changeCountry);
+}
+
+function changeCountry(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeCountry');
+    var formData = new FormData(userCountryForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    setTimeout(function(){
+        xhr.onload = function() {
+
+            statusBox.innerHTML = '';
+            statusBox.style.display = 'block';
+
+            var res = JSON.parse(this.responseText);
+            if(res.denied){
+                var p = document.createElement('p');
+                p.innerHTML = res.denied;
+                img.src = denied;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else if(res.errors){
+                var p = document.createElement('p');
+                p.innerHTML = res.errors;
+                img.src = attention;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else{
+                var p = document.createElement('p');
+                p.innerHTML = "Saved Successfuly";
+                img.src = successMark;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+                lableValueCountry.innerHTML = countryInput.options[countryInput.value].text;
+                currentStateCountry.innerHTML = countryInput.options[countryInput.value].text;
+            }
+        };
+        xhr.send(formData);
+    },500);
+
+}
+
+// CHANGE Mobile Number
+    // this is in modal
+var mobileNumberInput = document.querySelector("#mobileNumber");
+var userMobileNumberForm = document.querySelector("#userMobileNumberForm");
+var mobileNumberSubmit = document.querySelector("#mobileNumberSubmit");
+    //this is in general settings
+var lableValueMobileNumber = document.querySelector("#lableValueMobileNumber");
+
+if(mobileNumberSubmit){
+    mobileNumberSubmit.addEventListener('click', changeMobileNumber);
+}
+function changeMobileNumber(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeMobileNumber');
+    var formData = new FormData(userMobileNumberForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(mobileNumberInput.value.length > 20 || mobileNumberInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 20 digits!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueMobileNumber.innerHTML = mobileNumberInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE user Skype name
+    // this is in modal
+var skypeNameInput = document.querySelector("#skypeName");
+var userSkypeForm = document.querySelector("#userSkypeForm");
+var skypeSubmit = document.querySelector("#skypeSubmit");
+    //this is in general settings
+var lableValueSkype = document.querySelector("#lableValueSkype");
+
+if(skypeSubmit){
+    skypeSubmit.addEventListener('click', changeSkypeName);
+}
+function changeSkypeName(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeSkypeName');
+    var formData = new FormData(userSkypeForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(skypeNameInput.value.length > 40 || skypeNameInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 40 digits!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueSkype.innerHTML = skypeNameInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE user website
+// this is in modal
+var webAddresInput = document.querySelector("#webAddres");
+var userWebsiteForm = document.querySelector("#userWebsiteForm");
+var websiteSubmit = document.querySelector("#websiteSubmit");
+//this is in general settings
+var lableValueWebsite = document.querySelector("#lableValueWebsite");
+
+if(websiteSubmit){
+    websiteSubmit.addEventListener('click', changeWebsite);
+}
+function changeWebsite(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeWebsite');
+    var formData = new FormData(userWebsiteForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(webAddresInput.value.length > 40 || webAddresInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 40 digits!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueWebsite.innerHTML = webAddresInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+
 // prevent enter submit for forms
 function stopRKey(evt) {
     var evt = (evt) ? evt : ((event) ? event : null);
     var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
     if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+    if ((evt.keyCode == 13) && (node.type=="number"))  {return false;}
 }
 
 document.onkeypress = stopRKey;

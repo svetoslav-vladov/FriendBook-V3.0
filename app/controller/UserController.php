@@ -807,6 +807,7 @@ class UserController extends BaseController{
         }
 
     }
+
     public function changeRelationship(){
 
         if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['relationStatus'])){
@@ -831,11 +832,309 @@ class UserController extends BaseController{
                 try{
 
 
-                    if($dao->saveRelationship($_SESSION['logged']->getId(),$relationshipId)){
+                    if($dao->saveRelationshipId($_SESSION['logged']->getId(),$relationshipId)){
                         $relation_name = $dao->getRelationshipStatus($_SESSION['logged']->getId());
 
                         $_SESSION['logged']->setRelationshipId($relationshipId);
                         $_SESSION['logged']->setRelationshipTag($relation_name->status_name);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+    public function changeGender(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['gender'])){
+
+            $gender = htmlentities(trim($_POST['gender']));
+            $status = array();
+
+            if($gender === $_SESSION['logged']->getGender()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($gender) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif ($gender !== "male" && $gender !== "female"){
+                $status['errors'] = 'Wrong Input value,must be male or female';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+
+                    if($dao->saveGender($_SESSION['logged']->getId(),$gender)){
+
+                        $_SESSION['logged']->setGender($gender);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+    public function changeBirthday(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['birthday'])){
+
+            $birthday = htmlentities(trim($_POST['birthday']));
+            $status = array();
+
+            $dateInput = strtotime($birthday);
+            $todayDate = strtotime('now');
+
+            if($birthday === $_SESSION['logged']->getBirthday()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($birthday) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif ($dateInput > $todayDate){
+                $status['errors'] = 'Date can go far than today';
+            }
+
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+
+                    if($dao->saveGender($_SESSION['logged']->getId(),$birthday)){
+
+                        $_SESSION['logged']->setBirthday($birthday);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+    public function changeCountry(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['country'])){
+
+            $countryId = htmlentities(trim($_POST['country']));
+            $status = array();
+
+            if($countryId === $_SESSION['logged']->getCountryId()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($countryId) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (!is_numeric($countryId)){
+                $status['errors'] = 'Wrong Input value';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+
+
+                    if($dao->saveCountryId($_SESSION['logged']->getId(),$countryId)){
+                        $country = $dao->getCountryName($_SESSION['logged']->getId());
+
+                        $_SESSION['logged']->setCountryId($countryId);
+                        $_SESSION['logged']->setCountryName($country->country_name);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+
+    public function changeMobileNumber(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['mobileNumber'])){
+
+            $mobileNumber = htmlentities(trim($_POST['mobileNumber']));
+            $status = array();
+
+            if($mobileNumber === $_SESSION['logged']->getMobileNumber()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($mobileNumber) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (mb_strlen($mobileNumber) > 20){
+                $status['errors'] = 'Input cannot be more than 20 digits';
+            }
+            elseif (!preg_match('/^\d+$/', $mobileNumber)){
+                $status['errors'] = 'Only Digits allowed';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+                    if($dao->saveMobileNumber($_SESSION['logged']->getId(),$mobileNumber)){
+                        $_SESSION['logged']->setMobileNumber($mobileNumber);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+    public function changeWebsite(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['webAddres'])){
+
+            $webAddres = htmlentities(trim($_POST['webAddres']));
+            $status = array();
+
+            if($webAddres === $_SESSION['logged']->getWww()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($webAddres) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (mb_strlen($webAddres) > 40){
+                $status['errors'] = 'Input cannot be more than 40 digits';
+            }
+// preg_match validation pattern in future
+//            elseif (!preg_match('/^\$/', $webAddres)){
+//                $status['errors'] = 'Only Digits allowed';
+//            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+                    if($dao->saveWebsite($_SESSION['logged']->getId(),$webAddres)){
+                        $_SESSION['logged']->setWww($webAddres);
+                        $status['success'] = true;
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = 'Save denied!!!';
+                        echo json_encode($status);
+                    }
+                }catch (\PDOException $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }catch (\Exception $e){
+                    $status['errors'] = $e->getMessage();
+                    echo json_encode($status);
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+
+    }
+
+    public function changeSkypeName(){
+
+        if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['skypeName'])){
+
+            $skypeName = htmlentities(trim($_POST['skypeName']));
+            $status = array();
+
+            if($skypeName === $_SESSION['logged']->getSkype()){
+                $status['errors'] = 'No changes made!';
+            }
+            elseif(!(mb_strlen($skypeName) > 0)){
+                $status['errors'] = 'Input cannot be empty';
+            }
+            elseif (mb_strlen($skypeName) > 40){
+                $status['errors'] = 'Input cannot be more than 40 digits';
+            }
+
+            if(!isset($status['errors'])){
+
+                $dao = UserDao::getInstance();
+
+                try{
+                    if($dao->saveWebsite($_SESSION['logged']->getId(),$skypeName)){
+                        $_SESSION['logged']->setSkype($skypeName);
                         $status['success'] = true;
                         echo json_encode($status);
                     }

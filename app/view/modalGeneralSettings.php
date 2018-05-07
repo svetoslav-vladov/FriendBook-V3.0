@@ -102,7 +102,7 @@
                 <form id="userRelationshipForm" action="<?php echo URL_ROOT . '/user/changeRelationship' ?>" method="post">
                     <div class="form-group">
                         <label for="relationStatus">Relationship status:
-                            <span class="currentState">
+                            <span class="currentState" id="currentStateRelationship">
                                 <?php
                                     echo $_SESSION['logged']->getRelationshipTag();
                                 ?>
@@ -144,19 +144,16 @@
                 <form id="userGenderForm" action="<?php echo URL_ROOT . '/user/changeGender' ?>" method="post">
                     <div class="form-group">
                         <label for="gender">Gender status:
-                            <span class="currentState">
+                            <span class="currentState" id="currentStateGender">
                                 <?php
-                                echo $_SESSION['logged']->getRelationshipTag();
+                                echo $_SESSION['logged']->getGender();
                                 ?>
                             </span>
                         </label>
                         <select name="gender" id="gender" class="form-control">
                             <option value="" selected>Select option</option>
-                            <?php
-                            foreach ($data['relationship'] as $status){
-                                echo "<option value=\"$status->id\">$status->status_name</option>\n\r";
-                            }
-                            ?>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
                         </select>
                     </div>
                 </form>
@@ -185,7 +182,7 @@
                 <form id="userBirthdayForm" action="<?php echo URL_ROOT . '/user/changeBirthday' ?>" method="post">
                     <div class="form-group">
                         <label for="birthday">Your BirthDay:
-                            <span class="currentState">
+                            <span class="currentState" id="currentStateBirthday">
                                 <?php
                                     echo $_SESSION['logged']->getBirthday();
                                 ?>
@@ -218,7 +215,7 @@
                 <form id="userCountryForm" action="<?php echo URL_ROOT . '/user/changeCountry' ?>" method="post">
                     <div class="form-group">
                         <label for="country">Country:
-                            <span class="currentState">
+                            <span class="currentState" id="currentStateCountry">
                                 <?php
                                     echo $_SESSION['logged']->getCountryName();
                                 ?>

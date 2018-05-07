@@ -215,7 +215,7 @@
 
                             <div class="form-group">
                                 <input type="submit" name="description_submit" id="description_submit"
-                                       class="btn btn-green btn-lg" value="SAVE">
+                                       class="btn btn-success btn-lg" value="SAVE">
                             </div>
 
                         </fieldset>

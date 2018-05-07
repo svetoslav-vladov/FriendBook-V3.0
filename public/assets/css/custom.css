@@ -3,6 +3,7 @@ body {
     height: 100%;
     padding-bottom: 40px;
     padding-top: 25px;
+    background: #fbfbfb;
 }
 
 div#guest_wrap {
@@ -939,5 +940,37 @@ span.aboutValue {
 }
 
 .isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+}
 
+form#general_form label {
+    font-weight:  bold;
+    color: #444;
+}
+
+form#general_form label span {
+    color: #28a745;
+    font-weight:  normal;
+}
+
+span.labelName {
+    font-weight:  bold;
+    color:  #555;
+}
+
+span.labelValue {
+    color: green;
+}
+
+.modal-body form label {
+    font-weight:  bold;
+    color:  #555;
+}
+
+span.currentState {
+    font-weight:  normal !important;
+    color: green !important;
 }

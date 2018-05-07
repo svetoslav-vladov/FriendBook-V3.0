@@ -323,9 +323,7 @@ function uploadProfileCover() {
 
 }
 
-// CHANGE profile COVER !!! no albums - start
-
-// ADD PROFILE PHOTOS - start
+// ADD PROFILE PHOTOS
 
 var ImageAdd = document.querySelector('#ImageAdd');
 var uploadUserPhotosForm = document.querySelector('#uploadUserPhotosForm');
@@ -466,7 +464,6 @@ function uploadProfilePhotos() {
     xhr.send(formData);
 
 }
-// ADD PROFILE PHOTOS - end !!! no albums
 
 // SETTINGS PAGE -start
 
@@ -476,8 +473,6 @@ var security_btn = document.querySelector('#security');
 var description_btn = document.querySelector('#description');
 
 // getting submit btn's
-var general_submit = document.querySelector('#general_submit');
-var security_submit = document.querySelector('#security_submit');
 var description_submit = document.querySelector('#description_submit');
 
 // div boxes
@@ -487,10 +482,12 @@ var desc_box = document.querySelector('#desc_box');
 
 // status box for loading image and success icon
 var statusBox = document.querySelector("#settingsStatus");
+
 // check if element is on page
 if(statusBox){
     statusBox.style.display = "none";
 }
+
 if(general_btn || security_btn || general_box || security_box){
 
     general_btn.addEventListener('click', showGeneralBox);
@@ -553,106 +550,11 @@ if(general_btn || security_btn || general_box || security_box){
     }
 }
 
-if(document.querySelector('#general_submit')){
-    general_submit.addEventListener('click', saveGeneralSettings);
-}
-
+// description settings save
 if(desc_box){
     description_submit.addEventListener('click', saveDescriptionSettings);
 }
-
-function saveGeneralSettings(e) {
-    e.preventDefault();
-
-    statusBox.innerHTML = '';
-    statusBox.style.display = 'block';
-    var xhr = new XMLHttpRequest();
-    xhr.open('post', url_root + '/user/saveGeneralSettings');
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // .onload is status 200 / ready 4
-
-
-    //content_box.appendChild(loading_image);
-
-    var first_name = document.querySelector('#first_name');
-    var last_name = document.querySelector('#last_name');
-    var display_name = document.querySelector('#display_name');
-    var relation_status = document.querySelector('#relation_status');
-    var gender = document.querySelector('#gender');
-    var birthday = document.querySelector('#birthday');
-    var country = document.querySelector('#country');
-    var website = document.querySelector('#web_addres');
-    var mobile_number = document.querySelector('#mobile_number');
-    var skype_name = document.querySelector('#skype_name');
-    var data = {
-        'first_name': first_name.value,
-        'last_name': last_name.value,
-        'display_name': display_name.value,
-        'relation_status': relation_status.value,
-        'gender': gender.value,
-        'birthday': birthday.value,
-        'country': country.value,
-        'website': website.value,
-        'mobile_number': mobile_number.value,
-        'skype_name': skype_name.value
-    };
-
-    var img = document.createElement('img');
-    img.src = loading_gif_anim;
-    img.classList.add('img_100');
-    statusBox.appendChild(img);
-
-    if(first_name.value.length > 30 || last_name.value.length > 30 ||
-        display_name.value.length > 30 || relation_status.value.length > 30 ||
-        gender.value.length > 30 || birthday.value.length > 30 ||
-        country.value.length > 30 || website.value.length > 30 ||
-        mobile_number.value.length > 30 || skype_name.value.length > 30
-    ){
-        statusBox.innerHTML = '';
-        statusBox.style.display = 'block';
-        var p = document.createElement('p');
-        p.innerHTML = 'Length Limit max 30 char!';
-        img.src = attention;
-        statusBox.appendChild(img);
-        statusBox.appendChild(p);
-    }
-    else{
-        setTimeout(function(){
-            xhr.onload = function() {
-
-                statusBox.innerHTML = '';
-                statusBox.style.display = 'block';
-
-                var res = JSON.parse(this.responseText);
-                if(res.denied){
-                    var p = document.createElement('p');
-                    p.innerHTML = res.denied;
-                    img.src = denied;
-                    statusBox.appendChild(img);
-                    statusBox.appendChild(p);
-                }
-                else if(res.errors){
-                    var p = document.createElement('p');
-                    p.innerHTML = res.errors;
-                    img.src = attention;
-                    statusBox.appendChild(img);
-                    statusBox.appendChild(p);
-                }
-                else{
-                    var p = document.createElement('p');
-                    p.innerHTML = "Saved Successfuly";
-                    img.src = successMark;
-                    statusBox.appendChild(img);
-                    statusBox.appendChild(p);
-                }
-            };
-            xhr.send('general' + '&data=' + JSON.stringify(data));
-        },500);
-
-    }
-
-}
-
+// CHANGE description
 function saveDescriptionSettings(e) {
     e.preventDefault();
 
@@ -731,4 +633,944 @@ function saveDescriptionSettings(e) {
 
 }
 
-// SETTINGS PAGE - end
+// CHANGE First Name
+    // this is in modal
+var firstNameInput = document.querySelector("#firstName");
+var userFirstNameForm = document.querySelector("#userFirstNameForm");
+var firstNameSubmit = document.querySelector("#firstNameSubmit");
+    //this is in general settings
+var lableValueFirstName = document.querySelector("#lableValueFirstName");
+
+if(firstNameSubmit){
+    firstNameSubmit.addEventListener('click',changeFirstName);
+}
+function changeFirstName(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeFirstName');
+
+    var formData = new FormData(userFirstNameForm);
+
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(firstNameInput.value.length > 15 || firstNameInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 15 char!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueFirstName.innerHTML = firstNameInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE Last Name
+    // this is in modal
+var lastNameInput = document.querySelector("#lastName");
+var userLastNameForm = document.querySelector("#userLastNameForm");
+var lastNameSubmit = document.querySelector("#lastNameSubmit");
+    //this is in general settings
+var lableValueLastName = document.querySelector("#lableValueLastName");
+
+if(lastNameSubmit){
+    lastNameSubmit.addEventListener('click',changeLastName);
+}
+function changeLastName(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeLastName');
+    var formData = new FormData(userLastNameForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(lastNameInput.value.length > 15 || lastNameInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 15 char!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueLastName.innerHTML = lastNameInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE Last Name
+    // this is in modal
+var displayNameInput = document.querySelector("#displayName");
+var userDisplayNameForm = document.querySelector("#userDisplayNameForm");
+var displayNameSubmit = document.querySelector("#displayNameSubmit");
+    //this is in general settings
+var lableValueDisplayName = document.querySelector("#lableValueDisplayName");
+
+if(displayNameSubmit){
+    displayNameSubmit.addEventListener('click', changeDisplayName);
+}
+function changeDisplayName(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeDisplayName');
+    var formData = new FormData(userDisplayNameForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(displayNameInput.value.length > 20 || displayNameInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 20 char!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueDisplayName.innerHTML = displayNameInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE Relationship
+    // this is in modal
+var relationStatusInput = document.querySelector("#relationStatus");
+var userRelationshipForm = document.querySelector("#userRelationshipForm");
+var relationSubmit = document.querySelector("#relationSubmit");
+    //this is in general settings
+var lableValueRelationship = document.querySelector("#lableValueRelationship");
+var currentStateRelationship = document.querySelector("#currentStateRelationship");
+
+if(relationSubmit){
+    relationSubmit.addEventListener('click', changeRelationship);
+}
+
+function changeRelationship(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeRelationship');
+    var formData = new FormData(userRelationshipForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(relationStatusInput.value.length > 2 || relationStatusInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 2 char!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueRelationship.innerHTML = relationStatusInput.options[relationStatusInput.value].text;
+                    currentStateRelationship.innerHTML = relationStatusInput.options[relationStatusInput.value].text;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE gender
+    // this is in modal
+var genderInput = document.querySelector("#gender");
+var userGenderForm = document.querySelector("#userGenderForm");
+var genderSubmit = document.querySelector("#genderSubmit");
+    //this is in general settings
+var lableValueGender = document.querySelector("#lableValueGender");
+var currentStateGender = document.querySelector("#currentStateGender");
+
+if(genderSubmit){
+    genderSubmit.addEventListener('click', changeGender);
+}
+
+function changeGender(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeGender');
+    var formData = new FormData(userGenderForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(!(genderInput.value === 'male') && !(genderInput.value === 'female')){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Value must be male or female!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueGender.innerHTML = genderInput.value;
+                    currentStateGender.innerHTML = genderInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE gender
+// this is in modal
+var birthdayInput = document.querySelector("#birthday");
+var userBirthdayForm = document.querySelector("#userBirthdayForm");
+var birthdaySubmit = document.querySelector("#birthdaySubmit");
+//this is in general settings
+var lableValueBirthday = document.querySelector("#lableValueBirthday");
+var currentStateBirthday = document.querySelector("#currentStateBirthday");
+
+if(birthdaySubmit){
+    birthdaySubmit.addEventListener('click', changeBirthday);
+}
+
+function changeBirthday(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeBirthday');
+    var formData = new FormData(userBirthdayForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    setTimeout(function(){
+        xhr.onload = function() {
+
+            statusBox.innerHTML = '';
+            statusBox.style.display = 'block';
+
+            var res = JSON.parse(this.responseText);
+            if(res.denied){
+                var p = document.createElement('p');
+                p.innerHTML = res.denied;
+                img.src = denied;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else if(res.errors){
+                var p = document.createElement('p');
+                p.innerHTML = res.errors;
+                img.src = attention;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else{
+                var p = document.createElement('p');
+                p.innerHTML = "Saved Successfuly";
+                img.src = successMark;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+                lableValueBirthday.innerHTML = birthdayInput.value;
+                currentStateBirthday.innerHTML = birthdayInput.value;
+            }
+        };
+        xhr.send(formData);
+    },500);
+}
+
+// CHANGE Contry
+    // this is in modal
+var countryInput = document.querySelector("#country");
+var userCountryForm = document.querySelector("#userCountryForm");
+var countrySubmit = document.querySelector("#countrySubmit");
+    //this is in general settings
+var lableValueCountry = document.querySelector("#lableValueCountry");
+var currentStateCountry = document.querySelector("#currentStateCountry");
+
+if(countrySubmit){
+    countrySubmit.addEventListener('click', changeCountry);
+}
+
+function changeCountry(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeCountry');
+    var formData = new FormData(userCountryForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    setTimeout(function(){
+        xhr.onload = function() {
+
+            statusBox.innerHTML = '';
+            statusBox.style.display = 'block';
+
+            var res = JSON.parse(this.responseText);
+            if(res.denied){
+                var p = document.createElement('p');
+                p.innerHTML = res.denied;
+                img.src = denied;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else if(res.errors){
+                var p = document.createElement('p');
+                p.innerHTML = res.errors;
+                img.src = attention;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+            }
+            else{
+                var p = document.createElement('p');
+                p.innerHTML = "Saved Successfuly";
+                img.src = successMark;
+                statusBox.appendChild(img);
+                statusBox.appendChild(p);
+                lableValueCountry.innerHTML = countryInput.options[countryInput.value].text;
+                currentStateCountry.innerHTML = countryInput.options[countryInput.value].text;
+            }
+        };
+        xhr.send(formData);
+    },500);
+
+}
+
+// CHANGE Mobile Number
+    // this is in modal
+var mobileNumberInput = document.querySelector("#mobileNumber");
+var userMobileNumberForm = document.querySelector("#userMobileNumberForm");
+var mobileNumberSubmit = document.querySelector("#mobileNumberSubmit");
+    //this is in general settings
+var lableValueMobileNumber = document.querySelector("#lableValueMobileNumber");
+
+if(mobileNumberSubmit){
+    mobileNumberSubmit.addEventListener('click', changeMobileNumber);
+}
+function changeMobileNumber(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeMobileNumber');
+    var formData = new FormData(userMobileNumberForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(mobileNumberInput.value.length > 20 || mobileNumberInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 20 digits!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueMobileNumber.innerHTML = mobileNumberInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE user Skype name
+    // this is in modal
+var skypeNameInput = document.querySelector("#skypeName");
+var userSkypeForm = document.querySelector("#userSkypeForm");
+var skypeSubmit = document.querySelector("#skypeSubmit");
+    //this is in general settings
+var lableValueSkype = document.querySelector("#lableValueSkype");
+
+if(skypeSubmit){
+    skypeSubmit.addEventListener('click', changeSkypeName);
+}
+function changeSkypeName(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeSkypeName');
+    var formData = new FormData(userSkypeForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(skypeNameInput.value.length > 40 || skypeNameInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 40 digits!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueSkype.innerHTML = skypeNameInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE user website
+// this is in modal
+var webAddresInput = document.querySelector("#webAddres");
+var userWebsiteForm = document.querySelector("#userWebsiteForm");
+var websiteSubmit = document.querySelector("#websiteSubmit");
+//this is in general settings
+var lableValueWebsite = document.querySelector("#lableValueWebsite");
+
+if(websiteSubmit){
+    websiteSubmit.addEventListener('click', changeWebsite);
+}
+function changeWebsite(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeWebsite');
+    var formData = new FormData(userWebsiteForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(webAddresInput.value.length > 40 || webAddresInput.value.length === 0){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Length Limit, cannot be empty or more than 40 digits!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    lableValueWebsite.innerHTML = webAddresInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE user email / login
+    // this is in modal
+var emailInput = document.querySelector("#email");
+var emailPasswordInput = document.querySelector("#emailPassword");
+var changeUserEmailForm = document.querySelector("#changeUserEmailForm");
+
+var emailChangeSubmit = document.querySelector("#emailChangeSubmit");
+    //this is in general settings
+var labelValueEmail = document.querySelector("#labelValueEmail");
+var currentStateEmail = document.querySelector("#currentStateEmail");
+
+if(emailChangeSubmit){
+    emailChangeSubmit.addEventListener('click', changeUserEmail);
+}
+function changeUserEmail(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changeEmail');
+    var formData = new FormData(changeUserEmailForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(!validateEmail(emailInput.value)){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML =emailInput.value + ' is not valid email!!!';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else if(emailPasswordInput.value.length > 40 || emailInput.value.length < 2){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'Password cannot be empty or less than 2 symbols, max 40';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                    labelValueEmail.innerHTML = emailInput.value;
+                    currentStateEmail.innerHTML = emailInput.value;
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// CHANGE user Password
+// this is in modal
+var oldPassInput = document.querySelector("#oldPass");
+var newPassInput = document.querySelector("#newPass");
+var newPassValidInput = document.querySelector("#newPassValid");
+
+var changeUserPassForm = document.querySelector("#changeUserPassForm");
+
+var changePasswordSubmit = document.querySelector("#changePasswordSubmit");
+
+if(changePasswordSubmit){
+    changePasswordSubmit.addEventListener('click', changeUserPassword);
+}
+function changeUserPassword(e){
+    e.preventDefault();
+
+    statusBox.innerHTML = '';
+    statusBox.style.display = 'block';
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/changePassword');
+    var formData = new FormData(changeUserPassForm);
+
+    // loading gifs
+    var img = document.createElement('img');
+    img.src = loading_gif_anim;
+    img.classList.add('img_100');
+    statusBox.appendChild(img);
+
+    if(!oldPassInput.value.length < 3 && oldPassInput.value.length > 40){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML ='Old Password min 3 char max 40 char';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    if(!newPassInput.value.length < 3 && newPassInput.value.length > 40){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML ='New Password min 3 char max 40 char';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    if(!newPassValidInput.value.length < 3 && newPassValidInput.value.length > 40){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML = 'New Password Confirm min 3 char max 40 char';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    if(newPassInput.value !== newPassValidInput.value){
+        statusBox.innerHTML = '';
+        statusBox.style.display = 'block';
+        var p = document.createElement('p');
+        p.innerHTML ='New Passwords do not match with password confirm';
+        img.src = attention;
+        statusBox.appendChild(img);
+        statusBox.appendChild(p);
+    }
+    else{
+
+        setTimeout(function(){
+            xhr.onload = function() {
+
+                statusBox.innerHTML = '';
+                statusBox.style.display = 'block';
+
+                var res = JSON.parse(this.responseText);
+                if(res.denied){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.denied;
+                    img.src = denied;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else if(res.errors){
+                    var p = document.createElement('p');
+                    p.innerHTML = res.errors;
+                    img.src = attention;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+                else{
+                    var p = document.createElement('p');
+                    p.innerHTML = "Saved Successfuly";
+                    img.src = successMark;
+                    statusBox.appendChild(img);
+                    statusBox.appendChild(p);
+                }
+            };
+            xhr.send(formData);
+        },500);
+
+    }
+}
+
+// prevent enter submit for forms
+function stopRKey(evt) {
+    var evt = (evt) ? evt : ((event) ? event : null);
+    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+    if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+    if ((evt.keyCode == 13) && (node.type=="number"))  {return false;}
+}
+
+document.onkeypress = stopRKey;
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}

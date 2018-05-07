@@ -35,7 +35,7 @@ class UserDao
 
     const GET_COUNTRIES_LIST = "SELECT * FROM countries";
 
-    const GET_RELATIONSHIP_LIST = "SELECT * FROM relationship ORDER BY id";
+    const GET_RELATIONSHIPS_LIST = "SELECT * FROM relationship ORDER BY id";
 
     const GET_INFO_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
 
@@ -47,29 +47,53 @@ class UserDao
 
     const INSERT_USER_PHOTOS = "INSERT INTO user_photos (user_id,img_url,thumb_url) values (?,?,?)";
 
-    const UPDATE_USER_GENERAL_INFO = "UPDATE users u
-                                        LEFT OUTER JOIN relationship r on
-                                        ? = r.id
-                                        LEFT OUTER JOIN countries c on
-                                        ? = c.id
-                                        SET u.relationship_id = r.id, u.country_id = c.id,
-                                        first_name = ?,last_name = ?,
-                                        gender = ?,birthday = ?, display_name = ?, 
-                                        mobile_number = ?, www =?, skype = ?
-                                        WHERE u.id = ?";
-
-    const UPDATE_USER_SECURITY_INFO = "UPDATE users u
-                                        LEFT OUTER JOIN relationship r on
-                                        ? = r.id
-                                        LEFT OUTER JOIN countries c on
-                                        ? = c.id
-                                        SET u.relationship_id = r.id, u.country_id = c.id,
-                                        first_name = ?,last_name = ?,
-                                        gender = ?,birthday = ?, display_name = ?, 
-                                        mobile_number = ?, www =?, skype = ?
-                                        WHERE u.id = ?";
+    // SETTINGS PAGE QUERY's
 
     const UPDATE_USER_DESCRIPTION_INFO = "UPDATE users SET description = ? WHERE id = ?";
+
+    const UPDATE_USER_FIRST_NAME = "UPDATE users SET first_name = ? WHERE id = ?";
+
+    const UPDATE_USER_LAST_NAME = "UPDATE users SET first_name = ? WHERE id = ?";
+
+    const UPDATE_USER_GENDER = "UPDATE users SET gender = ? WHERE id = ?";
+
+    const UPDATE_USER_BIRTHDAY = "UPDATE users SET birthday = ? WHERE id = ?";
+
+    const UPDATE_USER_DISPLAY_NAME = "UPDATE users SET display_name = ? WHERE id = ?";
+
+    const UPDATE_USER_MOBILE_NUMBER = "UPDATE users SET mobile_number = ? WHERE id = ?";
+
+    const UPDATE_USER_WEBSITE = "UPDATE users SET www = ? WHERE id = ?";
+
+    const UPDATE_USER_SKYPE_NAME = "UPDATE users SET skype = ? WHERE id = ?";
+
+    const UPDATE_USER_EMAIL = "UPDATE users SET email = ? WHERE id = ? AND password = ?";
+
+    const UPDATE_USER_PASSWORD = "UPDATE users SET password = ? WHERE id = ? AND password = ?";
+
+    const GET_USER_RELATIONSHIP_STATUS_NAME = "SELECT r.status_name
+                                            FROM relationship as r
+                                            JOIN users as u ON u.relationship_id = r.id
+                                            WHERE u.id = ?";
+
+    const UPDATE_USER_RELATIONSHIP_ID = "UPDATE users as u,
+                                            relationship as r
+                                            SET
+                                            u.relationship_id = r.id
+                                            WHERE
+                                            u.id = ? AND r.id = ?";
+
+    const UPDATE_USER_COUNTRY_ID = "UPDATE users as u,
+                                            countries as c
+                                            SET
+                                            u.country_id = c.id
+                                            WHERE
+                                            u.id = ? AND c.id = ?";
+
+    const GET_USER_COUNTRY_NAME = "SELECT c.country_name
+                                            FROM countries as c
+                                            JOIN users as u ON u.country_id = c.id
+                                            WHERE u.id = ?";
 
     // getting static connection from DBconnect file
     private function __construct()
@@ -99,32 +123,97 @@ class UserDao
         return $statement->execute(array($user->getFirstName(), $user->getLastName(), $user->getEmail(), $user->getPassword(), $user->getGender(), $user->getBirthday(), $user->getProfilePic(), $user->getProfileCover(),));
     }
 
-    public function saveUserGeneralSettings(User $user){
-
-        $statement = $this->pdo->prepare(self::UPDATE_USER_GENERAL_INFO);
-        $statement->execute(array($user->getRelationshipId(), $user->getCountryId(),
-            $user->getFirstName(), $user->getLastName(), $user->getGender(), $user->getBirthday(),
-            $user->getDisplayName(), $user->getMobileNumber(), $user->getWww(), $user->getSkype(), $user->getId()));
+// SETTINGS PAGE dao functions
+    // GENERAL SETTINGS
+    public function saveFirstName($id, $firstName){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_FIRST_NAME);
+        $statement->execute(array($firstName, $id));
         return $statement->rowCount();
-
-
+    }
+    public function saveLastName($id, $lastName){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_LAST_NAME);
+        $statement->execute(array($lastName, $id));
+        return $statement->rowCount();
+    }
+    public function saveDisplayName($id, $displayName){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_DISPLAY_NAME);
+        $statement->execute(array($displayName, $id));
+        return $statement->rowCount();
     }
 
+    public function saveGender($id, $gender){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_GENDER);
+        $statement->execute(array($gender, $id));
+        return $statement->rowCount();
+    }
+    public function saveBirthday($id, $birthday){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_BIRTHDAY);
+        $statement->execute(array($birthday, $id));
+        return $statement->rowCount();
+    }
+
+    public function saveRelationshipId($id, $relationshipId){
+
+        $statement = $this->pdo->prepare(self::UPDATE_USER_RELATIONSHIP_ID);
+        $statement->execute(array($id, $relationshipId));
+        return $statement->rowCount();
+    }
+    public function getRelationshipStatus($id){
+
+        $statement = $this->pdo->prepare(self::GET_USER_RELATIONSHIP_STATUS_NAME);
+        $statement->execute(array($id));
+        return $statement->fetch(\PDO::FETCH_OBJ);
+    }
+
+    public function saveCountryId($id, $countryId){
+
+        $statement = $this->pdo->prepare(self::UPDATE_USER_COUNTRY_ID);
+        $statement->execute(array($id, $countryId));
+        return $statement->rowCount();
+    }
+    public function getCountryName($id){
+
+        $statement = $this->pdo->prepare(self::GET_USER_COUNTRY_NAME);
+        $statement->execute(array($id));
+        return $statement->fetch(\PDO::FETCH_OBJ);
+    }
+
+    public function saveMobileNumber($id, $mobileNumber){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_MOBILE_NUMBER);
+        $statement->execute(array($mobileNumber, $id));
+        return $statement->rowCount();
+    }
+    public function saveWebsite($id, $websiteUrl){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_WEBSITE);
+        $statement->execute(array($websiteUrl, $id));
+        return $statement->rowCount();
+    }
+    public function saveSkypeName($id, $skypeName){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_SKYPE_NAME);
+        $statement->execute(array($skypeName, $id));
+        return $statement->rowCount();
+    }
+
+    // DESCRIPTION SETTINGS
     public function saveUserDescriptionSettings(User $user){
         $statement = $this->pdo->prepare(self::UPDATE_USER_DESCRIPTION_INFO);
         return $statement->execute(array($user->getDescription(),$user->getId()));
     }
 
-    public function saveUserSecuritySettings(User $user){
-
-        $statement = $this->pdo->prepare(self::UPDATE_USER_GENERAL_INFO);
-        $statement->execute(array($user->getRelationshipId(), $user->getCountryId(),
-            $user->getFirstName(), $user->getLastName(), $user->getGender(), $user->getBirthday(),
-            $user->getDisplayName(), $user->getMobileNumber(), $user->getWww(), $user->getSkype(), $user->getId()));
+    // SECURITY SETTINGS
+    public function saveEmail($id, $email, $password){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_EMAIL);
+        $statement->execute(array($email, $id, $password));
         return $statement->rowCount();
-
     }
 
+    public function savePassword($id, $oldPassword, $password){
+        $statement = $this->pdo->prepare(self::UPDATE_USER_PASSWORD);
+        $statement->execute(array($password, $id, $oldPassword));
+        return $statement->rowCount();
+    }
+
+    // UPLOAD IMAGES
     public function saveUserProfileInfo(User $user)
     {
         $statement = $this->pdo->prepare(self::UPDATE_USER_PICTURE);
@@ -161,10 +250,10 @@ class UserDao
 
     }
 
-    public function checkIfExists(User $user)
+    public function checkIfExistsEmail($email)
     {
         $statement = $this->pdo->prepare(self::CHECK_FOR_EMAIL);
-        $statement->execute(array($user->getEmail()));
+        $statement->execute(array($email));
         return $statement->fetch(\PDO::FETCH_ASSOC)['row'] > 0;
     }
 
@@ -177,7 +266,7 @@ class UserDao
 
     public function getRelationshipList()
     {
-        $statement = $this->pdo->prepare(self::GET_RELATIONSHIP_LIST);
+        $statement = $this->pdo->prepare(self::GET_RELATIONSHIPS_LIST);
         $statement->execute(array());
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }

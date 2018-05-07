@@ -9,7 +9,9 @@ class PostController extends BaseController{
         $dao = PostDao::getInstance();
         if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_SESSION['logged'])) {
             try {
-                echo json_encode($dao->getAllPosts($_SESSION['logged']->getId()));
+                $limit = htmlentities($_GET['limit']);
+                $offset = htmlentities($_GET['offset']);
+                echo json_encode($dao->getAllPosts($_SESSION['logged']->getId(), $limit, $offset));
             } catch (\PDOException $e) {
                 echo $e->getMessage();
             }

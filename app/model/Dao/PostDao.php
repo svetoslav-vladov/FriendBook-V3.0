@@ -37,7 +37,9 @@ class PostDao {
         $statement->execute(array($post_id, $image_url));
     }
 
-    public function  getAllPosts($logged_user_id) {
+    public function  getAllPosts($logged_user_id, $limit, $offset) {
+        $lim = intval($limit);
+        $off = intval($offset);
         // this function return my posts and my friends posts
         $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, 
                                                     posts.create_date, posts.user_id AS user_id, 
@@ -51,7 +53,8 @@ class PostDao {
                                                     IN (SELECT friend_id 
                                                     FROM friends 
                                                     WHERE friends.user_id = ?) OR posts.user_id = ?
-                                                    ORDER BY posts.create_date DESC");
+                                                    ORDER BY posts.create_date DESC
+                                                    LIMIT $lim OFFSET $off");
         $statement->execute(array($logged_user_id, $logged_user_id, $logged_user_id));
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;

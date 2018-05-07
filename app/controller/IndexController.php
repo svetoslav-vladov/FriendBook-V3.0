@@ -88,12 +88,12 @@ class IndexController extends \controller\BaseController
     public function main(){
         $dao = PostDao::getInstance();
         $data = [];
-        try {
-            $allPosts = $dao->getAllPosts($_SESSION['logged']->getId());
-            $data['newsFeed'] = $allPosts;
-        } catch (\PDOException $e) {
-            echo $e->getMessage();
-        }
+//        try {
+//            $allPosts = $dao->getAllPosts($_SESSION['logged']->getId());
+//            $data['newsFeed'] = $allPosts;
+//        } catch (\PDOException $e) {
+//            echo $e->getMessage();
+//        }
         $this->renderView('main', $data);
     }
 

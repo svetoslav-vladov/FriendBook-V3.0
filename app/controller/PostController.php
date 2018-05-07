@@ -7,9 +7,20 @@ class PostController extends BaseController{
 
     public function getAllPosts() {
         $dao = PostDao::getInstance();
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_SESSION['logged'])) {
             try {
-                echo json_encode($dao->getAllPosts());
+                echo json_encode($dao->getAllPosts($_SESSION['logged']->getId()));
+            } catch (\PDOException $e) {
+                echo $e->getMessage();
+            }
+        }
+    }
+
+    public function getAllPostsByLike() {
+        $dao = PostDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_SESSION['logged'])) {
+            try {
+                echo json_encode($dao->getAllPostsByLike($_SESSION['logged']->getId()));
             } catch (\PDOException $e) {
                 echo $e->getMessage();
             }
@@ -121,8 +132,8 @@ class PostController extends BaseController{
     public function deletePost() {
         $dao = PostDao::getInstance();
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $user_id = $_SESSION['logged']->getId();
             $post_id = htmlentities($_POST['post_id']);
+            $user_id = $_SESSION['logged']->getId();
             $dao->deletePost($post_id, $user_id);
         }
     }

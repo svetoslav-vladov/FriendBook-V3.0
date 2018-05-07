@@ -144,12 +144,7 @@ function deletePost(post_id) {
             setTimeout(function () {
                 $('#post'+post_id).remove();
             }, 600);
-
         }
     };
     request.send("post_id=" + post_id);
-}
-
-function viewDetails(post_id) {
-
 }

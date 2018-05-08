@@ -268,12 +268,14 @@ class UserController extends BaseController{
             if (isset($validResult['count_err'])) {
                 $status['img_count_error'] = $validResult['count_err'];
                 echo json_encode($status);
-            } elseif (isset($validResult['form']) && empty($validResult['form']['name'])) {
+            }
+            elseif (isset($validResult['form']) && empty($validResult['form']['name'])) {
                 $status = array();
                 $status['error'] = 'Failed to upload!';
                 $status['info'] = $validResult['err'];
                 echo json_encode($status);
-            } elseif (isset($validResult['form'])) {
+            }
+            elseif (isset($validResult['form'])) {
                 $formImages = $validResult['form'];
                 $imgObjects = parent::generateImagesList($formImages, $mode);
 
@@ -311,12 +313,105 @@ class UserController extends BaseController{
                 } else {
                     echo "images not created";
                 }
-            } else {
+            }
+            else {
                 echo "Validation Error...";
             }
         }
         else{
             header('location:'.URL_ROOT.'/error/401');
+        }
+    }
+
+    // create album
+
+    public function createAlbumPhotos(){
+        if(isset($_FILES) && !is_array($_FILES['albumFiles']['name'])){
+            $status['error'] = 'Wrong input type, mutiple files expected';
+            echo json_encode($status);
+        }
+        elseif(isset($_FILES) && !count($_FILES['albumFiles']['name']) > 0){
+            $status['error'] = 'Files input cannot be empty';
+            echo json_encode($status);
+        }
+
+        if(isset($_POST['albumName']) && isset($_FILES['albumFiles']) && !isset($status['error'])){
+            $albumName = htmlentities(trim($_POST['albumName']));
+
+            $mode = 'albums';
+            $formImages = $_FILES['albumFiles'];
+            $status = array();
+
+            if(!$albumName > 0){
+                $status['error'] = "Album name cannot be empty";
+            }
+            if(!$albumName > 0){
+                $status['error'] = "Album name cannot be empty";
+            }
+
+            if(!isset($status['error'])){
+                // validation
+                // returns assoc array -> form key , status key , err key
+                $validResult = parent::imageValidation($formImages, $mode);
+
+                // if validation err or true / NOTE: wrong files or images wont stop
+                if (isset($validResult['count_err'])) {
+                    $status['img_count_error'] = $validResult['count_err'];
+                    echo json_encode($status);
+                }
+                elseif (isset($validResult['form']) && empty($validResult['form']['name'])) {
+                    $status = array();
+                    $status['error'] = 'Failed to upload!';
+                    $status['info'] = $validResult['err'];
+                    echo json_encode($status);
+                }
+                elseif (isset($validResult['form'])) {
+                    $formImages = $validResult['form'];
+                    $imgObjects = parent::generateImagesList($formImages, $mode);
+
+                    // if img list generated
+                    if ($imgObjects) {
+
+                        //  thumbnail generated
+                        parent::generateThumbnailsList($imgObjects, $mode);
+
+                        $dao = UserDao::getInstance();
+                        try {
+
+                            if($dao->saveUserAlbumAndPhotos($_SESSION['logged']->getId(),$albumName,$imgObjects)){
+                                $response = [];
+                                $response['success'] = true;
+                                if (isset($validResult['err'])) {
+                                    $response['dataNotPassed'] = $validResult['err'];
+                                }
+
+                                foreach ($imgObjects as $idx=>$row){
+                                    $response['picture_object_data'][] = $imgObjects[$idx]->object_to_array($imgObjects[$idx]);
+                                }
+                                echo json_encode($response);
+
+                            }
+
+                        } catch (\PDOException $e) {
+                            $status['error'] = $e->getMessage();
+                            echo json_encode($status);
+                        } catch (\Exception $e) {
+                            $status['error'] = $e->getMessage();
+                            echo json_encode($status);
+                        }
+
+                    }
+                    else {
+                        echo "images not created";
+                    }
+                }
+                else {
+                    echo "Validation Error...";
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
         }
     }
 
@@ -1442,4 +1537,5 @@ class UserController extends BaseController{
             return true;
         }
     }
+
 }

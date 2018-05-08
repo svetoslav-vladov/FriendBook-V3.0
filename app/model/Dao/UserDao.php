@@ -19,7 +19,7 @@ class UserDao
 
     const CHECK_FOR_EMAIL = "SELECT COUNT(*) as row FROM users WHERE email = ?";
 
-    const GET_PROFILE_IMAGES = "SELECT img_url FROM user_photos WHERE user_id = ? LIMIT 16;";
+    const GET_PROFILE_IMAGES = "SELECT img_url FROM user_photos WHERE user_id = ? AND album_id IS NULL LIMIT 16;";
 
     const LOGIN_CHECK_WITH_FULL_USER_DETAILS = "SELECT u.* , c.country_name, r.status_name as relationship_tag
                         FROM users as u
@@ -46,6 +46,9 @@ class UserDao
     const UPDATE_USER_COVER = "UPDATE users SET profile_cover = ?, thumbs_cover = ? WHERE id = ?";
 
     const INSERT_USER_PHOTOS = "INSERT INTO user_photos (user_id,img_url,thumb_url) values (?,?,?)";
+
+    const INSERT_USER_ALBUM = "INSERT INTO photo_albums (name, user_id) values (?,?)";
+    const INSERT_USER_ALBUM_PHOTOS = "INSERT INTO user_photos (user_id, img_url, album_id, thumb_url) values (?,?,?,?)";
 
     // SETTINGS PAGE QUERY's
 
@@ -237,6 +240,39 @@ class UserDao
                 throw new \PDOException('failed');
             }
         }
+
+        return true;
+    }
+
+    public function saveUserAlbumAndPhotos($userId, $albumName, $imagesList)
+    {
+        $album = $this->pdo->prepare(self::INSERT_USER_ALBUM);
+
+        $albumPhotos = $this->pdo->prepare(self::INSERT_USER_ALBUM_PHOTOS);
+
+        try{
+            $this->pdo->beginTransaction();
+
+            $album->execute(array($albumName,$userId));
+            $albumId = $this->pdo->lastInsertId();
+
+            foreach ($imagesList as $pic_obj) {
+                $albumPhotos->execute(array($userId, $pic_obj->getUrlOnDiskPicture(), $albumId, $pic_obj->getUrlOnDiskThumb()));
+            }
+
+            $this->pdo->commit();
+        }
+        catch (\PDOException $e){
+            $this->pdo->rollBack();
+            throw new \PDOException($e->getMessage());
+        }
+//        $stmt = $this->pdo->prepare(self::INSERT_USER_PHOTOS);
+//
+//        foreach ($imagesList as $pic_obj) {
+//            if (!$stmt->execute(array($userId, $pic_obj->getUrlOnDiskPicture(), $pic_obj->getUrlOnDiskThumb()))) {
+//                throw new \PDOException('failed');
+//            }
+//        }
 
         return true;
     }

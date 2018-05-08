@@ -5,12 +5,6 @@
 ?>
 
 <div id="wrap" class="mt-5">
-    <div id="myModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-
-        </div>
-    </div>
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-lg-3">
@@ -39,25 +33,18 @@
                         // button and form for change cover - start
                         if($theUser->getId() === $_SESSION['logged']->getId()){
                             ?>
+                            <div id="change_profile_cover">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <form id="upload_cover_form" class="d-none" action="<?php echo URL_ROOT . "/user/changeProfilePic" ?>" method="post" enctype="multipart/form-data">
+                                <label for="cover_image_input"></label>
+                                <input type="file" id="cover_image_input" name="images[]" multiple accept="image/*">
+                            </form>
+                        <?php
 
-                    <div id="change_profile_cover">
-                        <i class="fas fa-edit"></i>
-                    </div>
-                    <form id="upload_cover_form" class="d-none" action="<?php echo URL_ROOT . "/user/changeProfilePic" ?>" method="post" enctype="multipart/form-data">
-                        <label for="cover_image_input"></label>
-                        <input type="file" id="cover_image_input" name="images[]" multiple accept="image/*">
-                    </form>
-                    <?php
-                        }
-                        // button and form for change cover - ende
-                    ?>
+                        } // button and form for change cover - end
 
-                    <?php
-
-                        if($theUser->getId() === $_SESSION['logged']->getId()){
-
-                        }
-                        else {
+                        if(!($theUser->getId() === $_SESSION['logged']->getId())){
                             ?>
                             <div class="coverProfilePic card text-center p-1">
                                 <a data-toggle="lightbox" data-gallery="other_profile_pic" href="<?php echo URL_ROOT . $theUser->getProfilePic(); ?>">
@@ -66,17 +53,15 @@
                                     echo $theUser->getFullName() . 'profile picture'; ?>">
                                 </a>
 
-
-
                                 <ul class="navbar-nav">
                                     <li class="nav-item dropdown col-md-12">
                                         <a class="nav-link dropdown-toggle text-dark" id="friendRequests"
                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <?php echo ucwords($theUser->getFullName()); ?>
+                                            <?php echo ucwords($theUser->getFullName()); ?>
                                             <i class="fa fa-users text-dark"></i></a>
                                         <div class="dropdown-menu text-white" aria-labelledby="friendRequests">
-                                           <a class="dropdown-item" onclick="sendFriendRequest(<?php echo $theUser->getId(); ?>)" href="#">Add Friend</a>
-                                           <a class="dropdown-item" href="#">Follow</a>
+                                            <a class="dropdown-item" onclick="sendFriendRequest(<?php echo $theUser->getId(); ?>)" href="#">Add Friend</a>
+                                            <a class="dropdown-item" href="#">Follow</a>
                                         </div>
                                     </li>
                                 </ul>
@@ -198,47 +183,60 @@
                     </div>
                 </div>
                 <div id="photos" class="card p-3">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card p-3 text-center small" id="albumAdd" data-toggle="modal" data-target="#albumPopupInsert">
+                                <?php
+                                if (!(isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId())) {
+                                    ?>
+                                    <span>
+                                        <img class="img-thumbnail" src="<?php echo URL_ROOT . '/assets/images/addAlbum.png' ?>" alt="">
+                                    </span>
+                                    <?php
+                                }
+                                ?>
+                                <div>Add Album</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card p-3 text-center small" id="ImageAdd">
+                                <?php
+                                if (!(isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId())) {
+                                    ?>
+                                    <form id="uploadUserPhotosForm" action="<?php echo URL_ROOT . "/user/uploadProfilePhotos"; ?>" method="post" enctype="multipart/form-data">
+                                        <input name="images[]" id="uploadPhotosInput" type="file" multiple accept="image/*"/>
+                                    </form>
+                                    <span>
+                                         <img class="img-thumbnail" id="imageUploadBtn" src="<?php echo URL_ROOT . '/assets/images/addImage.png' ?>" alt="">
+                                    </span>
+                                    <?php
+                                }
+                                ?>
+                                <div>Add Photos</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card p-3 text-center small" id="statusBoxPics">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
                     <h1>Albums</h1>
 
                     <div class="holder p-3">
-                        <?php
-                        if (isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId()) {
-
-                        }
-                        else{
-                            ?>
-                            <span id="albumAdd">
-                                <img class="img-thumbnail img_100" src="<?php echo URL_ROOT . '/assets/images/add_album_photos.png' ?>" alt="">
-                            </span>
-                            <?php
-                        }
-                        ?>
                         <span id="albumList"></span>
+                        <span id="albumPagination"></span>
                     </div>
                     <hr>
                     <h1>Photos</h1>
                     <p>Limit 16 imgs</p>
                     <div class="holder p-3">
-                    <?php
-                    if (isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId()) {
-
-                    }
-                    else{
-                        ?>
-                        <form id="uploadUserPhotosForm" action="<?php echo URL_ROOT . "/user/uploadProfilePhotos"; ?>" method="post" enctype="multipart/form-data">
-                            <input name="images[]" id="uploadPhotosInput" type="file" multiple accept="image/*"/>
-                        </form>
-                        <span id="ImageAdd">
-                            <img class="img-thumbnail img_100 p-2" id="imageUploadBtn" src="<?php echo URL_ROOT . '/assets/images/add_img.png' ?>" alt="">
-                        </span>
-                        <hr>
-                        <?php
-                    }
-                    ?>
                         <div class="row justify-content-center">
                             <div class="col-md-12">
                                 <div class="row text-center" id="image_list">
-
+                                    <!-- images generate here !-->
                                 </div>
                             </div>
                         </div>
@@ -246,9 +244,57 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <!--/row-->
     </div>
     <!--/.fluid-container-->
+</div>
+
+<!-- The Modal for album add-->
+<div class="modal" id="albumPopupInsert">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create photo album</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="albumInsertForm" action="<?php echo URL_ROOT . '/user/createAlbumUploadPhotos' ?>"
+                      method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="albumName">Album Name:</label>
+                        <input type="text" name="albumName" id="albumName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="albumName">Upload photos:</label>
+                        <input type="file" name="albumFiles[]" id="albumFiles" multiple class="form-control">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="small">
+                                <li>Album name max 30 characters</li>
+                                <li>All fileds required, atleast one photo and album name</li>
+                                <li>Maximum images for upload at once <?php echo MAX_IMG_UPLOAD_PHOTOS; ?></li>
+                                <li>Max image size <?php echo formatBytes(MAX_IMG_UPLOAD_PHOTO_SIZE); ?></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <button type="button" class="btn btn-success form-control" id="createAlbumSubmit"
+                                    data-dismiss="modal">Create</button>
+                        </div>
+                        <div class="col-md-6 text-center">
+                        <button type="button" class="btn btn-danger form-control" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

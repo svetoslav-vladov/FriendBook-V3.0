@@ -419,7 +419,6 @@ a.comment_owner {
 }
 .icon img {
     width: 100%;
-    height: -webkit-fill-available;
     border-radius: 50%;
 }
 .name {
@@ -578,16 +577,6 @@ div#profile-pic img {
 #profile-pic{
     position: relative;
     text-align: center;
-}
-
-span#ImageAdd img {
-    opacity:  0.7;
-    transition:  opacity 0.4s ease-in-out;
-    cursor:  pointer;
-}
-
-span#ImageAdd img:hover {
-    opacity:  1;
 }
 input#upload_photos {
     display: none;
@@ -975,6 +964,22 @@ span.currentState {
     color: green !important;
 }
 
+#ImageAdd, #albumAdd {
+    opacity:  0.7;
+    transition: opacity 0.3s ease-in-out;
+    cursor:  pointer;
+}
+
+#ImageAdd:hover, #albumAdd:hover {
+    opacity:  1;
+}
+#statusBoxPics{
+     display: none;
+}
+#statusBoxPics img {
+    width: 58px;
+    height: 58px;
+}
 .loading_posts {
     display: block;
     margin: 0px auto;

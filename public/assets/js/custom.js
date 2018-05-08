@@ -2,6 +2,7 @@
 
 var url_root = window.location.origin + '/projects/FriendBook-v3.0';
 var loading_gif_anim = url_root + '/assets/images/ajax-loading-c4.gif';
+var loadingGifTwo = url_root + '/assets/images/loading.gif';
 var successMark = url_root + '/assets/images/Yes_Check_Circle.svg.png';
 var attention = url_root + '/assets/images/attention.png';
 var denied = url_root + '/assets/images/denied.png';
@@ -444,17 +445,6 @@ function uploadProfilePhotos() {
 
             success.appendChild(ul);
             success.appendChild(loading);
-
-
-
-
-            //console.log(res);
-           // console.log(res.picture_object_data[0].urlOnDiskPicture);
-           // console.log(res.picture_object_data[1].urlOnDiskPicture);
-
-
-            // picFullA.href = url_root + res.images.full;
-            // picThumb.style.backgroundImage = "url('" + url_root + res.images.thumb + "')";
 
         }
 
@@ -1566,6 +1556,149 @@ function stopRKey(evt) {
     var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
     if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
     if ((evt.keyCode == 13) && (node.type=="number"))  {return false;}
+}
+
+// ADD ALBUM FORM
+
+var albumName = document.querySelector('#albumName');
+var albumInsertForm = document.querySelector('#albumInsertForm');
+var albumFiles = document.querySelector('#albumFiles');
+
+var statusBoxPics = document.querySelector('#statusBoxPics');
+
+var createAlbumSubmit = document.querySelector('#createAlbumSubmit');
+
+if(createAlbumSubmit){
+    createAlbumSubmit.addEventListener('click', addUserAlbum);
+}
+
+function addUserAlbum() {
+    var xhr = new XMLHttpRequest();
+    var formData = new FormData(albumInsertForm);
+    xhr.open('post', url_root + '/user/createAlbumPhotos');
+
+    xhr.onload = function () {
+
+        var success = document.querySelector('#ajax_success');
+        var error = document.querySelector('#ajax_error');
+        var title = document.createElement('h3');
+        var ul = document.createElement('ul');
+
+        success.innerHTML = '';
+        error.innerHTML = '';
+        title.innerHTML = '';
+        ul.innerHTML= '';
+
+        var res = JSON.parse(this.responseText);
+
+        if(res.img_count_error){
+
+            var p = document.createElement('p');
+            title.innerHTML = 'Error:';
+            p.innerHTML = res.img_count_error;
+
+            error.appendChild(title);
+            error.appendChild(p);
+            error.style.display = 'block';
+        }
+        else if(res.error){
+
+            title.innerHTML = res.error;
+
+            for (var i = 0; i < res.info.length; i++){
+                var li = document.createElement('li');
+                li.innerHTML = 'Errors: ' + res.info[i].errors + '<br> File Name: ' + res.info[i].name;
+                ul.appendChild(li);
+            }
+            error.appendChild(title);
+            error.appendChild(ul);
+
+            error.style.display = 'block';
+        }
+        else if(res.success){
+
+            title.innerHTML = 'Loading...';
+
+            for (var i = 0; i < res.dataNotPassed.length; i++){
+                //console.log(res.dataNotPassed);
+
+                var li = document.createElement('li');
+                li.innerHTML = 'File Name: ' + res.dataNotPassed[i].name + ' ----- Errors: ' + res.dataNotPassed[i].errors[0];
+                ul.appendChild(li);
+
+            }
+
+            ul.style.backgroundColor = 'red';
+            success.appendChild(title);
+
+
+            // appending data after second loop
+
+            success.style.display = 'block';
+
+            success.style.backgroundColor= 'yellow';
+            var loading = document.createElement('img');
+            loading.src = url_root+loading_gif_anim;
+            success.appendChild(loading);
+
+            for (var x = 0; x < res.picture_object_data.length; x++){
+                var link_img = document.createElement('a');
+                link_img.setAttribute('data-toggle','lightbox');
+                link_img.setAttribute('data-gallery','single-images');
+                link_img.setAttribute('class','col-sm-3');
+                link_img.href = root + res.picture_object_data[x].urlOnDiskPicture;
+
+                var img_photo = document.createElement('img');
+                img_photo.src = root + res.picture_object_data[x].urlOnDiskThumb;
+                img_photo.classList.add('img_100');
+                img_photo.classList.add('img-thumbnail');
+
+                link_img.appendChild(img_photo);
+                image_list_box.appendChild(link_img);
+
+            }
+            success.innerHTML ='';
+            loading.src = successMark;
+            loading.style.height = '50px';
+            title.innerHTML = 'Succesfully uploaded';
+            success.style.backgroundColor= 'green';
+            success.appendChild(title);
+            if(res.error){
+                var hr = document.createElement('hr');
+                success.appendChild(hr);
+                var notUploaded = document.createElement('notUploaded');
+                notUploaded.innerHTML = 'Files not Uploaded:';
+                notUploaded.style.fontWeight = 'bold';
+                success.appendChild(notUploaded);
+            }
+
+            success.appendChild(ul);
+            success.appendChild(loading);
+
+        }
+
+
+    };
+
+    if(albumName.value.length === 0 || albumName.value.length > 20){
+        statusBoxPics.style.display = "block";
+        statusBoxPics.style.backgroundColor = "#dc3545";
+        statusBoxPics.style.color = "white";
+
+        statusBoxPics.innerHTML = "Album name cannot be empty or more tan 20 char";
+    }
+    else if(albumFiles.files.length === 0){
+        statusBoxPics.style.display = "block";
+        statusBoxPics.style.backgroundColor = "#ffc107";
+        statusBoxPics.style.color = "black";
+
+        statusBoxPics.innerHTML = "No selected files!!!";
+    }
+    else{
+        xhr.send(formData);
+    }
+
+
 }
 
 document.onkeypress = stopRKey;

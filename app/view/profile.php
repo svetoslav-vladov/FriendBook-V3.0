@@ -81,9 +81,30 @@
                 </div>
                 <hr>
                 <input type="hidden" name="user_id" id="user_nav_id" value="<?php echo $theUser->getId(); ?>">
-                <div id="timeline">
+                <div id="timeline" class="col-md-9 col-sm-12">
                     <h1>Your Posts:</h1>
-                    <?php var_dump($theUser); ?>
+                    <div id="profile_news_feed">
+                        <script>
+                            $(document).ready(function () {
+                                var limit = 3;
+                                var offset = 0;
+                                getOwnPosts(<?php echo $theUser->getId(); ?>, limit, offset);
+
+                                $(window).scroll(function() {
+                                    if($(window).scrollTop() == $(document).height() - ($(window).height())) {
+                                        offset += 3;
+                                        $('.loading_posts').show();
+                                        setTimeout(function () {
+                                            getOwnPosts(<?php echo $theUser->getId(); ?>, limit, offset);
+                                        },200);
+                                    }
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="loading_posts_container">
+                        <img src="<?php echo URL_ROOT."/assets/images/ajax-loading-c4.gif"?>" class="loading_posts" style="display: none">
+                    </div>
                 </div>
                 <div id="about" class="card p-3">
                     <h1>About</h1>
@@ -128,7 +149,7 @@
                                     <span class="aboutValue"><?php echo $theUser->getWww(); ?></span>
                                 </div>
                                 <div>
-                                    <span class="nav-icon"><i class="fas fa-skype"></i></span>
+                                    <span class="nav-icon"><i class="fab fa-skype"></i></span>
                                     <span class="aboutTag">Skype:</span>
                                     <span class="aboutValue"><?php echo $theUser->getSkype(); ?></span>
                                 </div>

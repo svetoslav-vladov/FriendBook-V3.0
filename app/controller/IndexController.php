@@ -13,8 +13,8 @@ class IndexController extends \controller\BaseController
         $this->renderView('login');
     }
 
-    public function postsbylike(){
-        $this->renderView('postsbylike');
+    public function register(){
+        $this->renderView('register');
     }
 
     public function profile()
@@ -39,6 +39,10 @@ class IndexController extends \controller\BaseController
         $this->renderView('profile', $theUser);
     }
 
+    public function postsbylike(){
+        $this->renderView('postsbylike');
+    }
+
     public function friends()
     {
 
@@ -60,10 +64,9 @@ class IndexController extends \controller\BaseController
         $this->renderView('friends', $theUser);
     }
 
-    public function register(){
-        $this->renderView('register');
+    public function album(){
+        $this->renderView('album');
     }
-
 
     public function settings(){
         try {

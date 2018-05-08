@@ -154,7 +154,7 @@ class PostController extends BaseController{
     public function deletePost() {
         $dao = PostDao::getInstance();
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $post_id = htmlentities($_POST['post_id']);
+            $post_id = $_POST['post_id'];
             $user_id = $_SESSION['logged']->getId();
             $dao->deletePost($post_id, $user_id);
         }

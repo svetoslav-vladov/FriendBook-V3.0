@@ -97,7 +97,6 @@ class UserController extends BaseController{
             $gender = htmlentities($_POST['gender']);
             $birthday = htmlentities($_POST['birthday']);
             // BETTER PHP validation NEEDED here
-
             if($gender == "male"){
                 $profile_pic = $GLOBALS['male_default_picture'];
 
@@ -116,10 +115,13 @@ class UserController extends BaseController{
             $user = new User();
             $user->setEmail($email);
 
-            $checkUserExists = $dao->checkIfExistsEmail($user);
+            $checkUserExists = $dao->checkIfExistsEmail($user->getEmail());
 
             if ($checkUserExists) {
                 $error = 'Username is already taken.';
+            }
+            elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error = "Invalid email format!";
             }
             elseif($pass !== $pass_valid) {
                 $error = 'Passwords differ, miss match!';

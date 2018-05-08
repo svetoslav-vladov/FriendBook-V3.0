@@ -43,6 +43,10 @@ class IndexController extends \controller\BaseController
         $this->renderView('postsbylike');
     }
 
+    public function post(){
+        $this->renderView('post');
+    }
+
     public function friends()
     {
 

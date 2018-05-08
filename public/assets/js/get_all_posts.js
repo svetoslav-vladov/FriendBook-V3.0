@@ -227,7 +227,7 @@ function getOwnPosts(user_id,limit, offset) {
                                             <h5 class="modal-title" id="exampleModalLongTitle">Do you really want to delete the post?</h5>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="deletePost(${post['post_id']})">Yes</button>
+                                            <button type="button" id="${post['post_id']}" class="btn btn-primary">Yes</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                                         </div>
                                     </div>
@@ -291,7 +291,6 @@ function getOwnPosts(user_id,limit, offset) {
 
 function deletePost(post_id) {
     var request = new XMLHttpRequest();
-    request.open('POST', url_root + '/post/deletePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -302,7 +301,9 @@ function deletePost(post_id) {
             setTimeout(function () {
                 $('#post'+post_id).remove();
             }, 600);
+            console.log(post_id);
         }
     };
+    request.open('POST', url_root + '/post/deletePost');
     request.send("post_id=" + post_id);
 }

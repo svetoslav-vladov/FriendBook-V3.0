@@ -81,26 +81,33 @@
                 </div>
                 <hr>
                 <input type="hidden" name="user_id" id="user_nav_id" value="<?php echo $theUser->getId(); ?>">
-                <div id="timeline" class="col-md-9 col-sm-12">
-                    <h1>Your Posts:</h1>
-                    <div id="profile_news_feed">
-                        <script>
-                            $(document).ready(function () {
-                                var limit = 3;
-                                var offset = 0;
-                                getOwnPosts(<?php echo $theUser->getId(); ?>, limit, offset);
 
-                                $(window).scroll(function() {
-                                    if($(window).scrollTop() == $(document).height() - ($(window).height())) {
-                                        offset += 3;
-                                        $('.loading_posts').show();
-                                        setTimeout(function () {
-                                            getOwnPosts(<?php echo $theUser->getId(); ?>, limit, offset);
-                                        },200);
-                                    }
-                                });
-                            });
-                        </script>
+                <div id="timeline">
+                    <h1>Your Posts:</h1>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div id="profile_news_feed" class="col-md-9">
+                                <script>
+                                    $(document).ready(function () {
+                                        var limit = 3;
+                                        var offset = 0;
+                                        getOwnPosts(<?php echo $theUser->getId(); ?>, limit, offset);
+
+                                        $(window).scroll(function() {
+                                            if($(window).scrollTop() == $(document).height() - ($(window).height())) {
+                                                offset += 3;
+                                                $('.loading_posts').show();
+                                                setTimeout(function () {
+                                                    getOwnPosts(<?php echo $theUser->getId(); ?>, limit, offset);
+                                                },200);
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
                     </div>
                     <div class="loading_posts_container">
                         <img src="<?php echo URL_ROOT."/assets/images/ajax-loading-c4.gif"?>" class="loading_posts" style="display: none">

@@ -632,113 +632,6 @@ class UserController extends BaseController{
         }
     }
 
-    public function saveGeneralSettings(){
-        if(isset($_POST['data'])){
-            // working with objects
-            $data = json_decode($_POST['data']);
-        }
-
-        if(isset($_POST['general']) && count($_POST['data'])>0){
-
-            $first_name = htmlentities($data->first_name);
-            $last_name = htmlentities($data->last_name);
-            $display_name = htmlentities($data->display_name);
-            $relation_status = htmlentities($data->relation_status);
-            $gender = htmlentities($data->gender);
-            $birthday = htmlentities($data->birthday);
-            $country = htmlentities($data->country);
-            $website = htmlentities($data->website);
-            $mobile_number = htmlentities($data->mobile_number);
-            $skype_name = htmlentities($data->skype_name);
-
-            $loggedUsr = $_SESSION['logged'];
-
-            $newUserInfo = clone $_SESSION['logged'];
-
-            $status = [];
-            var_dump(strlen($_POST['data']));
-
-            // THIS IFs have to modify them with something more dynamic for or fore
-            if(strlen(trim($first_name)) > 0){
-                $newUserInfo->setFirstName($data->first_name);
-            }
-
-            if(strlen(trim($last_name)) > 0){
-                $newUserInfo->setLastName($data->last_name);
-            }
-
-            if(strlen(trim($gender)) > 0){
-                $newUserInfo->setGender($data->gender);
-            }
-
-            if(strlen(trim($birthday)) > 0 ){
-                $newUserInfo->setBirthday($data->birthday);
-            }
-
-            if(strlen(trim($country)) > 0 ){
-                $newUserInfo->setCountryId($data->country);
-            }
-
-            if(strlen(trim($relation_status)) > 0){
-                $newUserInfo->setRelationshipId($data->relation_status);
-            }
-
-            if(strlen(trim($display_name)) > 0){
-                $newUserInfo->setDisplayName($data->display_name);
-            }
-
-            if(strlen(trim($mobile_number)) > 0){
-                $newUserInfo->setMobileNumber($data->mobile_number);
-            }
-
-            if(strlen(trim($website)) > 0){
-                $newUserInfo->setWww($data->website);
-            }
-
-            if(strlen(trim($skype_name)) > 0){
-                $newUserInfo->setSkype($data->skype_name);
-            }
-            var_dump($_POST['data']);
-            if($newUserInfo != $loggedUsr){
-                try{
-                    $dao = UserDao::getInstance();
-                    // passing new user info which is cloned from session
-
-                    if($dao->saveUserGeneralSettings($newUserInfo)){
-
-                        $newUserInfo = $dao->getFullUserInfoById($loggedUsr);
-
-                        // this is setting = object from db with User Class
-                        cast($_SESSION['logged'],$newUserInfo);
-                        $fullname = $_SESSION['logged']->getFirstName() . " " . $_SESSION['logged']->getLastName();
-                        $_SESSION['logged']->setFullName($fullname);
-                        $_SESSION['logged']->setPassword('');
-                        $status['success'] = true;
-                        echo json_encode($status);
-                    }
-                    else{
-                        $status['denied'] = 'Save denied!!!';
-                        echo json_encode($status);
-                    }
-                }catch (\PDOException $e){
-                    $status['errors'] = $e->getMessage();
-                    echo json_encode($status);
-                }catch (\Exception $e){
-                    $status['errors'] = $e->getMessage();
-                    echo json_encode($status);
-                }
-            }
-            else{
-                $status['errors'] = 'No Changes saved!!!';
-                echo json_encode($status);
-            }
-        }
-        else{
-            $msg = 'Wrong action...';
-            header('location:'.URL_ROOT.'/index/login&error=' . $msg);
-        }
-    }
-
     // GENERAL SETTINGS PAGE
     public function changeFirstName(){
 
@@ -1355,11 +1248,12 @@ class UserController extends BaseController{
 
     }
 
-    // DESCRIPTION SETTINGS PAGE
+    // DESCRIPTION SETTINGS PAGE -- corrections to be made
     public function saveDescriptionSettings(){
         if(isset($_POST['data'])){
-            // working with objects
+            // working with objects from javascript
             $data = json_decode(trim(($_POST['data'])));
+
         }
         if(isset($_POST['description']) && count($_POST['data'])>0){
 

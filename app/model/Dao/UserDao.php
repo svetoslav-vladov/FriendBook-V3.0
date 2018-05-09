@@ -60,13 +60,6 @@ class UserDao
                                             JOIN photo_albums as pa ON up.album_id = pa.id
                                             WHERE up.user_id = ? AND up.album_id = ?";
 
-    const GET_PROFILE_ALBUM_PHOTOS_BY_ID_AND_USER = "SELECT up.*, CONCAT(u.first_name, ' ',u.last_name) as full_name,
-                                                    u.profile_pic, thumbs_profile,
-                                                    pa.name as album_name FROM user_photos as up 
-                                                    JOIN photo_albums as pa ON up.album_id = pa.id
-                                                    JOIN users as u ON up.user_id = u.id
-                                                    WHERE up.user_id = ? AND up.album_id = ?";
-
     // SETTINGS PAGE QUERY's
 
     const UPDATE_USER_DESCRIPTION_INFO = "UPDATE users SET description = ? WHERE id = ?";
@@ -324,17 +317,17 @@ class UserDao
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function getFullUserInfoById(User $user)
+    public function getFullUserInfoById($userId)
     {
         $statement = $this->pdo->prepare(self::GET_USER_FULL_DETAILS_BY_ID);
-        $statement->execute(array($user->getId()));
+        $statement->execute(array($userId));
         return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
-    public function getUserInfoById(User $user)
+    public function getUserInfoById($userId)
     {
         $statement = $this->pdo->prepare(self::GET_INFO_BY_ID);
-        $statement->execute(array($user->getId()));
+        $statement->execute(array($userId));
         return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
@@ -356,22 +349,14 @@ class UserDao
     {
         $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUMS_LIMIT_50);
         $statement->execute(array($userId));
-        return $statement->fetchALL(\PDO::FETCH_ASSOC);
+        return $statement->fetchALL(\PDO::FETCH_OBJ);
     }
-
-    public function getUserAlbumsPhotosByIdAndUser($userId, $albumId)
-    {
-        $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUM_PHOTOS_BY_ID_AND_USER);
-        $statement->execute(array($userId,$albumId));
-        return $statement->fetchALL(\PDO::FETCH_ASSOC);
-    }
-
 
     public function getUserAlbumPhotosById($userId, $albumId)
     {
         $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUM_PHOTOS_BY_IDS);
         $statement->execute(array($userId,$albumId));
-        return $statement->fetchALL(\PDO::FETCH_ASSOC);
+        return $statement->fetchALL(\PDO::FETCH_OBJ);
     }
 
     public function getAllUsers($logged_user_id)

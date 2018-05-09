@@ -9,7 +9,6 @@ use Model\Dao\UserDao;
 class IndexController extends \controller\BaseController
 {
 
-
     public function login(){
         $this->renderView('login');
     }
@@ -26,10 +25,11 @@ class IndexController extends \controller\BaseController
             $dao = UserDao::getInstance();
 
             $theUser = new User();
-            $theUser->setId(htmlentities($_GET['id']));
+
+            $theUserId = htmlentities($_GET['id']);
 
             try {
-                $result = $dao->getUserInfoById($theUser);
+                $result = $dao->getFullUserInfoById($theUserId);
                 // we can check if id is given to see if that id is a friend, for profile view nav
                 //$isFriend = $dao->getUserFriendStatus($theUser);
                 if ($result) {
@@ -88,20 +88,37 @@ class IndexController extends \controller\BaseController
         $data = array();
         $dao = UserDao::getInstance();
 
+        // if album id + user id passed
         if(isset($_GET['id']) && isset($_GET['userId'])){
             $userId = htmlentities($_GET['userId']);
             $albumId = htmlentities($_GET['id']);
+
+            // get user id full info
+            if($_SESSION['logged']->getId() !== $userId){
+                try{
+                    if(!$dao->getFullUserInfoById($userId)){
+                        $data['errors'] = 'No user with that id found';
+                    }
+                    $data['userInfo'] = $dao->getFullUserInfoById($userId);
+                }
+                catch (\PDOException $e){
+                    $data['errors'] = $e->getMessage();
+                }
+            }
+
+            // for album photos by id and userId
             try{
-                if(!$dao->getUserAlbumsPhotosByIdAndUser($userId,$albumId)){
+                if(!$dao->getUserAlbumPhotosById($userId,$albumId)){
                     $data['errors'] = 'User do not own or have album with that id!!!';
                 }
-                $data['otherView'] = $dao->getUserAlbumsPhotosByIdAndUser($userId,$albumId);
+                $data['otherView'] = $dao->getUserAlbumPhotosById($userId,$albumId);
             }
             catch (\PDOException $e){
                 $data['errors'] = $e->getMessage();
             }
         }
         elseif (isset($_GET['id'])){
+            // if only album id passed
             $albumId = htmlentities($_GET['id']);
             try{
                 if(!$dao->getUserAlbumPhotosById($_SESSION['logged']->getId(), $albumId)){
@@ -114,6 +131,7 @@ class IndexController extends \controller\BaseController
             }
         }
         else{
+            // if no param passed -> album list
             try{
                 $data['albums'] = $dao->getUserAlbumsBigLimit($_SESSION['logged']->getId());
             }

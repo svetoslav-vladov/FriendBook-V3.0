@@ -989,5 +989,11 @@ span#msg_count, .friendNotifications {
     left: 0;
 }
 button#send_msg_btn {
-    cursor:  pointer;
+    cursor: pointer;
+}
+.notification-description {
+    font-size: 0.47em;
+    line-height: 1.1;
+    margin: 3px 0px;
+
 }

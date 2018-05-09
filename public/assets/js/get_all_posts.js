@@ -89,7 +89,6 @@ function getAllPosts(limit,offset) {
     };
     request.open('GET', url_root + "/post/getAllPosts&limit="+limit+"&offset="+offset);
     request.send();
-
 }
 
 function getAllPostsByLike(limit,offset) {

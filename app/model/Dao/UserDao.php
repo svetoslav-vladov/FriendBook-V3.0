@@ -21,6 +21,10 @@ class UserDao
 
     const GET_PROFILE_IMAGES = "SELECT img_url FROM user_photos WHERE user_id = ? AND album_id IS NULL LIMIT 16;";
 
+    const GET_PROFILE_ALBUMS = "SELECT * FROM photo_albums WHERE user_id = ? LIMIT 4;";
+
+    const GET_PROFILE_ALBUM_PHOTOS = "SELECT * FROM photo_albums WHERE user_id = ? LIMIT 4;";
+
     const LOGIN_CHECK_WITH_FULL_USER_DETAILS = "SELECT u.* , c.country_name, r.status_name as relationship_tag
                         FROM users as u
                         LEFT OUTER JOIN countries as c ON (u.country_id = c.id) 
@@ -47,8 +51,19 @@ class UserDao
 
     const INSERT_USER_PHOTOS = "INSERT INTO user_photos (user_id,img_url,thumb_url) values (?,?,?)";
 
-    const INSERT_USER_ALBUM = "INSERT INTO photo_albums (name, user_id) values (?,?)";
+    const INSERT_USER_ALBUM = "INSERT INTO photo_albums (name, user_id, album_thumb) values (?,?,?)";
     const INSERT_USER_ALBUM_PHOTOS = "INSERT INTO user_photos (user_id, img_url, album_id, thumb_url) values (?,?,?,?)";
+
+    const GET_PROFILE_ALBUM_PHOTOS_BY_IDS = "SELECT up.*, pa.name as album_name FROM user_photos as up 
+                                            JOIN photo_albums as pa ON up.album_id = pa.id
+                                            WHERE up.user_id = ? AND up.album_id = ?";
+
+    const GET_PROFILE_ALBUM_PHOTOS_BY_ID_AND_USER = "SELECT up.*, CONCAT(u.first_name, ' ',u.last_name) as full_name,
+                                                    u.profile_pic, thumbs_profile,
+                                                    pa.name as album_name FROM user_photos as up 
+                                                    JOIN photo_albums as pa ON up.album_id = pa.id
+                                                    JOIN users as u ON up.user_id = u.id
+                                                    WHERE up.user_id = ? AND up.album_id = ?";
 
     // SETTINGS PAGE QUERY's
 
@@ -252,8 +267,8 @@ class UserDao
 
         try{
             $this->pdo->beginTransaction();
-
-            $album->execute(array($albumName,$userId));
+            // first image will be thumb for album
+            $album->execute(array($albumName,$userId,$imagesList[0]->getUrlOnDiskThumb()));
             $albumId = $this->pdo->lastInsertId();
 
             foreach ($imagesList as $pic_obj) {
@@ -325,6 +340,28 @@ class UserDao
     {
         $statement = $this->pdo->prepare(self::GET_PROFILE_IMAGES);
         $statement->execute(array($user->getId()));
+        return $statement->fetchALL(\PDO::FETCH_ASSOC);
+    }
+
+    public function getUserAlbums($userId)
+    {
+        $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUMS);
+        $statement->execute(array($userId));
+        return $statement->fetchALL(\PDO::FETCH_ASSOC);
+    }
+
+    public function getUserAlbumsPhotosByIdAndUser($userId, $albumId)
+    {
+        $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUM_PHOTOS_BY_ID_AND_USER);
+        $statement->execute(array($userId,$albumId));
+        return $statement->fetchALL(\PDO::FETCH_ASSOC);
+    }
+
+
+    public function getUserAlbumPhotosById($userId, $albumId)
+    {
+        $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUM_PHOTOS_BY_IDS);
+        $statement->execute(array($userId,$albumId));
         return $statement->fetchALL(\PDO::FETCH_ASSOC);
     }
 

@@ -9,6 +9,7 @@ use Model\Dao\UserDao;
 class IndexController extends \controller\BaseController
 {
 
+
     public function login(){
         $this->renderView('login');
     }
@@ -19,24 +20,37 @@ class IndexController extends \controller\BaseController
 
     public function profile()
     {
-
+        // this will set $theUser to be session info or userInfo by id
         if (isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId() && is_numeric($_GET['id'])) {
+
+            $dao = UserDao::getInstance();
+
             $theUser = new User();
             $theUser->setId(htmlentities($_GET['id']));
-            $newController = new UserController();
+
             try {
-                $theUser = $newController->getUserInfo($theUser);
-            } catch (\PDOException $e) {
-                header('location:' . URL_ROOT . '/index/main&error=' . $e->getMessage());
+                $result = $dao->getUserInfoById($theUser);
+                // we can check if id is given to see if that id is a friend, for profile view nav
+                //$isFriend = $dao->getUserFriendStatus($theUser);
+                if ($result) {
+                    cast($theUser, $result);
+                    $theUser->setPassword(null);
+                    $theUser->setFullName($theUser->getFirstName() . " " . $theUser->getLastName());
+                } else {
+                    // return false if no user with that id, then set session id to val
+                    $theUser = $_SESSION["logged"];
+                }
             }
-            if ($theUser === false) {
-                $theUser = $_SESSION["logged"];
+            catch (\PDOException $e) {
+                header('location:' . URL_ROOT . '/index/profile&error=' . $e->getMessage());
             }
-        } else {
+
+        }
+        else {
             $theUser = $_SESSION["logged"];
         }
 
-        $this->renderView('profile', $theUser);
+        return $this->renderView('profile', $theUser);
     }
 
     public function postsbylike(){
@@ -69,7 +83,43 @@ class IndexController extends \controller\BaseController
     }
 
     public function album(){
-        $this->renderView('album');
+
+        // request to db for different cases
+        $data = array();
+        $dao = UserDao::getInstance();
+
+        if(isset($_GET['id']) && isset($_GET['userId'])){
+            $userId = htmlentities($_GET['userId']);
+            $albumId = htmlentities($_GET['id']);
+            try{
+                $data['otherView'] = $dao->getUserAlbumsPhotosByIdAndUser($userId,$albumId);
+            }
+            catch (\PDOException $e){
+                $data['errors'] = $e->getMessage();
+            }
+        }
+        elseif (isset($_GET['id'])){
+            $albumId = htmlentities($_GET['id']);
+            try{
+                if(!$dao->getUserAlbumPhotosById($_SESSION['logged']->getId(), $albumId)){
+                    $data['errors'] = 'You dont own photo album with that id';
+                }
+                $data['yourView'] = $dao->getUserAlbumPhotosById($_SESSION['logged']->getId(), $albumId);
+            }
+            catch (\PDOException $e){
+                $data['errors'] = $e->getMessage();
+            }
+        }
+        else{
+            try{
+                $data['albums'] = $dao->getUserAlbums($_SESSION['logged']->getId());
+            }
+            catch (\PDOException $e){
+                $data['errors'] = $e->getMessage();
+            }
+        }
+
+        $this->renderView('album', $data);
     }
 
     public function settings(){

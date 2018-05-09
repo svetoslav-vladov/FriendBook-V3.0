@@ -92,6 +92,9 @@ class IndexController extends \controller\BaseController
             $userId = htmlentities($_GET['userId']);
             $albumId = htmlentities($_GET['id']);
             try{
+                if(!$dao->getUserAlbumsPhotosByIdAndUser($userId,$albumId)){
+                    $data['errors'] = 'User do not own or have album with that id!!!';
+                }
                 $data['otherView'] = $dao->getUserAlbumsPhotosByIdAndUser($userId,$albumId);
             }
             catch (\PDOException $e){
@@ -102,7 +105,7 @@ class IndexController extends \controller\BaseController
             $albumId = htmlentities($_GET['id']);
             try{
                 if(!$dao->getUserAlbumPhotosById($_SESSION['logged']->getId(), $albumId)){
-                    $data['errors'] = 'You dont own photo album with that id';
+                    $data['errors'] = 'You dont own photo album with that id!!!';
                 }
                 $data['yourView'] = $dao->getUserAlbumPhotosById($_SESSION['logged']->getId(), $albumId);
             }
@@ -112,7 +115,7 @@ class IndexController extends \controller\BaseController
         }
         else{
             try{
-                $data['albums'] = $dao->getUserAlbums($_SESSION['logged']->getId());
+                $data['albums'] = $dao->getUserAlbumsBigLimit($_SESSION['logged']->getId());
             }
             catch (\PDOException $e){
                 $data['errors'] = $e->getMessage();

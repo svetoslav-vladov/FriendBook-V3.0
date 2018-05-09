@@ -23,6 +23,8 @@ class UserDao
 
     const GET_PROFILE_ALBUMS = "SELECT * FROM photo_albums WHERE user_id = ? LIMIT 4;";
 
+    const GET_PROFILE_ALBUMS_LIMIT_50 = "SELECT * FROM photo_albums WHERE user_id = ? LIMIT 50;";
+
     const GET_PROFILE_ALBUM_PHOTOS = "SELECT * FROM photo_albums WHERE user_id = ? LIMIT 4;";
 
     const LOGIN_CHECK_WITH_FULL_USER_DETAILS = "SELECT u.* , c.country_name, r.status_name as relationship_tag
@@ -346,6 +348,13 @@ class UserDao
     public function getUserAlbums($userId)
     {
         $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUMS);
+        $statement->execute(array($userId));
+        return $statement->fetchALL(\PDO::FETCH_ASSOC);
+    }
+
+    public function getUserAlbumsBigLimit($userId)
+    {
+        $statement = $this->pdo->prepare(self::GET_PROFILE_ALBUMS_LIMIT_50);
         $statement->execute(array($userId));
         return $statement->fetchALL(\PDO::FETCH_ASSOC);
     }

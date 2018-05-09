@@ -38,26 +38,30 @@ $theUser = $data;
                         else{
                             $profilePic = $data['otherView'][0]['profile_pic'];
                         }
-                        ?>
 
-                        <div class="row mb-3">
-                            <div class="col-md-3 px-3">
-                                <a href="<?php echo URL_ROOT . '/index/profile&id=' . $data['otherView'][0]['user_id']?>"
-                                   class="card text-center">
-                                    <div class="large py-2">
-                                        Album Owner:
-                                    </div>
-                                    <img class="img_100" src="<?php echo URL_ROOT. $profilePic; ?>"
-                                         alt="<?php echo $data['otherView'][0]['full_name']; ?> profile pic"
-                                         title="<?php echo $data['otherView'][0]['full_name']; ?>">
-                                    <div class="large py-2">
-                                        <?php echo $data['otherView'][0]['full_name']; ?>
-                                    </div>
-                                </a>
+                        if($_SESSION['logged']->getId() !== $data['otherView'][0]['user_id']) { // session id check
+
+                            ?>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3 px-3">
+                                    <a href="<?php echo URL_ROOT . '/index/profile&id=' . $data['otherView'][0]['user_id'] ?>"
+                                       class="card text-center">
+                                        <div class="large py-2">
+                                            Album Owner:
+                                        </div>
+                                        <img class="img_100" src="<?php echo URL_ROOT . $profilePic; ?>"
+                                             alt="<?php echo $data['otherView'][0]['full_name']; ?> profile pic"
+                                             title="<?php echo $data['otherView'][0]['full_name']; ?>">
+                                        <div class="large py-2">
+                                            <?php echo $data['otherView'][0]['full_name']; ?>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <?php
+                            <?php
+                        } // session id check -> end
                         albumPhotoShow($data['otherView']);
                     }
                     elseif(isset($data['yourView'])){

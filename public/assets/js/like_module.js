@@ -4,6 +4,7 @@ var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
 var loading_gif = $("<img class='loading-gif' src="+ url_root +"/assets/images/ajax-loading-c4.gif>");
 
 function likePost(post_id) {
+    addNotificationOnLike(post_id);
     var request = new XMLHttpRequest();
     request.open('POST', url_root + '/post/likePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -82,6 +83,7 @@ function getCountLikes(post_id) {
 }
 
 function dislikePost(post_id) {
+    addNotificationOnDislike(post_id);
     var request = new XMLHttpRequest();
     request.open('POST', url_root + '/post/dislikePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

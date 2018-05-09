@@ -53,9 +53,14 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://example.com" id="notifications"
+                           onclick="getAllNotifications(<?php echo $_SESSION['logged']->getId();?>)"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="notifications">
-                            No notifications :)
+                        <div class="dropdown-menu" aria-labelledby="notifications" id="notificationContainer<?php echo $_SESSION['logged']->getId();?>">
+                            <ul class="list-group list-group-flush" id="notifications-list<?php echo $_SESSION['logged']->getId();?>"></ul>
+                        </div>
+
+                        <div class="dropdown-menu requestContainer" aria-labelledby="friendRequests">
+                            <ul class="list-group list-group-flush" id="friend-requests<?php echo $_SESSION['logged']->getId();?>"></ul>
                         </div>
                     </li>
                     <li class="nav-item dropdown">

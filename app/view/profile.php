@@ -190,36 +190,29 @@
                     </div>
                 </div>
                 <div id="photos" class="card p-3">
-
+                    <!-- Add navigation -->
+                    <?php
+                        if (!(isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId())) {
+                    ?>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card p-3 text-center small" id="albumAdd" data-toggle="modal" data-target="#albumPopupInsert">
-                                <?php
-                                if (!(isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId())) {
-                                    ?>
-                                    <span>
-                                        <img class="img-thumbnail" src="<?php echo URL_ROOT . '/assets/images/addAlbum.png' ?>" alt="">
-                                    </span>
-                                    <?php
-                                }
-                                ?>
+                                <span>
+                                    <img class="img-thumbnail" src="<?php echo URL_ROOT . '/assets/images/addAlbum.png' ?>" alt="">
+                                </span>
                                 <div>Add Album</div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="card p-3 text-center small" id="ImageAdd">
-                                <?php
-                                if (!(isset($_GET['id']) && $_GET['id'] !== $_SESSION['logged']->getId())) {
-                                    ?>
-                                    <form id="uploadUserPhotosForm" action="<?php echo URL_ROOT . "/user/uploadProfilePhotos"; ?>" method="post" enctype="multipart/form-data">
-                                        <input name="images[]" id="uploadPhotosInput" type="file" multiple accept="image/*"/>
-                                    </form>
-                                    <span>
-                                         <img class="img-thumbnail" id="imageUploadBtn" src="<?php echo URL_ROOT . '/assets/images/addImage.png' ?>" alt="">
-                                    </span>
-                                    <?php
-                                }
-                                ?>
+
+                                <form id="uploadUserPhotosForm" action="<?php echo URL_ROOT . "/user/uploadProfilePhotos"; ?>" method="post" enctype="multipart/form-data">
+                                    <input name="images[]" id="uploadPhotosInput" type="file" multiple accept="image/*"/>
+                                </form>
+                                <span>
+                                     <img class="img-thumbnail" id="imageUploadBtn" src="<?php echo URL_ROOT . '/assets/images/addImage.png' ?>" alt="">
+                                </span>
+
                                 <div>Add Photos</div>
                             </div>
                         </div>
@@ -228,13 +221,26 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                        }
+                    ?>
 
                     <hr>
-                    <h1>Albums</h1>
+                    <h1><?php if(isset($_GET['id'])){
+                            echo "Albums";
+                        }
+                        else{
+                            ?>
+                                <a href="<?php echo URL_ROOT . '/index/album'; ?>">Albums</a>
+                            <?php
+                        }
+                        ?></h1>
 
                     <div class="holder p-3">
-                        <span id="albumList"></span>
-                        <span id="albumPagination"></span>
+                        <div class="row"  id="albumList">
+                            <!-- albums generate here !-->
+                        </div>
+                        <div id="albumPagination"></div>
                     </div>
                     <hr>
                     <h1>Photos</h1>
@@ -275,7 +281,7 @@
                         <input type="text" name="albumName" id="albumName" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="albumName">Upload photos:</label>
+                        <label for="albumFiles">Upload photos:</label>
                         <input type="file" name="albumFiles[]" id="albumFiles" multiple class="form-control">
                     </div>
 

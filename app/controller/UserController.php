@@ -172,36 +172,16 @@ class UserController extends BaseController{
 
     }
 
-    public function getUserInfo(User $user){
-        if(isset($user)) {
-
-            $dao = UserDao::getInstance();
-            $result = $dao->getUserInfoById($user);
-            try {
-                if ($result) {
-
-                    cast($user, $result);
-                    $user->setPassword(null);
-                    $user->setFullName($user->getFirstName() . " " . $user->getLastName());
-                    return $user;
-                } else {
-                    // return false if no user with that id
-                    return false;
-                }
-            } catch (\PDOException $e) {
-                header('location:' . URL_ROOT . '/index/profile&error=' . $e->getMessage());
-            }
-        }
-    }
-
-    public function getUserPhotos(){
+    public function getUserPhotosAndAlbums(){
         $dao = UserDao::getInstance();
         $user_id = htmlentities($_GET['user_id']);
         $targetUser = new User();
         $targetUser->setId($user_id);
         $data = [];
+
         try{
-            $data['data'] = $dao->getUserPhotos($targetUser);
+            $data['data']['photos'] = $dao->getUserPhotos($targetUser);
+            $data['data']['albums'] = $dao->getUserAlbums($targetUser->getId());
         }
         catch (\PDOException $e){
             $data['PDO_error'] = $e->getMessage();
@@ -209,6 +189,7 @@ class UserController extends BaseController{
         catch (\Exception $e){
             $data['exception'] = $e->getMessage();
         }
+
         echo json_encode($data['data']);
     }
 

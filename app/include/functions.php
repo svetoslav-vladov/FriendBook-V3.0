@@ -35,3 +35,30 @@ function formatBytes($bytes, $precision = 2) {
 
     return round($bytes, $precision) . ' ' . $units[$pow];
 }
+
+function albumPhotoShow($data){
+    echo '<h1>'.$data[0]['album_name'] .'</h1>';
+    echo '<div class="row" id="albumList">';
+    foreach ($data as $items){
+        ?>
+        <a data-toggle="lightbox" data-gallery="single-images" class="col-sm-3" href="<?php echo URL_ROOT . $items['img_url']; ?>">
+            <img class="img_100 img-thumbnail" src="<?php echo URL_ROOT . $items['thumb_url']; ?>">
+        </a>
+        <?php
+    }
+    echo '<div>';
+}
+
+function albumShow($data){
+    echo '<div class="row" id="albumList">';
+    foreach ($data as $items){
+        ?>
+        <a class="col-sm-3" id="albumLink-<?php echo $items['id']; ?>" href="<?php
+        echo URL_ROOT . '/index/album&id=' .  $items['id']; ?>">
+            <img src="<?php echo URL_ROOT . $items['album_thumb']; ?>" class="img_100 img-thumbnail">
+            <div class="albumNameTag"><?php echo $items['name']; ?></div>
+        </a>
+        <?php
+    }
+    echo '<div>';
+}

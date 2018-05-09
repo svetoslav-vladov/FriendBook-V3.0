@@ -36,7 +36,7 @@ var upload_image_btn = document.querySelector('#imageUploadBtn');
 var user_id_nav = document.querySelector('#user_nav_id');
 
 if(document.querySelector('#photos')){
-    photos_btn.addEventListener('click', getAllPhotos);
+    photos_btn.addEventListener('click', getAllPhotosAndAlbums);
 }
 
 if(document.querySelector('#about')){
@@ -52,13 +52,13 @@ if(document.querySelector('#timeline')){
 }
 
 // get Images with no album on click from db
-function getAllPhotos(e) {
+function getAllPhotosAndAlbums(e) {
     e.preventDefault();
 
     var xhr = new XMLHttpRequest();
     var dir = './uploads/users/photos/';
     // this will get images and albums in future, for now only images
-    xhr.open('get', url_root + '/user/getUserPhotos&user_id='+user_id_nav.value);
+    xhr.open('get', url_root + '/user/getUserPhotosAndAlbums&user_id='+user_id_nav.value);
 
     timeline.style.display = 'none';
     about.style.display = 'none';
@@ -67,7 +67,8 @@ function getAllPhotos(e) {
     xhr.onload = function () {
         image_list_box.innerHTML = "";
         res = JSON.parse(this.responseText);
-        for(var i = 0; i < res.length; i++){
+
+        for(var i = 0; i < res.photos.length; i++){
             var img = document.createElement('img');
             img.setAttribute('class','img_100');
             var big_img = document.createElement('img');
@@ -75,10 +76,10 @@ function getAllPhotos(e) {
             img.classList.add('img-thumbnail');
             img.classList.add('img_100');
 
-            var urlChunks = res[i]['img_url'].split('/');
+            var urlChunks = res.photos[i]['img_url'].split('/');
             img.src = url_root + dir + 'thumbs/' + urlChunks[urlChunks.length-1];
 
-            big_img = url_root + res[i]['img_url'];
+            big_img = url_root + res.photos[i]['img_url'];
 
             link.setAttribute('data-toggle','lightbox');
             link.setAttribute('data-gallery','single-images');
@@ -87,6 +88,31 @@ function getAllPhotos(e) {
             link.appendChild(img);
 
             image_list_box.appendChild(link);
+
+        }
+
+        for(var x = 0; x < res.albums.length; x++){
+
+            if(albumList.childElementCount !== res.albums.length){
+                var albumLink = document.createElement('a');
+                albumLink.setAttribute('class','col-sm-3');
+                albumLink.setAttribute('id','albumLink-'+res.albums[x].id);
+                albumLink.href = root + '/index/album&id='+res.albums[x].id + '&userId='+res.albums[x].user_id;
+
+                var img_photo = document.createElement('img');
+                img_photo.src = url_root + res.albums[x].album_thumb;
+                img_photo.classList.add('img_100');
+                img_photo.classList.add('img-thumbnail');
+
+                var albumNameDiv = document.createElement('div');
+                albumNameDiv.classList.add('albumNameTag');
+                albumNameDiv.innerHTML = res.albums[x].name;
+
+                albumLink.appendChild(img_photo);
+                albumLink.appendChild(albumNameDiv);
+
+                albumList.appendChild(albumLink);
+            }
 
         }
 
@@ -1550,19 +1576,13 @@ function changeUserPassword(e){
     }
 }
 
-// prevent enter submit for forms
-function stopRKey(evt) {
-    var evt = (evt) ? evt : ((event) ? event : null);
-    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-    if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
-    if ((evt.keyCode == 13) && (node.type=="number"))  {return false;}
-}
-
 // ADD ALBUM FORM
 
 var albumName = document.querySelector('#albumName');
 var albumInsertForm = document.querySelector('#albumInsertForm');
 var albumFiles = document.querySelector('#albumFiles');
+
+var albumList = document.querySelector('#albumList');
 
 var statusBoxPics = document.querySelector('#statusBoxPics');
 
@@ -1633,7 +1653,6 @@ function addUserAlbum() {
 
 
             // appending data after second loop
-
             success.style.display = 'block';
 
             success.style.backgroundColor= 'yellow';
@@ -1641,22 +1660,27 @@ function addUserAlbum() {
             loading.src = url_root+loading_gif_anim;
             success.appendChild(loading);
 
-            for (var x = 0; x < res.picture_object_data.length; x++){
-                var link_img = document.createElement('a');
-                link_img.setAttribute('data-toggle','lightbox');
-                link_img.setAttribute('data-gallery','single-images');
-                link_img.setAttribute('class','col-sm-3');
-                link_img.href = root + res.picture_object_data[x].urlOnDiskPicture;
+            var  albumId = 0;
+            var albumLink = document.createElement('a');
+            albumLink.setAttribute('class','col-sm-3');
+            albumLink.setAttribute('id','albumLink');
+            albumLink.href = root + '/index/album&id='+albumId;
 
-                var img_photo = document.createElement('img');
-                img_photo.src = root + res.picture_object_data[x].urlOnDiskThumb;
-                img_photo.classList.add('img_100');
-                img_photo.classList.add('img-thumbnail');
+            var img_photo = document.createElement('img');
+            img_photo.src = root + res.picture_object_data[0].urlOnDiskThumb;
+            img_photo.classList.add('img_100');
+            img_photo.classList.add('img-thumbnail');
 
-                link_img.appendChild(img_photo);
-                image_list_box.appendChild(link_img);
+            var albumNameDiv = document.createElement('div');
+            albumNameDiv.classList.add('albumNameTag');
+            albumNameDiv.innerHTML = albumName.value;
 
-            }
+            albumLink.appendChild(img_photo);
+            albumLink.appendChild(albumNameDiv);
+
+            albumList.appendChild(albumLink);
+
+
             success.innerHTML ='';
             loading.src = successMark;
             loading.style.height = '50px';
@@ -1701,9 +1725,18 @@ function addUserAlbum() {
 
 }
 
+// prevent enter submit for forms
+function stopRKey(evt) {
+    var evt = (evt) ? evt : ((event) ? event : null);
+    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+    if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+    if ((evt.keyCode == 13) && (node.type=="number"))  {return false;}
+}
+
 document.onkeypress = stopRKey;
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
+

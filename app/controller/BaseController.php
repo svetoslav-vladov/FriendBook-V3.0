@@ -8,7 +8,6 @@ use Model\Thumbnail;
 class BaseController implements \JsonSerializable {
 
     public function jsonSerialize(){}
-
     // this functions work for single or multi upload;
 
     // validate images - no direct call  !!! Depends on other function - #1

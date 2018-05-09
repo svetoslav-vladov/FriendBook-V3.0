@@ -66,6 +66,7 @@ class UserDao
 
     const UPDATE_USER_FIRST_NAME = "UPDATE users SET first_name = ? WHERE id = ?";
 
+
     const UPDATE_USER_LAST_NAME = "UPDATE users SET first_name = ? WHERE id = ?";
 
     const UPDATE_USER_GENDER = "UPDATE users SET gender = ? WHERE id = ?";
@@ -107,6 +108,13 @@ class UserDao
                                             FROM countries as c
                                             JOIN users as u ON u.country_id = c.id
                                             WHERE u.id = ?";
+
+    // messages sql q
+    const INSERT_SEND_MESSAGE = "INSERT INTO messages (sender_id, reciever_id, message_text, msg_status) values (?,?,?,?)";
+
+    const GET_ALL_UNSEEN_MESSAGES = "SELECT m.*, u.first_name, u.last_name FROM messages as m 
+                                    JOIN users u ON m.sender_id = u.id
+                                    WHERE m.reciever_id = ? AND msg_status = 0";
 
     // getting static connection from DBconnect file
     private function __construct()
@@ -514,5 +522,19 @@ class UserDao
                                                     AND notifications.user_id != $id");
         $statement->execute(array($logged_user_id));
         return $statement->fetch()['check_notifications'];
+    }
+
+    // messages
+
+    public function getUserUnseenMsg($userId){
+        $statement = $this->pdo->prepare(self::GET_ALL_UNSEEN_MESSAGES);
+        $statement->execute(array($userId));
+        return $statement->fetchALL(\PDO::FETCH_OBJ);
+    }
+
+    public function saveMessage($senderId,$recieverId,$messageText){
+        $statement = $this->pdo->prepare(self::INSERT_SEND_MESSAGE);
+        $statement->execute(array($senderId, $recieverId, $messageText, 0));
+        return $statement->rowCount();
     }
 }

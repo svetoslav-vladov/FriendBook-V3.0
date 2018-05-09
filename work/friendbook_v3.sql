@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 04, 2018 at 01:23 AM
+-- Generation Time: May 09, 2018 at 03:23 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.23
 
@@ -43,7 +43,8 @@ INSERT INTO `comments` (`id`, `description`, `comment_date`, `post_id`, `owner_i
 (82, 'Браво', '2018-04-27 11:43:20', 36, 20),
 (94, 'ww', '2018-04-30 15:05:05', 61, 21),
 (95, 'aa', '2018-04-30 15:20:17', 61, 21),
-(98, 'aa', '2018-05-03 22:18:28', 65, 21);
+(98, 'aa', '2018-05-03 22:18:28', 65, 21),
+(99, 'Много добре', '2018-05-04 09:45:28', 62, 20);
 
 -- --------------------------------------------------------
 
@@ -335,7 +336,11 @@ CREATE TABLE `friends` (
 
 INSERT INTO `friends` (`user_id`, `friend_id`) VALUES
 (20, 21),
-(21, 20);
+(20, 25),
+(21, 20),
+(21, 25),
+(25, 20),
+(25, 21);
 
 -- --------------------------------------------------------
 
@@ -359,8 +364,15 @@ INSERT INTO `friend_requests` (`requested_by`, `requester_id`, `approved`) VALUE
 (21, 24, 0),
 (21, 22, 0),
 (21, 26, 0),
-(21, 25, 0),
-(21, 23, 0);
+(21, 25, 1),
+(21, 23, 0),
+(20, 27, 0),
+(20, 24, 0),
+(20, 22, 0),
+(25, 20, 1),
+(25, 27, 0),
+(20, 23, 0),
+(23, 27, 0);
 
 -- --------------------------------------------------------
 
@@ -404,7 +416,51 @@ INSERT INTO `like_post` (`post_id`, `user_id`, `status`) VALUES
 (38, 21, 1),
 (61, 21, 1),
 (65, 21, 1),
-(62, 21, 0);
+(62, 21, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `sender_id` int(11) NOT NULL,
+  `reciever_id` int(11) NOT NULL,
+  `message_text` text NOT NULL,
+  `msg_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `sender_id`, `reciever_id`, `message_text`, `msg_status`) VALUES
+(1, 23, 27, 'Какво става', 0),
+(2, 23, 27, 'test', 0),
+(3, 23, 27, 'test', 0),
+(4, 23, 27, 'test', 0),
+(5, 23, 27, 'asd', 0),
+(6, 23, 27, 'res', 0),
+(7, 23, 27, 'res', 0),
+(8, 23, 20, 'hello', 0),
+(9, 23, 20, 'hello 2', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `description` varchar(150) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `notification_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `seen` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -415,8 +471,19 @@ INSERT INTO `like_post` (`post_id`, `user_id`, `status`) VALUES
 CREATE TABLE `photo_albums` (
   `id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `album_thumb` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `photo_albums`
+--
+
+INSERT INTO `photo_albums` (`id`, `name`, `user_id`, `reg_date`, `album_thumb`) VALUES
+(8, 'Summer 2018', 20, '2018-05-08 22:56:51', './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326182-0-albums.jpg'),
+(9, 'Test', 20, '2018-05-08 23:36:56', './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a6877c73-0-albums.jpg'),
+(10, 'Test1', 25, '2018-05-09 01:23:22', './uploads/users/photos/thumbs/Eli-1525818201-5af22359e7a67-0-albums.jpg');
 
 -- --------------------------------------------------------
 
@@ -440,7 +507,8 @@ INSERT INTO `posts` (`id`, `description`, `create_date`, `user_id`) VALUES
 (38, 'Здравейте!!!', '2018-04-29 08:38:23', 25),
 (61, 'asdasd', '2018-04-30 15:03:35', 26),
 (62, 'aa', '2018-04-30 15:13:49', 21),
-(65, 'aaa', '2018-05-03 21:44:21', 21);
+(65, 'aaa', '2018-05-03 21:44:21', 21),
+(66, 'Ехо', '2018-05-04 09:46:56', 20);
 
 -- --------------------------------------------------------
 
@@ -510,10 +578,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `reg_date`, `gender`, `birthday`, `relationship_id`, `profile_pic`, `profile_cover`, `description`, `display_name`, `country_id`, `mobile_number`, `www`, `skype`, `thumbs_profile`, `thumbs_cover`) VALUES
-(20, 'Svetoslav', 'Vladov', 'komara_@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-05-03 22:13:17', 'male', '1988-10-22', 2, './uploads/users/photos/fullsized/Svetoslav-1525385592-5aeb8978875c1-0-profile.jpg', './uploads/users/photos/fullsized/Svetoslav-1525385597-5aeb897da287d-0-cover.jpg', NULL, 'komara', 33, NULL, 'www.ivsweb.net', 'komara_123', './uploads/users/photos/thumbs/Svetoslav-1525385592-5aeb8978875c1-0-profile.jpg', './uploads/users/photos/thumbs/Svetoslav-1525385597-5aeb897da287d-0-cover.jpg'),
+(20, 'Svetoslav', 'Vladov', 'komara_@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-05-09 07:21:34', 'male', '1988-10-22', 2, './uploads/users/photos/fullsized/Svetoslav-1525385592-5aeb8978875c1-0-profile.jpg', './uploads/users/photos/fullsized/Svetoslav-1525385597-5aeb897da287d-0-cover.jpg', 'sasda', 'komara', 33, 888434001, 'www.ivs.bg', 'komara_123', './uploads/users/photos/thumbs/Svetoslav-1525385592-5aeb8978875c1-0-profile.jpg', './uploads/users/photos/thumbs/Svetoslav-1525385597-5aeb897da287d-0-cover.jpg'),
 (21, 'eray', 'myumyun', 'eray@abv.bg', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '2018-05-03 22:00:29', 'male', '2018-04-12', NULL, './uploads/users/photos/fullsized/eray-1525384798-5aeb865e3d47a-0-profile.png', './uploads/users/photos/fullsized/eray-1525384829-5aeb867d07ffa-0-cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, './uploads/users/photos/thumbs/eray-1525384798-5aeb865e3d47a-0-profile.png', './uploads/users/photos/thumbs/eray-1525384829-5aeb867d07ffa-0-cover.jpg'),
 (22, 'Krasimir', 'Stoev', 'krasi@kra.si', 'a6dba7cb58095dedee2641744602ae218511f4a1', '2018-04-23 10:39:31', 'male', '2018-03-16', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 'test', 'test', 'test@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-05-02 01:51:35', 'female', '2018-04-17', NULL, '/uploads/female_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '', NULL),
+(23, 'test', 'test', 'test@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-05-09 08:43:56', 'female', '2018-04-17', NULL, './uploads/users/photos/fullsized/test-1525855436-5af2b4cc201b8-0-profile.jpg', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, './uploads/users/photos/thumbs/test-1525855436-5af2b4cc201b8-0-profile.jpg', NULL),
 (24, 'Kiril', 'Dragomirov', 'kiril@dragomirov.email', '7c4a8d09ca3762af61e59520943dc26494f8941b', '2018-04-26 14:44:39', 'male', '1997-05-11', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (25, 'Eli', 'Stoqnova', 'eli@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-04-30 21:32:27', 'female', '2002-12-09', NULL, '/uploads/female_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (26, 'girl', 'girl', 'girl@abv.bg', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '2018-04-30 12:17:56', 'female', '2018-04-11', NULL, '/uploads/female_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -540,11 +608,22 @@ CREATE TABLE `user_photos` (
 --
 
 INSERT INTO `user_photos` (`id`, `user_id`, `img_url`, `album_id`, `thumb_url`) VALUES
-(1, 20, './uploads/users/photos/fullsized/Svetoslav-1525384804-5aeb8664d8a55-0-photos.jpg', NULL, './uploads/users/photos/thumbs/Svetoslav-1525384804-5aeb8664d8a55-0-photos.jpg'),
-(2, 21, './uploads/users/photos/fullsized/eray-1525385941-5aeb8ad590625-0-photos.jpg', NULL, './uploads/users/photos/thumbs/eray-1525385941-5aeb8ad590625-0-photos.jpg'),
-(3, 21, './uploads/users/photos/fullsized/eray-1525385941-5aeb8ad590df5-1-photos.png', NULL, './uploads/users/photos/thumbs/eray-1525385941-5aeb8ad590df5-1-photos.png'),
-(4, 21, './uploads/users/photos/fullsized/eray-1525385941-5aeb8ad5919ad-2-photos.jpg', NULL, './uploads/users/photos/thumbs/eray-1525385941-5aeb8ad5919ad-2-photos.jpg'),
-(5, 21, './uploads/users/photos/fullsized/eray-1525385941-5aeb8ad59217d-3-photos.png', NULL, './uploads/users/photos/thumbs/eray-1525385941-5aeb8ad59217d-3-photos.png');
+(35, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326182-0-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326182-0-albums.jpg'),
+(36, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af201032656a-1-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af201032656a-1-albums.jpg'),
+(37, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326952-2-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326952-2-albums.jpg'),
+(38, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326952-3-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326952-3-albums.jpg'),
+(39, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326d3a-4-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326d3a-4-albums.jpg'),
+(40, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010327122-5-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010327122-5-albums.jpg'),
+(41, 20, './uploads/users/photos/fullsized/Svetoslav-1525810287-5af2046f0db45-0-photos.jpg', NULL, './uploads/users/photos/thumbs/Svetoslav-1525810287-5af2046f0db45-0-photos.jpg'),
+(42, 20, './uploads/users/photos/fullsized/Svetoslav-1525810287-5af2046f0df2d-1-photos.jpg', NULL, './uploads/users/photos/thumbs/Svetoslav-1525810287-5af2046f0df2d-1-photos.jpg'),
+(43, 20, './uploads/users/photos/fullsized/Svetoslav-1525810287-5af2046f0e315-2-photos.jpg', NULL, './uploads/users/photos/thumbs/Svetoslav-1525810287-5af2046f0e315-2-photos.jpg'),
+(44, 20, './uploads/users/photos/fullsized/Svetoslav-1525811816-5af20a6877c73-0-albums.jpg', 9, './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a6877c73-0-albums.jpg'),
+(45, 20, './uploads/users/photos/fullsized/Svetoslav-1525811816-5af20a687805b-1-albums.jpg', 9, './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a687805b-1-albums.jpg'),
+(46, 20, './uploads/users/photos/fullsized/Svetoslav-1525811816-5af20a687805b-2-albums.jpg', 9, './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a687805b-2-albums.jpg'),
+(47, 25, './uploads/users/photos/fullsized/Eli-1525818201-5af22359e7a67-0-albums.jpg', 10, './uploads/users/photos/thumbs/Eli-1525818201-5af22359e7a67-0-albums.jpg'),
+(48, 25, './uploads/users/photos/fullsized/Eli-1525818201-5af22359e7e4f-1-albums.jpg', 10, './uploads/users/photos/thumbs/Eli-1525818201-5af22359e7e4f-1-albums.jpg'),
+(49, 25, './uploads/users/photos/fullsized/Eli-1525818219-5af2236b640ed-0-photos.jpg', NULL, './uploads/users/photos/thumbs/Eli-1525818219-5af2236b640ed-0-photos.jpg'),
+(50, 25, './uploads/users/photos/fullsized/Eli-1525818219-5af2236b644d5-1-photos.jpg', NULL, './uploads/users/photos/thumbs/Eli-1525818219-5af2236b644d5-1-photos.jpg');
 
 --
 -- Indexes for dumped tables
@@ -601,11 +680,26 @@ ALTER TABLE `like_post`
   ADD KEY `user_like_fk_idx` (`user_id`);
 
 --
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sender_id_fk_idx` (`sender_id`),
+  ADD KEY `receiver_Id_fk_idx` (`reciever_id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `notifications_post_id_fk_idx` (`post_id`),
+  ADD KEY `notifications_user_id_fk` (`user_id`);
+
+--
 -- Indexes for table `photo_albums`
 --
 ALTER TABLE `photo_albums`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name_UNIQUE` (`name`),
   ADD KEY `user_id_fk_idx` (`user_id`);
 
 --
@@ -652,12 +746,27 @@ ALTER TABLE `user_photos`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 --
 -- AUTO_INCREMENT for table `countries`
 --
 ALTER TABLE `countries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `photo_albums`
+--
+ALTER TABLE `photo_albums`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `posts`
 --
@@ -677,7 +786,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_photos`
 --
 ALTER TABLE `user_photos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 --
 -- Constraints for dumped tables
 --
@@ -723,6 +832,20 @@ ALTER TABLE `like_comment`
 ALTER TABLE `like_post`
   ADD CONSTRAINT `liked_post_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `user_like_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `messages`
+--
+ALTER TABLE `messages`
+  ADD CONSTRAINT `receiver_Id_fk` FOREIGN KEY (`reciever_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `sender_id_fk` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notifications_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `photo_albums`

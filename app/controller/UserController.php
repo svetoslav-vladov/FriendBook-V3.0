@@ -1486,4 +1486,65 @@ class UserController extends BaseController{
         }
     }
 
+    // send message
+    public function sendMessage(){
+
+        if($_SERVER['REQUEST_METHOD'] == "POST" &&
+            isset($_POST['messageText']) &&
+            isset($_POST['senderId']) &&
+            isset($_POST['receiverId'])){
+
+            $messageText = htmlentities(trim($_POST['messageText']));
+            $senderId = htmlentities(trim($_POST['senderId']));
+            $receiverId = htmlentities(trim($_POST['receiverId']));
+
+            $status = array();
+            if(!is_numeric($senderId)){
+                $status['errors'] = "Sender id must be int";
+            }
+            elseif(!strlen($senderId) > 0){
+                $status['errors'] = "Sender Id cannot be empty";
+            }
+
+            if(!is_numeric($receiverId)){
+                $status['errors'] = "Receiver id must be int";
+            }
+            elseif(!strlen($receiverId) > 0){
+                $status['errors'] = "Receiver Id cannot be empty";
+            }
+
+            if(!mb_strlen($messageText) > 0){
+                $status['errors'] = "Cannot send empty messages";
+            }
+            elseif(mb_strlen($messageText) > 1500){
+                $status['errors'] = "Cannot send messages with more than 1500 chars";
+            }
+
+            if(!isset($status['errors'])){
+                $dao = UserDao::getInstance();
+
+                try{
+                    if($dao->saveMessage($senderId,$receiverId,$messageText)){
+                        $status['success'] = "Message Sent!!!";
+                        echo json_encode($status);
+                    }
+                    else{
+                        $status['denied'] = "Something went wrong";
+                        echo json_encode($status);
+                    }
+
+                }catch(\PDOException $e){
+                    echo json_encode($status['errors'] = $e->getMessage());
+                }
+                catch(\Exception $e){
+                    echo json_encode($status['errors'] = $e->getMessage());
+                }
+            }
+            else{
+                echo json_encode($status);
+            }
+
+        }
+    }
+
 }

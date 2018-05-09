@@ -1725,6 +1725,60 @@ function addUserAlbum() {
 
 }
 
+// SEND MESSAGE
+
+var sendMessageForm = document.querySelector("#sendMessageForm");
+var messageText = document.querySelector("#messageText");
+var receiverId = document.querySelector("#receiverId");
+var senderId = document.querySelector("#senderId");
+
+var messagePopupBox = document.querySelector('#messagePopupBox');
+
+var messageSendSubmit = document.querySelector('#messageSendSubmit');
+
+if(messageSendSubmit){
+    messageSendSubmit.addEventListener('click', sendMessage);
+}
+
+function sendMessage(e){
+    e.preventDefault();
+
+    // xhr request + formdata
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url_root + '/user/sendMessage');
+    var formData = new FormData(sendMessageForm);
+
+    var success = document.querySelector('#ajax_success');
+    var error = document.querySelector('#ajax_error');
+
+    xhr.onload = function() {
+
+        error.innerHTML = '';
+        success.innerHTML = '';
+
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        if(res.denied){
+            error.innerHTML = res.success;
+            error.style.display = 'block'
+        }
+        else if(res.errors){
+            error.innerHTML = res.success;
+            error.style.display = 'block;'
+        }
+        else{
+            success.innerHTML = res.success;
+            success.style.display = 'block;'
+        }
+    };
+    xhr.send(formData);
+
+
+}
+
+
+// send button
+
 // prevent enter submit for forms
 function stopRKey(evt) {
     var evt = (evt) ? evt : ((event) ? event : null);

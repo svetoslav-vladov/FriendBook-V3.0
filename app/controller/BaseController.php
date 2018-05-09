@@ -2,6 +2,7 @@
 
 namespace controller;
 
+use model\Dao\UserDao;
 use Model\Picture;
 use Model\Thumbnail;
 
@@ -319,6 +320,22 @@ class BaseController implements \JsonSerializable {
         require_once '../app/include/header.php';
 
         if(isset($_SESSION['logged'])){
+
+//            $dao = UserDao::getInstance();
+//            $messages = array();
+//            try{
+//                if($dao->getUserUnseenMsg($_SESSION['logged']->getId())) {
+//                    // objects
+//                    $messages['msgs'] = $dao->getUserUnseenMsg($_SESSION['logged']->getId());
+//                }
+//                else{
+//                    $messages['msgs'] = "No messages";
+//                }
+//            }
+//            catch (\PDOException $e){
+//                $messages['errors'] = $e->getMessage();
+//            }
+
             require_once "../app/include/nav.php";
         }
 

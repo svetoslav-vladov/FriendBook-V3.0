@@ -60,8 +60,9 @@
                                             <?php echo ucwords($theUser->getFullName()); ?>
                                             <i class="fa fa-users text-dark"></i></a>
                                         <div class="dropdown-menu text-white" aria-labelledby="friendRequests">
-                                            <a class="dropdown-item" onclick="sendFriendRequest(<?php echo $theUser->getId(); ?>)" href="#">Add Friend</a>
-                                            <a class="dropdown-item" href="#">Follow</a>
+                                            <button type="button" class="link link-dark dropdown-item" id="send_msg_btn" data-toggle="modal" data-target="#messagePopupBox">
+                                                Send Message
+                                            </button>
                                         </div>
                                     </li>
                                 </ul>
@@ -308,6 +309,41 @@
 
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="messagePopupBox">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Send Message</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="sendMessageForm" action="<?php echo URL_ROOT . '/user/sendMessage'; ?>" method="post">
+                    <label for="messageText">Enter your Message:</label>
+                    <textarea name="messageText" id="messageText" class="form-control" rows="10"></textarea>
+                    <input type="hidden" name="senderId" id="senderId" value="<?php echo $_SESSION['logged']->getId(); ?>">
+                    <input type="hidden" name="receiverId" id="receiverId" value="<?php echo $theUser->getId(); ?>">
+                    <ul class="my-3 small">
+                        <li>No empty msg allowed</li>
+                        <li>max length 1500 char</li>
+                    </ul>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="messageSendSubmit" data-dismiss="modal">Send</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+
         </div>
     </div>
 </div>

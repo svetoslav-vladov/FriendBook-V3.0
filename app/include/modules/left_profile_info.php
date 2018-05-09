@@ -44,6 +44,5 @@
         <li><a class="text-success list-group-item list-group-item-action mt-2" href="#"><span class="nav-icon"><i class="fas fa-envelope nav-icon"></i></span>Messages</a></li>
         <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/settings"><span class="nav-icon"><i class="fas fa-cog nav-icon"></i></span>Settings</a></li>
         <li><a class="text-success list-group-item list-group-item-action mt-2" href="<?php echo URL_ROOT; ?>/index/friends" ><span class="nav-icon"><i class="fas fa-users nav-icon"></i></span>Friends</a></li>
-        <li><a class="text-success list-group-item list-group-item-action mt-2" href="#"><span class="nav-icon"><i class="fas fa-eye nav-icon"></i></span>Followed</a></li>
     </ul>
 </div>

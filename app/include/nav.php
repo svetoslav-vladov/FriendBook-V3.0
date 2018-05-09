@@ -46,10 +46,11 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="messages"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-envelope"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="messages">
-                            No messages ;(
-                        </div>
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="small label labe-pill label-danger count background-danger" id="msg_count">1</span><i class="fa fa-envelope"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="messages">
+                            <?php var_dump($messages); ?>
+                        </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://example.com" id="notifications"

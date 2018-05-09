@@ -866,19 +866,6 @@ div#settingsStatus:hover {
     transition: all 0.3s ease-in-out;
 }
 
-.friendNotifications {
-    border-radius: 5px;
-    font-size: 0.6em;
-    padding: 0px 5px;
-    background: red;
-    color: white;
-    box-shadow: 0 0 12px 2px red;
-    position: absolute;
-    left: 12px;
-    bottom: 4px;
-    text-shadow: 0 0 3px white;
-}
-
 .add-cancel-buttons-container {
     position: relative;
     height: 21px;
@@ -974,7 +961,7 @@ span.currentState {
     opacity:  1;
 }
 #statusBoxPics{
-     display: none;
+    display: none;
 }
 #statusBoxPics img {
     width: 58px;
@@ -990,4 +977,17 @@ span.currentState {
     display: block;
     text-align: center;
     font-size: 0.8rem;
+}
+
+span#msg_count, .friendNotifications {
+    background:  red;
+    padding: 0 5px;
+    color:  white;
+    font-size: 0.6rem;
+    border-radius: 50%;
+    position:  absolute;
+    left: 0;
+}
+button#send_msg_btn {
+    cursor:  pointer;
 }

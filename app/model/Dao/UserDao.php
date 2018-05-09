@@ -504,7 +504,8 @@ class UserDao
                                                     users.thumbs_profile, users.profile_pic,
                                                     notifications.description AS notification_description, notifications.post_id, 
                                                     notification_date, posts.description AS post_description, users.gender,
-                                                    users.display_name, notifications.notification_date
+                                                    users.display_name, notifications.notification_date, users.id AS user_id,
+                                                    notifications.id AS notification_id
                                                     FROM notifications
                                                     JOIN posts ON posts.id = notifications.post_id
                                                     JOIN users ON notifications.user_id = users.id
@@ -514,7 +515,7 @@ class UserDao
                                                     WHERE posts.user_id = ?) 
                                                     AND notifications.user_id != $id
                                                     ORDER BY notifications.notification_date DESC
-                                                    LIMIT 15");
+                                                    LIMIT 9");
         $statement->execute(array($logged_user_id));
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -526,8 +527,14 @@ class UserDao
                                                     JOIN posts ON posts.id = notifications.post_id
                                                     WHERE notifications.post_id IN 
                                                     (SELECT posts.id FROM posts WHERE posts.user_id = ?) 
-                                                    AND notifications.user_id != $id");
+                                                    AND notifications.user_id != $id
+                                                    AND notifications.seen = 0");
         $statement->execute(array($logged_user_id));
         return $statement->fetch()['check_notifications'];
+    }
+
+    function viewNotification($notification_id) {
+        $statement = $this->pdo->prepare("UPDATE notifications SET seen = 1 WHERE notifications.id = ?");
+        return $statement->execute(array($notification_id));
     }
 }

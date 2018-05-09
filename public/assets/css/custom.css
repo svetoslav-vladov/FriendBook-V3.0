@@ -991,3 +991,9 @@ span.currentState {
     text-align: center;
     font-size: 0.8rem;
 }
+
+.notification-description {
+    font-size: 0.47em;
+    line-height: 1.1;
+    margin: 3px 0px;
+}

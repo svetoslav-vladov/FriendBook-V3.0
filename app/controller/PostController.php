@@ -153,10 +153,14 @@ class PostController extends BaseController{
 
     public function deletePost() {
         $dao = PostDao::getInstance();
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $post_id = $_POST['post_id'];
-            $user_id = $_SESSION['logged']->getId();
-            $dao->deletePost($post_id, $user_id);
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $post_id = $_POST['post_id'];
+                $user_id = $_SESSION['logged']->getId();
+                $dao->deletePost($post_id, $user_id);
+            }
+        }catch (\PDOException $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -177,6 +181,18 @@ class PostController extends BaseController{
         else {
             $error = 'Wrong action!';
             header('location:'.URL_ROOT.'/index/main&error=' . $error);
+        }
+    }
+
+    public function getSinglePost() {
+        try {
+            $dao = PostDao::getInstance();
+            if ($_SERVER['REQUEST_METHOD'] == "GET") {
+                $post_id = $_GET['post_id'];
+                echo json_encode($dao->getSinglePost($post_id));
+            }
+        }catch (\PDOException $e) {
+            echo $e->getMessage();
         }
     }
 }

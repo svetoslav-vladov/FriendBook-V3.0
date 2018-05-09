@@ -161,4 +161,17 @@ class PostDao {
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
     }
+
+    function getSinglePost($post_id){
+        $statement = $this->pdo->prepare("SELECT posts.id AS post_id, posts.description, posts.create_date, 
+                                                    posts.user_id AS user_id, users.first_name, users.last_name, users.gender, 
+                                                    users.profile_pic, users.profile_cover, thumbs_profile, users.display_name
+                                                    FROM posts 
+                                                    JOIN users 
+                                                    ON users.id = posts.user_id
+                                                    WHERE posts.id = ?");
+        $statement->execute(array($post_id));
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

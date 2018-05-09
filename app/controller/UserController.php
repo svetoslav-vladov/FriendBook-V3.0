@@ -1586,9 +1586,27 @@ class UserController extends BaseController{
 
     public function checkForNotifications() {
         $dao = UserDao::getInstance();
-        if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['user_id'])) {
-            $user_id = htmlentities($_GET['user_id']);;
-            echo $dao->checkForNotifications($user_id);
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            try{
+                $user_id = htmlentities($_SESSION['logged']->getId());
+                echo $dao->checkForNotifications($user_id);
+            }catch (\PDOException $e) {
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function viewNotification() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            try {
+                $notification_id = htmlentities($_POST['notification_id']);
+                echo $dao->viewNotification($notification_id);
+            }catch (\PDOException $e) {
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
         }
     }
 

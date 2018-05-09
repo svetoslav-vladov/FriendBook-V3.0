@@ -9,7 +9,7 @@ function getAllPosts(limit,offset) {
             }
             for(var post of posts) {
                 var postCard = $(`
-                <div class="card p-3 mt-3 mb-3" id="post${post['post_id']}">
+                <div class="post_card card p-3 mt-3 mb-3" id="post${post['post_id']}">
                     <div class='user_info'>
                    <div class="icon">
                         <a href="${root}/index/profile&id=${post['user_id']}">
@@ -103,7 +103,7 @@ function getAllPostsByLike(limit,offset) {
             }
             for(var post of posts) {
                 var postCard = $(`
-                <div class="card p-3 mt-3 mb-3" id="post${post['post_id']}">
+                <div class="post_card card p-3 mt-3 mb-3" id="post${post['post_id']}">
                     <div class='user_info'> 
                    <div class="icon">
                         <a href="${root}/index/profile&id=${post['user_id']}">
@@ -192,7 +192,7 @@ function getAllPostsByLike(limit,offset) {
     req.send();
 }
 
-function getOwnPosts(user_id,limit, offset) {
+function getOwnPosts(user_id, limit, offset) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -203,7 +203,7 @@ function getOwnPosts(user_id,limit, offset) {
             }
             for(var post of posts) {
                 var postCard = $(`
-                <div class="card p-3 mt-3 mb-3" id="post${post['post_id']}">
+                <div class="post_card card p-3 mt-3 mb-3" id="post${post['post_id']}">
                     <div class='user_info'> 
                    <div class="icon">
                         <a href="${root}/index/profile&id=${post['user_id']}">
@@ -217,7 +217,7 @@ function getOwnPosts(user_id,limit, offset) {
                                      </a>
                     </div>
                     <div class="date">${post['create_date']}</div>        
-                        ${(post['isMyPost'] == 1) ? `<button data-toggle="modal" data-target=".bd-example-modal-sm" id="${post['post_id']}" type="button" class="close delete-post-button" aria-label="Close">
+                        ${(post['isMyPost'] === '1') ? `<button data-toggle="modal" data-target=".bd-example-modal-sm" type="button" class="close delete-post-button" aria-label="Close">
                                 <span aria-hidden="true">&#10008;delete</span>
                             </button>
                             <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -227,7 +227,7 @@ function getOwnPosts(user_id,limit, offset) {
                                             <h5 class="modal-title" id="exampleModalLongTitle">Do you really want to delete the post?</h5>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" id="${post['post_id']}" class="btn btn-primary">Yes</button>
+                                            <button type="button" onclick="deletePost(${post['post_id']})" class="btn btn-primary">Yes</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                                         </div>
                                     </div>
@@ -271,7 +271,6 @@ function getOwnPosts(user_id,limit, offset) {
                                 <div class="comments" id="comments${post['post_id']}"></div>
                             </div>
                             <div class="input-group mb-3 add_comment_container">
-                                
                                 <input type="text" class="form-control comment-textarea${post['post_id']}" name="comment_description" placeholder="Write comment..." aria-label="Write comment" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button onclick="addComment(${post['post_id']})" id="add${post['post_id']}" type="button" class="add-comment-btn btn btn-sm btn-outline-success">add</button>
@@ -291,6 +290,7 @@ function getOwnPosts(user_id,limit, offset) {
 
 function deletePost(post_id) {
     var request = new XMLHttpRequest();
+    request.open('POST', url_root + '/post/deletePost');
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -304,6 +304,5 @@ function deletePost(post_id) {
             console.log(post_id);
         }
     };
-    request.open('POST', url_root + '/post/deletePost');
     request.send("post_id=" + post_id);
 }

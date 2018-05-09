@@ -2,6 +2,7 @@ var root = window.location.origin + '/projects/FriendBook-v3.0';
 var comment_gif = $("<img class='comments_gif' src="+ root +"/assets/images/ajax-loading-c4.gif>");
 
 function addComment(post_id) {
+    addNotificationOnComment(post_id);
     var commentDesc = $('.comment-textarea' + post_id);
     var request = new XMLHttpRequest();
 //   validation for text area is empty or contains white spaces

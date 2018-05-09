@@ -1392,7 +1392,7 @@ class UserController extends BaseController{
             $session_user_id = $_SESSION['logged']->getId();
             $friend_id = htmlentities($_POST['friend_id']);
             try{
-                $dao->deleteFriend($friend_id);
+                $dao->deleteFriend($friend_id, $session_user_id);
                 $status['success'] = true;
                 echo json_encode($status);
             }
@@ -1411,6 +1411,78 @@ class UserController extends BaseController{
         }
         else{
             return true;
+        }
+    }
+
+    public function addNotificationOnLike() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $user_id = htmlentities($_SESSION['logged']->getId());
+            $post_id = htmlentities($_POST['post_id']);
+            $description = 'liked';
+            try {
+                $dao->addNotification($post_id, $user_id, $description);
+                $status['success'] = true;
+                echo json_encode($status);
+            }catch (\PDOException $e) {
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function addNotificationOnDislike() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $user_id = htmlentities($_SESSION['logged']->getId());
+            $post_id = htmlentities($_POST['post_id']);
+            $description = 'disliked';
+            try {
+                $dao->addNotification($post_id, $user_id, $description);
+                $status['success'] = true;
+                echo json_encode($status);
+            }catch (\PDOException $e) {
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function addNotificationOnComment() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $user_id = htmlentities($_SESSION['logged']->getId());
+            $post_id = htmlentities($_POST['post_id']);
+            $description = 'commented';
+            try {
+                $dao->addNotification($post_id, $user_id, $description);
+                $status['success'] = true;
+                echo json_encode($status);
+            }catch (\PDOException $e) {
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function getAllNotifications() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            $user_id = htmlentities($_SESSION['logged']->getId());
+            try {
+                echo json_encode($dao->getAllNotifications($user_id));
+            }catch (\PDOException $e) {
+                $status['err'] = $e->getMessage();
+                echo json_encode($status);
+            }
+        }
+    }
+
+    public function checkForNotifications() {
+        $dao = UserDao::getInstance();
+        if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['user_id'])) {
+            $user_id = htmlentities($_GET['user_id']);;
+            echo $dao->checkForNotifications($user_id);
         }
     }
 

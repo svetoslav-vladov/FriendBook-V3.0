@@ -457,9 +457,8 @@ class UserDao
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    function deleteFriend($friend_id) {
+    function deleteFriend($friend_id, $logged_user_id) {
         try {
-            $logged_user_id = $_SESSION['logged']->getId();
             $transaction = $this->pdo->beginTransaction();
             $deleteFromRequest = $this->pdo->prepare("DELETE FROM friend_requests 
                                                                 WHERE (requested_by = ? AND requester_id = ?) 
@@ -475,5 +474,45 @@ class UserDao
         }catch (\PDOException $e) {
             throw new \PDOException($e->getMessage());
         }
+    }
+
+    function addNotification($post_id, $user_id, $description) {
+        $statement = $this->pdo->prepare("INSERT INTO notifications (post_id, user_id, description) 
+                                VALUES (?, ?, ?)");
+        return $statement->execute(array($post_id, $user_id, $description));
+    }
+
+    function getAllNotifications($logged_user_id) {
+        $id = $logged_user_id;
+        $statement = $this->pdo->prepare("SELECT users.first_name AS notification_firstName, 
+                                                    users.last_name AS notification_lastName,
+                                                    users.thumbs_profile, users.profile_pic,
+                                                    notifications.description AS notification_description, notifications.post_id, 
+                                                    notification_date, posts.description AS post_description, users.gender,
+                                                    users.display_name, notifications.notification_date
+                                                    FROM notifications
+                                                    JOIN posts ON posts.id = notifications.post_id
+                                                    JOIN users ON notifications.user_id = users.id
+                                                    WHERE notifications.post_id IN 
+                                                    (SELECT posts.id 
+                                                    FROM posts 
+                                                    WHERE posts.user_id = ?) 
+                                                    AND notifications.user_id != $id
+                                                    ORDER BY notifications.notification_date DESC
+                                                    LIMIT 15");
+        $statement->execute(array($logged_user_id));
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    function checkForNotifications($logged_user_id) {
+        $id = $logged_user_id;
+        $statement = $this->pdo->prepare("SELECT COUNT(*) as check_notifications 
+                                                    FROM notifications
+                                                    JOIN posts ON posts.id = notifications.post_id
+                                                    WHERE notifications.post_id IN 
+                                                    (SELECT posts.id FROM posts WHERE posts.user_id = ?) 
+                                                    AND notifications.user_id != $id");
+        $statement->execute(array($logged_user_id));
+        return $statement->fetch()['check_notifications'];
     }
 }

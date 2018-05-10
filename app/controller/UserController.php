@@ -1279,9 +1279,9 @@ class UserController extends BaseController{
                     $dao = UserDao::getInstance();
                     // passing new user info which is cloned from session
 
-                    if($dao->saveUserDescriptionSettings($newUserInfo)){
+                    if($dao->saveUserDescriptionSettings($_SESSION['logged']->getId(),$description)){
 
-                        $newUserInfo = $dao->getFullUserInfoById($loggedUsr);
+                        $newUserInfo = $dao->getFullUserInfoById($_SESSION['logged']->getId());
 
                         // this is setting = object from db with User Class
                         cast($_SESSION['logged'],$newUserInfo);

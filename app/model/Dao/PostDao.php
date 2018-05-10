@@ -154,7 +154,7 @@ class PostDao {
                                                     IN (SELECT friend_id
                                                     FROM friends
                                                     WHERE friends.user_id = ?) OR posts.user_id = ?
-                                                    GROUP BY posts.id,posts.description
+                                                    GROUP BY posts.id
                                                     ORDER BY most_liked DESC
                                                     LIMIT $lim OFFSET $off");
         $statement->execute(array($session_logged_id, $session_logged_id, $session_logged_id));

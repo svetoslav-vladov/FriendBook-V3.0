@@ -216,9 +216,9 @@ class UserDao
     }
 
     // DESCRIPTION SETTINGS
-    public function saveUserDescriptionSettings(User $user){
+    public function saveUserDescriptionSettings($userId,$descrption){
         $statement = $this->pdo->prepare(self::UPDATE_USER_DESCRIPTION_INFO);
-        return $statement->execute(array($user->getDescription(),$user->getId()));
+        return $statement->execute(array($userId,$descrption));
     }
 
     // SECURITY SETTINGS
@@ -532,7 +532,7 @@ class UserDao
     public function getUserUnseenMsg($userId){
         $statement = $this->pdo->prepare(self::GET_ALL_UNSEEN_MESSAGES);
         $statement->execute(array($userId));
-        return $statement->fetchALL(\PDO::FETCH_OBJ);
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
     public function saveMessage($senderId,$recieverId,$messageText){

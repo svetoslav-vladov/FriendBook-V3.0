@@ -321,20 +321,21 @@ class BaseController implements \JsonSerializable {
 
         if(isset($_SESSION['logged'])){
 
-//            $dao = UserDao::getInstance();
-//            $messages = array();
-//            try{
-//                if($dao->getUserUnseenMsg($_SESSION['logged']->getId())) {
-//                    // objects
-//                    $messages['msgs'] = $dao->getUserUnseenMsg($_SESSION['logged']->getId());
-//                }
-//                else{
-//                    $messages['msgs'] = "No messages";
-//                }
-//            }
-//            catch (\PDOException $e){
-//                $messages['errors'] = $e->getMessage();
-//            }
+            $dao = UserDao::getInstance();
+            $messages = array();
+
+            try{
+                if($dao->getUserUnseenMsg($_SESSION['logged']->getId())) {
+                    // objects
+                    $messages['msgs'] = $dao->getUserUnseenMsg($_SESSION['logged']->getId());
+                }
+                else{
+                    $messages['msgs'] = "";
+                }
+            }
+            catch (\PDOException $e){
+                $messages['errors'] = $e->getMessage();
+            }
 
             require_once "../app/include/nav.php";
         }

@@ -47,9 +47,22 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="messages"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="small label labe-pill label-danger count background-danger" id="msg_count">1</span><i class="fa fa-envelope"></i></a>
+                            <span class="small label labe-pill label-danger count background-danger" id="msg_count">
+                                <?php if(is_array($messages['msgs']) && count($messages['msgs']) !== 0) { echo count($messages['msgs']); }?>
+                            </span><i class="fa fa-envelope"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="messages">
-                            <?php var_dump($messages); ?>
+                            <?php
+                            if(!isset($messages['errors']) && is_array($messages['msgs'])) {
+                                foreach ($messages['msgs'] as $message) {?>
+                                 <li>
+                                     <a href="<?php echo URL_ROOT . '/index/profile&id=' . $message->sender_id ?>">
+                                         <?= $message->first_name . ' ' .$message->last_name ?>
+                                     </a>
+                                     <p><?php echo $message->message_text; ?></p>
+                                 </li>
+                            <?php }
+                            }
+                            ?>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

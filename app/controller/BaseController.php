@@ -6,10 +6,9 @@ use model\Dao\UserDao;
 use Model\Picture;
 use Model\Thumbnail;
 
-class BaseController implements \JsonSerializable {
+class BaseController {
 
-    public function jsonSerialize(){}
-    // this functions work for single or multi upload;
+
 
     // validate images - no direct call  !!! Depends on other function - #1
     public function imageValidation($formImages,$mode){
@@ -85,7 +84,6 @@ class BaseController implements \JsonSerializable {
                     break;
 
             }
-
             // marking which files are not the one allowed
             $blackList = array();
             $num = 0;
@@ -262,12 +260,12 @@ class BaseController implements \JsonSerializable {
                 $thumb->setExtension($picObjects[$objectIndex]->getExtension());
 
 
-                if ($picObjects[$objectIndex]->getExtension() === 'jpg') {
+                if (strtolower($picObjects[$objectIndex]->getExtension()) === 'jpg') {
                     $ims[$objectIndex] = imagecreatefromjpeg($picObjects[$objectIndex]->getUrlOnDiskPicture());
-                } elseif ($picObjects[$objectIndex]->getExtension() === 'gif') {
+                } elseif (strtolower($picObjects[$objectIndex]->getExtension()) === 'gif') {
                     $ims[$objectIndex] = imagecreatefromgif($picObjects[$objectIndex]->getUrlOnDiskPicture());
 
-                } elseif ($picObjects[$objectIndex]->getExtension() === 'png') {
+                } elseif (strtolower($picObjects[$objectIndex]->getExtension()) === 'png') {
                     $ims[$objectIndex] = imagecreatefrompng($picObjects[$objectIndex]->getUrlOnDiskPicture());
                 }
 
@@ -295,14 +293,14 @@ class BaseController implements \JsonSerializable {
                     $picObjects[$objectIndex]->getWidth(),
                     $picObjects[$objectIndex]->getHeight());
 
-                if ($thumb->getExtension() === 'jpg') {
+                if (strtolower($thumb->getExtension()) === 'jpg') {
                     imagejpeg($nms[$objectIndex], UPLOAD_THUMBS . '/' . $thumb->getNewName() . '.' . $thumb->getExtension());
 
                     $thumb->setUrlOnDiskPicture(UPLOAD_THUMBS . '/' . $thumb->getNewName() . '.' . $thumb->getExtension());
-                } elseif ($thumb->getExtension() === 'gif') {
+                } elseif (strtolower($thumb->getExtension()) === 'gif') {
                     imagegif($nms[$objectIndex], UPLOAD_THUMBS . '/' . $thumb->getNewName() . '.' . $thumb->getExtension());
                     $thumb->setUrlOnDiskPicture(UPLOAD_THUMBS . '/' . $thumb->getNewName() . '.' . $thumb->getExtension());
-                } elseif ($thumb->getExtension() === 'png') {
+                } elseif (strtolower($thumb->getExtension()) === 'png') {
                     imagepng($nms[$objectIndex], UPLOAD_THUMBS . '/' . $thumb->getNewName() . '.' . $thumb->getExtension());
                     $thumb->setUrlOnDiskPicture(UPLOAD_THUMBS . '/' . $thumb->getNewName() . '.' . $thumb->getExtension());
                 }

@@ -4,9 +4,9 @@
 
 ## [Changelog](./CHANGELOG.md)
 
-## Major Versions readme:
-- [v1](./v1/README.md)
-- [v2](./v2/README.md)
-- [v3](./v3/README.md)
+## Major Versions:
+- [v1](./v1/)
+- [v2](./v2/)
+- [v3](./v3/)
 
 

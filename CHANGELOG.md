@@ -1,4 +1,19 @@
-## 5-05-2025 - 3
+# Changelog
+All notable changes to this project will be documented in this file.
+    
+## [ [v3.0.0](https://github.com/svetoslav-vladov/FriendBook-ALL/tree/v3.0.0) ] 5-05-2025
+### Added
+- tag for v3
+
+## [ [v2.0.0](https://github.com/svetoslav-vladov/FriendBook-ALL/tree/v2.0.0) ] 5-05-2025
+### Added
+- tag for v2
+
+## [ [v1.0.0](https://github.com/svetoslav-vladov/FriendBook-ALL/tree/v1.0.0) ] 5-05-2025
+### Added
+- tag for v1
+
+## 5-05-2025 - 4
 ### Changed
 - main readme.md version to point to folders
 

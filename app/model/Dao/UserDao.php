@@ -112,7 +112,7 @@ class UserDao
     // messages sql q
     const INSERT_SEND_MESSAGE = "INSERT INTO messages (sender_id, reciever_id, message_text, msg_status) values (?,?,?,?)";
 
-    const GET_ALL_UNSEEN_MESSAGES = "SELECT m.*, u.first_name, u.last_name FROM messages as m 
+    const GET_ALL_UNSEEN_MESSAGES = "SELECT m.*, u.first_name, u.last_name, u.thumbs_profile, u.gender FROM messages as m 
                                     JOIN users u ON m.sender_id = u.id
                                     WHERE m.reciever_id = ? AND msg_status = 0";
 

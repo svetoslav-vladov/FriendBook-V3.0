@@ -1,11 +1,20 @@
 <?php
+    
+    $httpProtocol = isset($_SERVER['HTTPS']) ? "https" : "http";
+    /*
+        Example:
+            - example.com
+            - subdomain.example.com
+            - localhost
+    */
+    $siteUrl = "localhost";
+    $hostUrl = $httpProtocol. '://' . $siteUrl;
 
     //app root
     define('APP_ROOT', dirname(dirname(__FILE__)));
     //url root
-    define('URL_ROOT', 'http://' . $_SERVER['SERVER_NAME'] . '/projects/FriendBook-v3.0');
+    define('URL_ROOT', $hostUrl);
 
-    define('URI_ROOT', $_SERVER['SERVER_NAME'] . '/projects/FriendBook-v3.0');
     // thumbs uri
     define('THUMBS_URI', './uploads/users/photos/thumbs/');
     // site name

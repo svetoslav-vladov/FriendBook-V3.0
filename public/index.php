@@ -9,7 +9,7 @@ spl_autoload_register(function ($class) {
     require_once APP_ROOT . DIRECTORY_SEPARATOR . $class;
 });
 
-ini_set('mbstring.internal_encoding', 'UTF-8');
+
 header('Content-Type: text/html; charset=UTF-8');
 
 $fileNotFound = false;

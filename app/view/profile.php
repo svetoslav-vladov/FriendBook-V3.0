@@ -58,10 +58,13 @@
                                         <a class="nav-link dropdown-toggle text-dark" id="friendRequests"
                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <?php echo ucwords($theUser->getFullName()); ?>
-                                            <i class="fa fa-users text-dark"></i></a>
+                                        </a>
                                         <div class="dropdown-menu text-white" aria-labelledby="friendRequests">
                                             <button type="button" class="link link-dark dropdown-item" id="send_msg_btn" data-toggle="modal" data-target="#messagePopupBox">
-                                                Send Message
+                                                <i class="fa fa-envelope"></i>&nbsp;&nbsp;&nbsp;Send Message
+                                            </button>
+                                            <button type="button" class="link link-dark dropdown-item" id="profileNotification">
+                                                <i class="fa fa-bell"></i>&nbsp;&nbsp;&nbsp;Follow
                                             </button>
                                         </div>
                                     </li>

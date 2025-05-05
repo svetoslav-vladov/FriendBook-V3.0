@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 09, 2018 at 03:23 PM
--- Server version: 10.1.13-MariaDB
--- PHP Version: 5.6.23
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 05, 2025 at 12:50 PM
+-- Server version: 5.7.31
+-- PHP Version: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -26,25 +27,17 @@ SET time_zone = "+00:00";
 -- Table structure for table `comments`
 --
 
-CREATE TABLE `comments` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
   `comment_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `post_id` int(11) NOT NULL,
-  `owner_id` int(11) NOT NULL
+  `owner_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `commented_post_fk_idx` (`post_id`),
+  KEY `commented_owner_fk_idx` (`owner_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `comments`
---
-
-INSERT INTO `comments` (`id`, `description`, `comment_date`, `post_id`, `owner_id`) VALUES
-(79, 'dsfsd', '2018-04-26 14:46:59', 36, 24),
-(82, 'Браво', '2018-04-27 11:43:20', 36, 20),
-(94, 'ww', '2018-04-30 15:05:05', 61, 21),
-(95, 'aa', '2018-04-30 15:20:17', 61, 21),
-(98, 'aa', '2018-05-03 22:18:28', 65, 21),
-(99, 'Много добре', '2018-05-04 09:45:28', 62, 20);
 
 -- --------------------------------------------------------
 
@@ -52,10 +45,13 @@ INSERT INTO `comments` (`id`, `description`, `comment_date`, `post_id`, `owner_i
 -- Table structure for table `countries`
 --
 
-CREATE TABLE `countries` (
-  `id` int(11) NOT NULL,
-  `country_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DROP TABLE IF EXISTS `countries`;
+CREATE TABLE IF NOT EXISTS `countries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `country_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `country_name_UNIQUE` (`country_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=246 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `countries`
@@ -176,12 +172,12 @@ INSERT INTO `countries` (`id`, `country_name`) VALUES
 (112, 'Kazakhstan'),
 (113, 'Kenya'),
 (114, 'Kiribati'),
-(115, 'Korea, Democratic People''s Republic of'),
+(115, 'Korea, Democratic People\'s Republic of'),
 (116, 'Korea, Republic of'),
 (117, 'Kosovo'),
 (118, 'Kuwait'),
 (119, 'Kyrgyzstan'),
-(120, 'Lao People''s Democratic Republic'),
+(120, 'Lao People\'s Democratic Republic'),
 (121, 'Latvia'),
 (122, 'Lebanon'),
 (123, 'Lesotho'),
@@ -314,9 +310,12 @@ INSERT INTO `countries` (`id`, `country_name`) VALUES
 -- Table structure for table `following_user`
 --
 
-CREATE TABLE `following_user` (
+DROP TABLE IF EXISTS `following_user`;
+CREATE TABLE IF NOT EXISTS `following_user` (
   `follower_id` int(11) NOT NULL,
-  `followed_id` int(11) NOT NULL
+  `followed_id` int(11) NOT NULL,
+  KEY `user_id_fk_idx` (`follower_id`),
+  KEY `followed_id_fik_idx` (`followed_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -325,22 +324,13 @@ CREATE TABLE `following_user` (
 -- Table structure for table `friends`
 --
 
-CREATE TABLE `friends` (
+DROP TABLE IF EXISTS `friends`;
+CREATE TABLE IF NOT EXISTS `friends` (
   `user_id` int(11) NOT NULL,
-  `friend_id` int(11) NOT NULL
+  `friend_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`friend_id`),
+  KEY `user_friends_fk_idx` (`friend_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `friends`
---
-
-INSERT INTO `friends` (`user_id`, `friend_id`) VALUES
-(20, 21),
-(20, 25),
-(21, 20),
-(21, 25),
-(25, 20),
-(25, 21);
 
 -- --------------------------------------------------------
 
@@ -348,10 +338,13 @@ INSERT INTO `friends` (`user_id`, `friend_id`) VALUES
 -- Table structure for table `friend_requests`
 --
 
-CREATE TABLE `friend_requests` (
+DROP TABLE IF EXISTS `friend_requests`;
+CREATE TABLE IF NOT EXISTS `friend_requests` (
   `requested_by` int(11) NOT NULL,
   `requester_id` int(11) NOT NULL,
-  `approved` tinyint(4) DEFAULT NULL
+  `approved` tinyint(4) DEFAULT NULL,
+  KEY `user_id_fk_idx` (`requested_by`),
+  KEY `request_id_idx` (`requester_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -359,20 +352,7 @@ CREATE TABLE `friend_requests` (
 --
 
 INSERT INTO `friend_requests` (`requested_by`, `requester_id`, `approved`) VALUES
-(21, 20, 1),
-(21, 27, 0),
-(21, 24, 0),
-(21, 22, 0),
-(21, 26, 0),
-(21, 25, 1),
-(21, 23, 0),
-(20, 27, 0),
-(20, 24, 0),
-(20, 22, 0),
-(25, 20, 1),
-(25, 27, 0),
-(20, 23, 0),
-(23, 27, 0);
+(33, 32, 0);
 
 -- --------------------------------------------------------
 
@@ -380,18 +360,13 @@ INSERT INTO `friend_requests` (`requested_by`, `requester_id`, `approved`) VALUE
 -- Table structure for table `like_comment`
 --
 
-CREATE TABLE `like_comment` (
+DROP TABLE IF EXISTS `like_comment`;
+CREATE TABLE IF NOT EXISTS `like_comment` (
   `comment_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  KEY `like_comment_fk_idx` (`comment_id`),
+  KEY `like_user_fk_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `like_comment`
---
-
-INSERT INTO `like_comment` (`comment_id`, `user_id`) VALUES
-(94, 21),
-(98, 21);
 
 -- --------------------------------------------------------
 
@@ -399,24 +374,14 @@ INSERT INTO `like_comment` (`comment_id`, `user_id`) VALUES
 -- Table structure for table `like_post`
 --
 
-CREATE TABLE `like_post` (
+DROP TABLE IF EXISTS `like_post`;
+CREATE TABLE IF NOT EXISTS `like_post` (
   `post_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `status` int(11) NOT NULL
+  `status` int(11) NOT NULL,
+  KEY `liked_post_fk_idx` (`post_id`),
+  KEY `user_like_fk_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `like_post`
---
-
-INSERT INTO `like_post` (`post_id`, `user_id`, `status`) VALUES
-(36, 24, 1),
-(36, 20, 1),
-(36, 21, 1),
-(38, 21, 1),
-(61, 21, 1),
-(65, 21, 1),
-(62, 21, 1);
 
 -- --------------------------------------------------------
 
@@ -424,28 +389,25 @@ INSERT INTO `like_post` (`post_id`, `user_id`, `status`) VALUES
 -- Table structure for table `messages`
 --
 
-CREATE TABLE `messages` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `sender_id` int(11) NOT NULL,
   `reciever_id` int(11) NOT NULL,
   `message_text` text NOT NULL,
-  `msg_status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `msg_status` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sender_id_fk_idx` (`sender_id`),
+  KEY `receiver_Id_fk_idx` (`reciever_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `messages`
 --
 
 INSERT INTO `messages` (`id`, `sender_id`, `reciever_id`, `message_text`, `msg_status`) VALUES
-(1, 23, 27, 'Какво става', 0),
-(2, 23, 27, 'test', 0),
-(3, 23, 27, 'test', 0),
-(4, 23, 27, 'test', 0),
-(5, 23, 27, 'asd', 0),
-(6, 23, 27, 'res', 0),
-(7, 23, 27, 'res', 0),
-(8, 23, 20, 'hello', 0),
-(9, 23, 20, 'hello 2', 0);
+(12, 32, 33, 'Simple message!', 0),
+(13, 33, 32, 'Simple message back to you!', 0);
 
 -- --------------------------------------------------------
 
@@ -453,13 +415,17 @@ INSERT INTO `messages` (`id`, `sender_id`, `reciever_id`, `message_text`, `msg_s
 -- Table structure for table `notifications`
 --
 
-CREATE TABLE `notifications` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(150) NOT NULL,
   `post_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `notification_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `seen` int(1) NOT NULL
+  `seen` int(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notifications_post_id_fk_idx` (`post_id`),
+  KEY `notifications_user_id_fk` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -468,22 +434,16 @@ CREATE TABLE `notifications` (
 -- Table structure for table `photo_albums`
 --
 
-CREATE TABLE `photo_albums` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `photo_albums`;
+CREATE TABLE IF NOT EXISTS `photo_albums` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `user_id` int(11) NOT NULL,
   `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `album_thumb` varchar(200) NOT NULL
+  `album_thumb` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id_fk_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `photo_albums`
---
-
-INSERT INTO `photo_albums` (`id`, `name`, `user_id`, `reg_date`, `album_thumb`) VALUES
-(8, 'Summer 2018', 20, '2018-05-08 22:56:51', './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326182-0-albums.jpg'),
-(9, 'Test', 20, '2018-05-08 23:36:56', './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a6877c73-0-albums.jpg'),
-(10, 'Test1', 25, '2018-05-09 01:23:22', './uploads/users/photos/thumbs/Eli-1525818201-5af22359e7a67-0-albums.jpg');
 
 -- --------------------------------------------------------
 
@@ -491,24 +451,15 @@ INSERT INTO `photo_albums` (`id`, `name`, `user_id`, `reg_date`, `album_thumb`) 
 -- Table structure for table `posts`
 --
 
-CREATE TABLE `posts` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_post_fk_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `posts`
---
-
-INSERT INTO `posts` (`id`, `description`, `create_date`, `user_id`) VALUES
-(36, 'Zdrasti, moyat pyrvi post', '2018-04-26 14:46:41', 24),
-(38, 'Здравейте!!!', '2018-04-29 08:38:23', 25),
-(61, 'asdasd', '2018-04-30 15:03:35', 26),
-(62, 'aa', '2018-04-30 15:13:49', 21),
-(65, 'aaa', '2018-05-03 21:44:21', 21),
-(66, 'Ехо', '2018-05-04 09:46:56', 20);
 
 -- --------------------------------------------------------
 
@@ -516,9 +467,11 @@ INSERT INTO `posts` (`id`, `description`, `create_date`, `user_id`) VALUES
 -- Table structure for table `post_images`
 --
 
-CREATE TABLE `post_images` (
+DROP TABLE IF EXISTS `post_images`;
+CREATE TABLE IF NOT EXISTS `post_images` (
   `post_id` int(11) NOT NULL,
-  `image_url` varchar(155) NOT NULL
+  `image_url` varchar(155) NOT NULL,
+  KEY `image_to_post_idx` (`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -527,10 +480,13 @@ CREATE TABLE `post_images` (
 -- Table structure for table `relationship`
 --
 
-CREATE TABLE `relationship` (
-  `id` int(11) NOT NULL,
-  `status_name` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `relationship`;
+CREATE TABLE IF NOT EXISTS `relationship` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `status_name` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `status_name_UNIQUE` (`status_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `relationship`
@@ -540,7 +496,7 @@ INSERT INTO `relationship` (`id`, `status_name`) VALUES
 (3, 'Engaged'),
 (2, 'In a relationship.'),
 (7, 'In an open relationship'),
-(5, 'It''s complicated.'),
+(5, 'It\'s complicated.'),
 (4, 'Married'),
 (1, 'Single'),
 (6, 'Widowed');
@@ -551,8 +507,9 @@ INSERT INTO `relationship` (`id`, `status_name`) VALUES
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
@@ -570,24 +527,19 @@ CREATE TABLE `users` (
   `www` varchar(100) DEFAULT NULL,
   `skype` varchar(50) DEFAULT NULL,
   `thumbs_profile` varchar(200) DEFAULT NULL,
-  `thumbs_cover` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `thumbs_cover` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  KEY `country_id_fk_idx` (`country_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `reg_date`, `gender`, `birthday`, `relationship_id`, `profile_pic`, `profile_cover`, `description`, `display_name`, `country_id`, `mobile_number`, `www`, `skype`, `thumbs_profile`, `thumbs_cover`) VALUES
-(20, 'Svetoslav', 'Vladov', 'komara_@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-05-09 07:21:34', 'male', '1988-10-22', 2, './uploads/users/photos/fullsized/Svetoslav-1525385592-5aeb8978875c1-0-profile.jpg', './uploads/users/photos/fullsized/Svetoslav-1525385597-5aeb897da287d-0-cover.jpg', 'sasda', 'komara', 33, 888434001, 'www.ivs.bg', 'komara_123', './uploads/users/photos/thumbs/Svetoslav-1525385592-5aeb8978875c1-0-profile.jpg', './uploads/users/photos/thumbs/Svetoslav-1525385597-5aeb897da287d-0-cover.jpg'),
-(21, 'eray', 'myumyun', 'eray@abv.bg', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '2018-05-03 22:00:29', 'male', '2018-04-12', NULL, './uploads/users/photos/fullsized/eray-1525384798-5aeb865e3d47a-0-profile.png', './uploads/users/photos/fullsized/eray-1525384829-5aeb867d07ffa-0-cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, './uploads/users/photos/thumbs/eray-1525384798-5aeb865e3d47a-0-profile.png', './uploads/users/photos/thumbs/eray-1525384829-5aeb867d07ffa-0-cover.jpg'),
-(22, 'Krasimir', 'Stoev', 'krasi@kra.si', 'a6dba7cb58095dedee2641744602ae218511f4a1', '2018-04-23 10:39:31', 'male', '2018-03-16', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 'test', 'test', 'test@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-05-09 08:43:56', 'female', '2018-04-17', NULL, './uploads/users/photos/fullsized/test-1525855436-5af2b4cc201b8-0-profile.jpg', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, './uploads/users/photos/thumbs/test-1525855436-5af2b4cc201b8-0-profile.jpg', NULL),
-(24, 'Kiril', 'Dragomirov', 'kiril@dragomirov.email', '7c4a8d09ca3762af61e59520943dc26494f8941b', '2018-04-26 14:44:39', 'male', '1997-05-11', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(25, 'Eli', 'Stoqnova', 'eli@abv.bg', 'f10e2821bbbea527ea02200352313bc059445190', '2018-04-30 21:32:27', 'female', '2002-12-09', NULL, '/uploads/female_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(26, 'girl', 'girl', 'girl@abv.bg', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '2018-04-30 12:17:56', 'female', '2018-04-11', NULL, '/uploads/female_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 'Георги', 'Гамишев', 'gamigata@abv.bg', 'bffb408bb31d00c975b57410ab58cd786843e612', '2018-05-01 08:16:40', 'male', '0006-03-01', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 'sad', 'fda', 'asd@bsd.sa', '20eabe5d64b0e216796e834f52d61fd0b70332fc', '2018-05-01 11:13:33', 'male', '2000-05-05', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(29, 'zxc', 'zxc', 'zxc@zxc.zx', 'd5a1bdf9ce989fd6161063e94b92bdeacb94ed23', '2018-05-01 11:14:32', 'male', '0001-01-01', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(32, 'test1', 'testing1', 'test1@gmail.com', '4c0d2b951ffabd6f9a10489dc40fc356ec1d26d5', '2025-05-05 11:48:53', 'male', '2025-05-01', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(33, 'test2', 'testing2', 'test2@gmail.com', '4c0d2b951ffabd6f9a10489dc40fc356ec1d26d5', '2025-05-05 11:49:29', 'male', '2025-05-01', NULL, '/uploads/male_default_picture.png', '/uploads/default_cover.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -595,198 +547,18 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `reg_
 -- Table structure for table `user_photos`
 --
 
-CREATE TABLE `user_photos` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `user_photos`;
+CREATE TABLE IF NOT EXISTS `user_photos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `img_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `album_id` int(11) DEFAULT NULL,
-  `thumb_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `thumb_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id_fk_idx` (`user_id`),
+  KEY `album_id_fk_idx` (`album_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `user_photos`
---
-
-INSERT INTO `user_photos` (`id`, `user_id`, `img_url`, `album_id`, `thumb_url`) VALUES
-(35, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326182-0-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326182-0-albums.jpg'),
-(36, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af201032656a-1-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af201032656a-1-albums.jpg'),
-(37, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326952-2-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326952-2-albums.jpg'),
-(38, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326952-3-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326952-3-albums.jpg'),
-(39, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010326d3a-4-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010326d3a-4-albums.jpg'),
-(40, 20, './uploads/users/photos/fullsized/Svetoslav-1525809411-5af2010327122-5-albums.jpg', 8, './uploads/users/photos/thumbs/Svetoslav-1525809411-5af2010327122-5-albums.jpg'),
-(41, 20, './uploads/users/photos/fullsized/Svetoslav-1525810287-5af2046f0db45-0-photos.jpg', NULL, './uploads/users/photos/thumbs/Svetoslav-1525810287-5af2046f0db45-0-photos.jpg'),
-(42, 20, './uploads/users/photos/fullsized/Svetoslav-1525810287-5af2046f0df2d-1-photos.jpg', NULL, './uploads/users/photos/thumbs/Svetoslav-1525810287-5af2046f0df2d-1-photos.jpg'),
-(43, 20, './uploads/users/photos/fullsized/Svetoslav-1525810287-5af2046f0e315-2-photos.jpg', NULL, './uploads/users/photos/thumbs/Svetoslav-1525810287-5af2046f0e315-2-photos.jpg'),
-(44, 20, './uploads/users/photos/fullsized/Svetoslav-1525811816-5af20a6877c73-0-albums.jpg', 9, './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a6877c73-0-albums.jpg'),
-(45, 20, './uploads/users/photos/fullsized/Svetoslav-1525811816-5af20a687805b-1-albums.jpg', 9, './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a687805b-1-albums.jpg'),
-(46, 20, './uploads/users/photos/fullsized/Svetoslav-1525811816-5af20a687805b-2-albums.jpg', 9, './uploads/users/photos/thumbs/Svetoslav-1525811816-5af20a687805b-2-albums.jpg'),
-(47, 25, './uploads/users/photos/fullsized/Eli-1525818201-5af22359e7a67-0-albums.jpg', 10, './uploads/users/photos/thumbs/Eli-1525818201-5af22359e7a67-0-albums.jpg'),
-(48, 25, './uploads/users/photos/fullsized/Eli-1525818201-5af22359e7e4f-1-albums.jpg', 10, './uploads/users/photos/thumbs/Eli-1525818201-5af22359e7e4f-1-albums.jpg'),
-(49, 25, './uploads/users/photos/fullsized/Eli-1525818219-5af2236b640ed-0-photos.jpg', NULL, './uploads/users/photos/thumbs/Eli-1525818219-5af2236b640ed-0-photos.jpg'),
-(50, 25, './uploads/users/photos/fullsized/Eli-1525818219-5af2236b644d5-1-photos.jpg', NULL, './uploads/users/photos/thumbs/Eli-1525818219-5af2236b644d5-1-photos.jpg');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `comments`
---
-ALTER TABLE `comments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `commented_post_fk_idx` (`post_id`),
-  ADD KEY `commented_owner_fk_idx` (`owner_id`);
-
---
--- Indexes for table `countries`
---
-ALTER TABLE `countries`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `country_name_UNIQUE` (`country_name`);
-
---
--- Indexes for table `following_user`
---
-ALTER TABLE `following_user`
-  ADD KEY `user_id_fk_idx` (`follower_id`),
-  ADD KEY `followed_id_fik_idx` (`followed_id`);
-
---
--- Indexes for table `friends`
---
-ALTER TABLE `friends`
-  ADD PRIMARY KEY (`user_id`,`friend_id`),
-  ADD KEY `user_friends_fk_idx` (`friend_id`);
-
---
--- Indexes for table `friend_requests`
---
-ALTER TABLE `friend_requests`
-  ADD KEY `user_id_fk_idx` (`requested_by`),
-  ADD KEY `request_id_idx` (`requester_id`);
-
---
--- Indexes for table `like_comment`
---
-ALTER TABLE `like_comment`
-  ADD KEY `like_comment_fk_idx` (`comment_id`),
-  ADD KEY `like_user_fk_idx` (`user_id`);
-
---
--- Indexes for table `like_post`
---
-ALTER TABLE `like_post`
-  ADD KEY `liked_post_fk_idx` (`post_id`),
-  ADD KEY `user_like_fk_idx` (`user_id`);
-
---
--- Indexes for table `messages`
---
-ALTER TABLE `messages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sender_id_fk_idx` (`sender_id`),
-  ADD KEY `receiver_Id_fk_idx` (`reciever_id`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `notifications_post_id_fk_idx` (`post_id`),
-  ADD KEY `notifications_user_id_fk` (`user_id`);
-
---
--- Indexes for table `photo_albums`
---
-ALTER TABLE `photo_albums`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id_fk_idx` (`user_id`);
-
---
--- Indexes for table `posts`
---
-ALTER TABLE `posts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_post_fk_idx` (`user_id`);
-
---
--- Indexes for table `post_images`
---
-ALTER TABLE `post_images`
-  ADD KEY `image_to_post_idx` (`post_id`);
-
---
--- Indexes for table `relationship`
---
-ALTER TABLE `relationship`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `status_name_UNIQUE` (`status_name`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email_UNIQUE` (`email`),
-  ADD KEY `country_id_fk_idx` (`country_id`);
-
---
--- Indexes for table `user_photos`
---
-ALTER TABLE `user_photos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id_fk_idx` (`user_id`),
-  ADD KEY `album_id_fk_idx` (`album_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `comments`
---
-ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
---
--- AUTO_INCREMENT for table `countries`
---
-ALTER TABLE `countries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
---
--- AUTO_INCREMENT for table `messages`
---
-ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `photo_albums`
---
-ALTER TABLE `photo_albums`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
---
--- AUTO_INCREMENT for table `posts`
---
-ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
---
--- AUTO_INCREMENT for table `relationship`
---
-ALTER TABLE `relationship`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
---
--- AUTO_INCREMENT for table `user_photos`
---
-ALTER TABLE `user_photos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 --
 -- Constraints for dumped tables
 --
@@ -877,6 +649,7 @@ ALTER TABLE `users`
 ALTER TABLE `user_photos`
   ADD CONSTRAINT `album_id_fk` FOREIGN KEY (`album_id`) REFERENCES `photo_albums` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `user_image_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

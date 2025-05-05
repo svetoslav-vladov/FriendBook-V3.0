@@ -6,3 +6,14 @@
 *END: 13.05.2018
 
 - The project is not finished due to deadline ( we defended it in this state ), will finish it in future for practice!
+
+## Database:
+- available users:
+	test1@gmail.com, test2@gmail.com with password testing123 for both
+
+## Configuration:
+- app/config/configuration.php:
+	set domain name: $siteUrl
+
+- app/model/Dao/DBconnect.php:
+	set database credentials

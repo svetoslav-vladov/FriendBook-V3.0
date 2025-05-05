@@ -50,15 +50,23 @@
                             <span class="small label labe-pill label-danger count background-danger" id="msg_count">
                                 <?php if(is_array($messages['msgs']) && count($messages['msgs']) !== 0) { echo count($messages['msgs']); }?>
                             </span><i class="fa fa-envelope"></i></a>
-                        <ul class="dropdown-menu" aria-labelledby="messages">
+                        <ul class="dropdown-menu pm-messages" aria-labelledby="messages">
                             <?php
                             if(!isset($messages['errors']) && is_array($messages['msgs'])) {
-                                foreach ($messages['msgs'] as $message) {?>
+                                foreach ($messages['msgs'] as $message) {
+                                    $gender = $message->gender . "_default_picture";
+                                    $pmProfilePic = is_null($message->thumbs_profile) ? $GLOBALS[$gender] : $message->thumbs_profile;
+                                ?>
                                  <li>
-                                     <a href="<?php echo URL_ROOT . '/index/profile&id=' . $message->sender_id ?>">
-                                         <?= $message->first_name . ' ' .$message->last_name ?>
-                                     </a>
-                                     <p><?php echo $message->message_text; ?></p>
+                                     <div class="pm-userPic">
+                                         <img src="<?php echo URL_ROOT . $pmProfilePic; ?>" alt="<?= $message->first_name . ' ' .$message->last_name ?> profile picture">
+                                     </div>
+                                     <div class="pm-params">
+                                        <a class="pm-user"href="<?php echo URL_ROOT . '/index/profile&id=' . $message->sender_id ?>">
+                                            <?= $message->first_name . ' ' .$message->last_name ?>
+                                        </a>
+                                        <p class="pm-msg"><?php echo $message->message_text; ?></p>
+                                     </div>
                                  </li>
                             <?php }
                             }

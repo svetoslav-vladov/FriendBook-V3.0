@@ -1,5 +1,5 @@
 // url location build
-var url_root = window.location.origin + '/projects/FriendBook-v3.0/';
+var url_root = window.location.origin;
 // loading gif
 var loading_gif = $("<img class='loading-gif' src="+ url_root +"/assets/images/ajax-loading-c4.gif>");
 

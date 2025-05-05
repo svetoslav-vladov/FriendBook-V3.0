@@ -220,11 +220,11 @@ function  getOwnFriends(session_id) {
             var friends = JSON.parse(this.responseText);
             for(var user of friends) {
                 var friendCard = $(`<div class="media friend-card" id="friend-card${user['id']}">
-                                        <a class="user_pic" href=${root}/index/profile&id=${user['id']}>
-                                            <img class="mr-3 suggested-user-img" src=${(user['thumbs_profile'] == null) ? root+user['profile_pic'] : root+user['thumbs_profile']}>
-                                        </a>
                                         <div class="media-body" id="friendNavigation${user['id']}">
-                                            <h5 class="mt-0">
+                                            <h5 class="mt-0 friendsListParams">
+                                                <a class="user_pic" href=${root}/index/profile&id=${user['id']}>
+                                                    <img class="mr-3 suggested-user-img" src=${(user['thumbs_profile'] == null) ? root+user['profile_pic'] : root+user['thumbs_profile']}>
+                                                </a>
                                                 <a class="${(user['gender'] == 'male') ? 'male' : 'female'}" href=${root}/index/profile&id=${user['id']}>
                                                     ${(user['display_name'] == null) ? (user['first_name'] + " " + user['last_name']) : user['display_name']}
                                                 </a>

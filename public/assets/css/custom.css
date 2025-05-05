@@ -133,6 +133,7 @@ nav li{
 
 .fixed-top {
     z-index: 1030;
+    height: 55px;
 }
 
 /* layout sidebars fixed*/
@@ -164,15 +165,17 @@ nav li{
 
 .post_modal {
     margin-bottom: 1rem !important;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
-    box-shadow: 0 0 8px 0px grey;
+    box-shadow: 0 0 6px 0px grey;
     transition: all 0.4s ease-in-out;
+    padding: 15px;
 }
 #post-panel:hover {
     cursor: pointer;
     background: #28a745;
     transition: all 0.4s ease-in-out;
+    color: #fff;
 }
 #small_image {
     display: inline-block;
@@ -181,7 +184,10 @@ nav li{
 }
 
 #post_input_fake {
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 .modal-header {
     display: block;
@@ -197,6 +203,9 @@ nav li{
 
 .modal-header h5 {
     display: inline-block;
+    color: #555;
+    font-size: 1.1em;
+    margin-left: 20px;
 }
 div#user-nav ul {
     list-style: none;
@@ -240,9 +249,8 @@ ul.navbar-nav li:hover {
 }
 
 .dropdown-menu {
-    background: green;
     padding: 0px;
-    box-shadow: 2px 4px 4px 0px green;
+    min-width: 12rem;
 }
 
 .dropdown-menu a:hover {
@@ -310,8 +318,8 @@ img.logo {
 }
 
 .user_pic {
-    width: 33px;
-    height: 33px;
+    width: 25px;
+    height: 25px;
     margin-right: 7px !important;
     border-radius: 50%;
 }
@@ -323,7 +331,7 @@ img.logo {
     width: 100%;
     margin-top: 27px;
     border-top: 1px solid darkgrey;
-    box-shadow: green -11px 0px 14px 0px inset;
+    box-shadow: #909090 -11px 0px 14px 0px inset;
 }
 
 .comment_big {
@@ -340,7 +348,7 @@ img.logo {
     border-top: 1px solid darkgray;
     margin: 13px 0px;
     padding: 10px 2px;
-    color: #5e5e5e;
+    color: #000;
 }
 .description p {
     margin:  0px;
@@ -377,17 +385,25 @@ input[type="text"] {
 
 .comment_date {
     font-size: 0.6em;
-    text-align: center;
     color: #488676;
-    font-weight:  bold;
-    font-family:  arial;
-    float: right;
-    margin: 8px 0px;
+    font-weight: bold;
+    font-family: arial;
+    height: 12px;
 }
 
+.commentParamsFlex{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.commentSection a {
+    display: inline-block;
+}
 
 a.comment_owner {
-    font-size: 0.8em;
+    font-size: 0.6em;
     font-weight:  bold;
     padding-top: 8px;
 }
@@ -406,20 +422,19 @@ a.comment_owner {
     text-shadow: 0 0 10px green;
 }
 .icon {
-    width: 9%;
     display: block;
     float: left;
     margin-right: 6px;
 }
 .icon a {
-    width: 100%;
-    height: 45px;
     display: block;
     border-radius: 50%;
 }
 .icon img {
-    width: 100%;
     border-radius: 50%;
+    height: 45px;
+    border: 2px solid #3b95ff;
+    width: 45px;
 }
 .name {
     font-size: 1.32em;
@@ -441,7 +456,7 @@ a.comment_owner {
 .date {
     float: right;
     font-size: 0.75em;
-    margin-top: 4px;
+    margin-top: 15px;
     color: gray;
 }
 
@@ -488,12 +503,14 @@ span.likes_counter {
 
 .comment-desc {
     margin: 0px;
+    padding: 5px 0;
+    font-size: 14px;
+    color: #555;
 }
 
 .post_navigation {
     padding: 10px 0px;
-    border-radius: 11px;
-    box-shadow: 0 0 10px 0px green;
+    border-radius: 10px;
 }
 
 .search_input {
@@ -508,7 +525,7 @@ span.likes_counter {
     text-decoration: none;
 }
 .list-group-item:hover {
-    background: #e7e7e7;
+    background: #fff !important;
     transition: all 0.3s;
     color: black;
 }
@@ -659,19 +676,16 @@ div#image_list img {
 
 .like-comment-container {
     position: relative;
-    float: left;
+    height: 25px;
+    width: 55px;
 }
 
 .like-comment-container button {
-    position: absolute;
-    left: 214px;
-    font-size: 0.63em;
-    width: 68px;
-    height: 25px;
+    font-size: 13px;
     background: none;
     border: none;
     cursor: pointer;
-    outline:none !important;
+    outline: none !important;
 }
 
 .unlike-comment-button {
@@ -701,9 +715,10 @@ div#image_list img {
 
 .delete-post-button {
     position: absolute;
-    top: 40px;
-    right: 12px;
-    outline:none !important;
+    top: 50px;
+    right: 15px;
+    outline: none !important;
+    font-size: 0.8rem;
 }
 
 .profile_cover_link{
@@ -741,6 +756,10 @@ div#change_profile_cover:hover {
     padding: 0 0 0 11px;;
 }
 
+.comments:last-child {
+    padding-bottom: 20px;
+}
+
 form#uploadUserPhotosForm {
     display: none;
     visibility:  hidden;
@@ -748,7 +767,8 @@ form#uploadUserPhotosForm {
 }
 
 .suggested-user-img {
-    width: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
 }
 
@@ -785,10 +805,6 @@ form#uploadUserPhotosForm {
     font-size: 0.7em;
     display: block;
     margin-bottom: 2px;
-}
-
-.user_pic {
-    float: left;
 }
 
 .female:hover {
@@ -887,7 +903,7 @@ div#settingsStatus:hover {
 .friend-card {
     border: 1px solid darkgrey;
     border-radius: 8px;
-    padding: 2px 4px;
+    padding: 10px;
     display: inline-block;
     margin: 2px 8px;
     width: 246px;
@@ -990,10 +1006,85 @@ span#msg_count, .friendNotifications {
 }
 button#send_msg_btn {
     cursor: pointer;
+    height: 50px;
+}
+button#profileNotification {
+    cursor: pointer;
+    height: 50px;
 }
 .notification-description {
     font-size: 0.47em;
     line-height: 1.1;
     margin: 3px 0px;
 
+}
+
+.pm-messages{
+    width: 300px;
+    border: 1px solid #1f7d34;
+    border-radius: 0;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.pm-messages li {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.9em;
+    align-items: center;
+    padding: 15px;
+    background: #fff;
+    height: 100px;
+}
+
+.pm-messages li:hover {
+    background: #fff;
+}
+
+.pm-messages li:nth-child(odd) {
+    background: #efefef;
+    border-bottom: 1px solid #1f7d34;
+}
+
+.pm-messages li:nth-child(odd):hover {
+    background: #efefef;
+}
+
+.pm-userPic{
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.pm-userPic img {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+}
+
+.pm-params{
+    max-width: 75%;
+}
+
+.pm-user, .pm-msg{
+    margin: 0;
+    padding: 0;
+    max-height: 55px;
+    overflow: hidden;
+}
+
+.friendsListParams{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    font-size: 0.9em;
+    padding: 0;
+    margin: 0;
+    height: 50px;
+    gap: 35px
+}
+
+#friendRequests{
+    display: block;
 }

@@ -1,4 +1,4 @@
-var root = window.location.origin + '/projects/FriendBook-v3.0';
+var root = window.location.origin;
 var comment_gif = $("<img class='comments_gif' src="+ root +"/assets/images/ajax-loading-c4.gif>");
 
 function addComment(post_id) {
@@ -39,15 +39,20 @@ function getComments(post_id) {
                 for(var comment of result) {
                     var commentDiv = $(`
                     <div class="media comment comment-${post_id}">
-                    <a href=${root}/index/profile&id=${comment['owner_id']}>
-                        <img class="user_pic align-self-start mr-3" src=${(comment['thumbs_profile'] == null) ? root+comment['profile_pic'] : root+comment['thumbs_profile']} alt="icon">
-                    </a>
                       <div class="media-body">
-                        <h5 class="mt-0"><a href="${root}/index/profile&id=${comment['owner_id']}" class="comment_owner ${(comment['gender'] == 'male') ? 'male' : 'female'}">
-                                    ${(comment['display_name'] == null) ? (comment['first_name'] + " " + comment['last_name']) : comment['display_name']}
-                                </a>
-                                <span class="like-comment-container" id=like-comment-container${comment['comment_id']}></span>
-                                <span class="comment_date">${comment['comment_date']}</span>
+                        <h5 class="commentParamsFlex">
+                                <div class="commentSection">
+                                    <a href=${root}/index/profile&id=${comment['owner_id']}>
+                                        <img class="user_pic align-self-start mr-3" src=${(comment['thumbs_profile'] == null) ? root+comment['profile_pic'] : root+comment['thumbs_profile']} alt="icon">
+                                    </a>
+                                    <a href="${root}/index/profile&id=${comment['owner_id']}" class="comment_owner ${(comment['gender'] == 'male') ? 'male' : 'female'}">
+                                        ${(comment['display_name'] == null) ? (comment['first_name'] + " " + comment['last_name']) : comment['display_name']}
+                                    </a>
+                                </div>
+                                <div class="commentSection">
+                                    <span class="comment_date">${comment['comment_date']}</span>
+                                    <span class="like-comment-container" id=like-comment-container${comment['comment_id']}></span>
+                                </div>
                         </h5>
                         <span><p class="comment-desc">${comment['description']}</p></span>
                       </div>

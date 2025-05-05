@@ -1,19 +1,12 @@
-# FriendBook-V3.0
-- This is separate project for version 3.0 - FriendBook social network
+# FriendBook-ALL
+- Renamed from FriendBook-V3.0 to FriendBook-ALL will hold all previous and future versions of the project
+- original v1 and v2 versions you can find archived here [FriendBook-v1-v2]("https://github.com/svetoslav-vladov/FriendBook-v1-v2")
 
-*BEGIN: 13.04.2018 
+## [Changelog](../CHANGELOG.md)
 
-*END: 13.05.2018
+## Major Versions readme:
+- [v1](../v1/README.md)
+- [v2](../v2/README.md)
+- [v3](../v3/README.md)
 
-- The project is not finished due to deadline ( we defended it in this state ), will finish it in future for practice!
 
-## Database:
-- available users:
-	test1@gmail.com, test2@gmail.com with password testing123 for both
-
-## Configuration:
-- app/config/configuration.php:
-	set domain name: $siteUrl
-
-- app/model/Dao/DBconnect.php:
-	set database credentials

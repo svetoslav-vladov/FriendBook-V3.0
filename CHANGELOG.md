@@ -1,4 +1,8 @@
-## Major 5-05-2025 - 17:00
+## Major 5-05-2025 - 17:20
+### Changed
+- readme.md and changelog.md files
+
+## Major 5-05-2025 - 17:12
 ### Added
 - added v1 and v2 projects to the repo
 ### Changed
